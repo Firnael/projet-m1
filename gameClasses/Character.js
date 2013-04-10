@@ -74,7 +74,8 @@ var Character = IgeEntityBox2d.extend({
                 .properties({x: x, y: y})
                 .duration(time)
                 .afterTween(function () {
-                    onTweenEnd(x, y, clientId)
+                    ige.$("player_"+clientId).translateTo(x, y, 0);
+                    onTweenEnd(x, y, clientId);
                 })
                 .start();
 
