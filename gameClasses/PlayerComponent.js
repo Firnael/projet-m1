@@ -20,7 +20,7 @@ var PlayerComponent = IgeClass.extend({
 
     _mouseUp: function (event, x, y, button) {
         var tilePoint = ige.$('objectLayer').mouseTileWorldXY().to2d();
-        ige.network.send("playerMove", tilePoint);
+        ige.network.send('playerMove', tilePoint);
     },
 
     _keyUp: function (event, keyCode) {

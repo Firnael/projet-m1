@@ -64,6 +64,11 @@ var ServerNetworkEvents = {
             var tilePoint = data;
             var player = ige.server.players[clientId];
             player.walkTo(tilePoint.x, tilePoint.y, clientId);
+
+            var data = new Array();
+            data[0] = tilePoint;
+            data[1] = clientId;
+            ige.network.send('playerMove', data);
         }
     },
 
@@ -103,6 +108,10 @@ var ServerNetworkEvents = {
 
     _onGetParcelle: function (data, cliendId) {
         ige.server.log("Server : _onGetParcelle");
+    },
+
+    _onStopWalkAnim: function (data, cliendId) {
+        ige.server.log("Server : _onStopWalkAnim");
     }
 };
 

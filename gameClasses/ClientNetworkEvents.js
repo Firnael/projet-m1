@@ -8,7 +8,6 @@ var ClientNetworkEvents = {
     _onPlayerEntity: function (data) {
         if (ige.$(data)) {
             ige.$(data).addComponent(PlayerComponent)
-                .setType()
                 .drawBounds(false)
                 .drawBoundsData(false);
 
@@ -20,7 +19,6 @@ var ClientNetworkEvents = {
             self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
                 if (entity.id() === data) {
                     ige.$(data).addComponent(PlayerComponent)
-                        .setType()
                         .drawBounds(false)
                         .drawBoundsData(false);
 
@@ -68,6 +66,12 @@ var ClientNetworkEvents = {
 
             ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
         }
+    },
+
+    _onPlayerMove: function (data) {
+        var tilePoint = data[0];
+        var clientId = data[1];
+        ige.$("player_" + clientId).walkTo(tilePoint.x, tilePoint.y, clientId);
     }
 };
 

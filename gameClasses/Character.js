@@ -31,6 +31,9 @@ var Character = IgeEntityBox2d.extend({
 					.texture(self._characterTexture)
 					.dimensionsFromCell()
 					.mount(self);
+
+                self.setType();
+
 			}, false, true);
 
             // Create label
@@ -50,7 +53,8 @@ var Character = IgeEntityBox2d.extend({
 	},
 
 	setType: function () {
-        this.imageEntity.animation.define('walkDown', [1, 2, 3, 2], 8, -1)
+        this.imageEntity
+            .animation.define('walkDown', [1, 2, 3, 2], 8, -1)
             .animation.define('walkLeft', [13, 14, 15, 14], 8, -1)
             .animation.define('walkRight', [25, 26, 27, 26], 8, -1)
             .animation.define('walkUp', [37, 38, 39, 38], 8, -1)
@@ -62,27 +66,47 @@ var Character = IgeEntityBox2d.extend({
 	},
 
     walkTo: function (x, y, clientId) {
-        if(ige.isServer) {
-            var distance = Math.distance(this.translate().x(), this.translate().y(), x, y),
-                speed = 0.1,
-                distX = x - this.translate().x(),
-                distY = y - this.translate().y(),
-                time = (distance / speed);
+        var character = ige.$("player_" + clientId),
+            distance = Math.distance(this.translate().x(), this.translate().y(), x, y),
+            speed = 0.1,
+            time = (distance / speed);
 
-            this._translate.tween()
-                .stopAll()
-                .properties({x: x, y: y})
-                .duration(time)
-                .afterTween(function () {
-                    ige.$("player_"+clientId).translateTo(x, y, 0);
-                    onTweenEnd(x, y, clientId);
-                })
-                .start();
+        if(!ige.isServer) {
+            var distX = x - character.translate().x();
+            var distY = y - character.translate().y();
 
-            return this;
+            var anim;
+            if (Math.abs(distX) > Math.abs(distY)) {
+                if (distX < 0) { anim = "walkLeft"; } // Moving left
+                else { anim = "walkRight"; } // Moving right
+            }
+            else {
+                if (distY < 0) { anim = "walkUp"; } // Moving up
+                else { anim = "walkDown"; } // Moving down
+            }
+
+            character.imageEntity.animation.select(anim);
+            ige.client.log("player_" + clientId + " has new anim : " + anim);
         }
 
+        character._translate.tween()
+            .stopAll()
+            .properties({x: x, y: y})
+            .duration(time)
+            .afterTween(function () {
+                if(!ige.isServer) {
+                    character.imageEntity.animation.stop();
+                }
+                if(ige.isServer) {
+                    onTweenEnd(x, y, clientId);
+                }
+            })
+            .start();
+
+        return character;
+
         function onTweenEnd(x, y, clientId) {
+            ige.$("player_" + clientId).translateTo(x, y, 0);
             var data = new IgePoint();
             data.x = x;
             data.y = y;
