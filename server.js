@@ -63,6 +63,18 @@ var Server = IgeClass.extend({
 							.drawBoundsData(false)
 							.mount(self.mainScene);
 
+                        self.uiScene = new IgeScene2d()
+                            .id('uiScene')
+                            .depth(2)
+                            .ignoreCamera(true)
+                            .mount(self.mainScene);
+
+                        self.gameScene = new IgeScene2d()
+                            .id('gameScene')
+                            .depth(1)
+                            .translateTo(0, -360, 0)
+                            .mount(self.mainScene);
+
 						self.objectLayer = new IgeTileMap2d()
 							.id('objectLayer')
 							.depth(1)
@@ -71,7 +83,7 @@ var Server = IgeClass.extend({
 							.drawBoundsData(false)
 							.tileWidth(40)
 							.tileHeight(40)
-							.mount(self.mainScene);
+							.mount(self.gameScene);
 
 						// Create the main viewport
 						self.vp1 = new IgeViewport()
@@ -79,8 +91,8 @@ var Server = IgeClass.extend({
 							.depth(1)
 							.autoSize(true)
 							.scene(self.mainScene)
-							.drawBounds(true)
-							.drawBoundsData(true)
+							.drawBounds(false)
+							.drawBoundsData(false)
 							.mount(ige);
 					}
 				});

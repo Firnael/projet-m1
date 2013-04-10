@@ -15,6 +15,7 @@ var Character = IgeEntityBox2d.extend({
 			.addComponent(IgeAnimationComponent);
 
         self.loginLabel = null;
+        self.nbTileOwned = 0;
 
 		// Load the character texture file and UI stuff
 		if (!ige.isServer) {
@@ -53,8 +54,7 @@ var Character = IgeEntityBox2d.extend({
 	},
 
 	setType: function () {
-        this.imageEntity
-            .animation.define('walkDown', [1, 2, 3, 2], 8, -1)
+        this.imageEntity.animation.define('walkDown', [1, 2, 3, 2], 8, -1)
             .animation.define('walkLeft', [13, 14, 15, 14], 8, -1)
             .animation.define('walkRight', [25, 26, 27, 26], 8, -1)
             .animation.define('walkUp', [37, 38, 39, 38], 8, -1)

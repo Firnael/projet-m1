@@ -3,6 +3,7 @@ var ClientNetworkEvents = {
     _onGetClientId: function (data, clientId) {
         ige.client.clientId = data;
         ige.client.log("Received clientId : " + data);
+        ige.client.setupUi();
     },
 
     _onPlayerEntity: function (data) {
@@ -60,7 +61,14 @@ var ClientNetworkEvents = {
             var tileData = new Tile(data.x, data.y, data.clientId);
             var tileType;
 
-            if(tileData.clientId == ige.client.clientId) { tileType = 1; }
+            if(tileData.clientId == ige.client.clientId) {
+                tileType = 1;
+                //on incrémente le compteur de tile du player
+                ige.$("player_"+data.clientId).nbTileOwned = ige.$("player_"+data.clientId).nbTileOwned +1;
+                ige.client.log(ige.$("player_"+data.clientId).nbTileOwned + "tile");
+                ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + ige.$("player_"+data.clientId).nbTileOwned);
+
+            }
             else if(tileData.clientId == null) { tileType = 2; }
             else { tileType = 3 }
 
