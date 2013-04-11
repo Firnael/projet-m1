@@ -37,7 +37,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://localhost:2000', function () {
+					ige.network.start('http://10.21.19.109:2000', function () {
 
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
@@ -132,8 +132,6 @@ var Client = IgeClass.extend({
                             .drawBounds(false)
                             .drawBoundsData(false)
                             .mount(ige);
-
-
 
                         // Set client id
                         ige.network.send('getClientId');

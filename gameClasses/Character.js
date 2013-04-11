@@ -72,39 +72,50 @@ var Character = IgeEntityBox2d.extend({
             time = (distance / speed);
 
         if(!ige.isServer) {
+            var anim;
             var distX = x - character.translate().x();
             var distY = y - character.translate().y();
 
-            var anim;
             if (Math.abs(distX) > Math.abs(distY)) {
-                if (distX < 0) { anim = "walkLeft"; } // Moving left
-                else { anim = "walkRight"; } // Moving right
+                if (distX < 0) {
+                    anim = "walkLeft"; // Moving left
+                }
+                else {
+                    anim = "walkRight"; // Moving right
+                }
             }
             else {
-                if (distY < 0) { anim = "walkUp"; } // Moving up
-                else { anim = "walkDown"; } // Moving down
+                if (distY < 0) {
+                    anim = "walkUp"; // Moving up
+                }
+                else {
+                    anim = "walkDown"; // Moving down
+                }
             }
 
+            // Select the anim to draw
             character.imageEntity.animation.select(anim);
-            ige.client.log("player_" + clientId + " has new anim : " + anim);
+
+            // Set the timeout for the animation so it stops when the tweening is over
+            setTimeout(function(){
+                character.imageEntity.animation.stop();
+            },time);
         }
 
-        character._translate.tween()
-            .stopAll()
-            .properties({x: x, y: y})
-            .duration(time)
-            .afterTween(function () {
-                if(!ige.isServer) {
-                    character.imageEntity.animation.stop();
-                }
-                if(ige.isServer) {
+        if(ige.isServer) {
+            character._translate.tween()
+                .stopAll()
+                .properties({x: x, y: y})
+                .duration(time)
+                .afterTween(function () {
                     onTweenEnd(x, y, clientId);
-                }
-            })
-            .start();
+                })
+                .start();
+        }
 
         return character;
 
+        // What happens when the tweening is over server-side
         function onTweenEnd(x, y, clientId) {
             ige.$("player_" + clientId).translateTo(x, y, 0);
             var data = new IgePoint();
