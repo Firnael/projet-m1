@@ -19,7 +19,7 @@ var Character = IgeEntityBox2d.extend({
 
 		// Load the character texture file and UI stuff
 		if (!ige.isServer) {
-			this._characterTexture = new IgeCellSheet('../assets/textures/sprites/vx_chara02_c.png', 12, 8);
+			this._characterTexture = new IgeCellSheet('../assets/textures/sprites/vx_chara02_d.png', 12, 8);
 
 			// Wait for the texture to load
 			this._characterTexture.on('loaded', function () {
@@ -95,11 +95,6 @@ var Character = IgeEntityBox2d.extend({
 
             // Select the anim to draw
             character.imageEntity.animation.select(anim);
-
-            // Set the timeout for the animation so it stops when the tweening is over
-            setTimeout(function(){
-                character.imageEntity.animation.stop();
-            },time);
         }
 
         if(ige.isServer) {
@@ -121,6 +116,8 @@ var Character = IgeEntityBox2d.extend({
             var data = new IgePoint();
             data.x = x;
             data.y = y;
+
+            ige.network.send("stopWalkAnim", clientId);
             ige.server._setParcelle(data, clientId);
         }
     },

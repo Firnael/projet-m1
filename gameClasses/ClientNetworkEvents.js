@@ -80,6 +80,10 @@ var ClientNetworkEvents = {
         var tilePoint = data[0];
         var clientId = data[1];
         ige.$("player_" + clientId).walkTo(tilePoint.x, tilePoint.y, clientId);
+    },
+
+    _onStopWalkAnim: function (data) {
+        ige.$("player_" + data).imageEntity.animation.stop();
     }
 };
 

@@ -44,6 +44,7 @@ var Client = IgeClass.extend({
                         ige.network.define('getMap', self._onGetMap);
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
+                        ige.network.define('stopWalkAnim', self._onStopWalkAnim);
 
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(160)
