@@ -37,6 +37,7 @@ var Server = IgeClass.extend({
                         ige.network.define('getMap', self._onGetMap);
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
+                        ige.network.define('getCharacterName', self._onGetCharacterName);
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);

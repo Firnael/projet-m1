@@ -2,7 +2,7 @@
 var Character = IgeEntityBox2d.extend({
 	classId: 'Character',
 
-	init: function () {
+	init: function (clientId, playerName) {
 		var self = this;
 		IgeEntityBox2d.prototype.init.call(this);
 
@@ -15,6 +15,7 @@ var Character = IgeEntityBox2d.extend({
 			.addComponent(IgeAnimationComponent);
 
         self.loginLabel = null;
+        self.playerName = playerName;
         self.nbTileOwned = 0;
 
 		// Load the character texture file and UI stuff
@@ -36,22 +37,25 @@ var Character = IgeEntityBox2d.extend({
                 self.setType();
 
 			}, false, true);
-
-            // Create label
-            loginLabel = new IgeFontEntity()
-                .depth(3)
-                .textAlignX(1) // Center the text in the entity bounds
-                .colorOverlay('#ffffff') // Make the text white
-                .nativeFont('10pt Arial') // Use 26pt Arial
-                .textLineSpacing(0) // Set line spacing px
-                .text(teub)
-                .center(0)
-                .middle(-20)
-                .drawBounds(false)
-                .drawBoundsData(false)
-                .mount(self);
 		}
 	},
+
+    createLabel: function(text) {
+        // Create label
+        this.loginLabel = new IgeFontEntity()
+            .id(this.id() + '_label')
+            .depth(3)
+            .textAlignX(1) // Center the text in the entity bounds
+            .colorOverlay('#ffffff') // Make the text white
+            .nativeFont('10pt Arial') // Use 26pt Arial
+            .textLineSpacing(0) // Set line spacing px
+            .text(text)
+            .center(0)
+            .middle(-20)
+            .drawBounds(false)
+            .drawBoundsData(false)
+            .mount(this);
+    },
 
 	setType: function () {
         this.imageEntity.animation.define('walkDown', [1, 2, 3, 2], 8, -1)

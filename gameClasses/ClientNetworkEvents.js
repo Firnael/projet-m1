@@ -8,23 +8,25 @@ var ClientNetworkEvents = {
 
     _onPlayerEntity: function (data) {
         if (ige.$(data)) {
-            ige.$(data).addComponent(PlayerComponent)
+            var client = ige.$(data);
+            client.addComponent(PlayerComponent)
                 .drawBounds(false)
                 .drawBoundsData(false);
 
-            ige.client.vp1.camera.lookAt(ige.$(data));
-            ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
+            ige.client.vp1.camera.lookAt(client);
+            ige.client.vp1.camera.trackTranslate(client, 50);
         }
         else {
             var self = this;
             self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
                 if (entity.id() === data) {
-                    ige.$(data).addComponent(PlayerComponent)
+                    var client = ige.$(data);
+                    client.addComponent(PlayerComponent)
                         .drawBounds(false)
                         .drawBoundsData(false);
 
-                    ige.client.vp1.camera.lookAt(ige.$(data));
-                    ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
+                    ige.client.vp1.camera.lookAt(client);
+                    ige.client.vp1.camera.trackTranslate(client, 50);
 
                     ige.network.stream.off('entityCreated', self._eventListener, function (result) {
                         if (!result) {
@@ -84,6 +86,12 @@ var ClientNetworkEvents = {
 
     _onStopWalkAnim: function (data) {
         ige.$("player_" + data).imageEntity.animation.stop();
+    },
+
+    _onGetCharacterName: function(data) {
+        if (ige.$(data)) {
+            ige.$(data[0]).createLabel(data[1]);
+        }
     }
 };
 
