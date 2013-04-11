@@ -15,6 +15,8 @@ var Client = IgeClass.extend({
         var self = this;
         var clientId = -1;
 
+        var player = null;
+
 		// Load our textures
         var grassTile = new IgeTexture('../assets/textures/backgrounds/grassTile.png');
         var grassSheet2 = new IgeCellSheet('../assets/textures/tiles/grassSheet.png', 4, 1);
@@ -37,7 +39,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://localhost:2000', function () {
+					ige.network.start('http://10.21.19.53:2000', function () {
 
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);

@@ -26,6 +26,9 @@ var ClientNetworkEvents = {
                     ige.client.vp1.camera.lookAt(ige.$(data));
                     ige.client.vp1.camera.trackTranslate(ige.$(data), 50);
 
+                    //On initialise la variable player
+                    ige.client.player = entity;
+
                     ige.network.stream.off('entityCreated', self._eventListener, function (result) {
                         if (!result) {
                             this.log('Could not disable event listener!', 'warning');
@@ -66,6 +69,8 @@ var ClientNetworkEvents = {
                 //on incrémente le compteur de tile du player
                 ige.$("player_"+data.clientId).nbTileOwned = ige.$("player_"+data.clientId).nbTileOwned +1;
                 ige.client.log(ige.$("player_"+data.clientId).nbTileOwned + "tile");
+                ige.client.log(ige.client.player.nbTileOwned + "tile from client");
+
                 ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + ige.$("player_"+data.clientId).nbTileOwned);
 
             }

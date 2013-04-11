@@ -40,11 +40,12 @@ var Character = IgeEntityBox2d.extend({
             // Create label
             loginLabel = new IgeFontEntity()
                 .depth(3)
+                .width(300)
                 .textAlignX(1) // Center the text in the entity bounds
                 .colorOverlay('#ffffff') // Make the text white
                 .nativeFont('10pt Arial') // Use 26pt Arial
                 .textLineSpacing(0) // Set line spacing px
-                .text(teub)
+                .text(loginOfThePlayer)
                 .center(0)
                 .middle(-20)
                 .drawBounds(false)
