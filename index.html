@@ -12,22 +12,7 @@
 	<!-- STYLES -->
 	<link href="../css/default.css" rel="stylesheet" type="text/css" />
 
-    <script type="text/javascript">
-
-        /**
-         * Fonction de récupération des paramètres GET de la page
-         * @return Array Tableau associatif contenant les paramètres GET
-         */
-        var loginParam = location.search.substring(1).split('&')[0].split('=')[1];
-        var loginOfThePlayer = null;
-        if(loginParam == null){
-            loginOfThePlayer = "login";
-        } else {
-            loginOfThePlayer = loginParam
-        }
-
-
-    </script>
+    <script type="text/javascript">var teub = location.search.substring(1).split('&')[0].split('=')[1];</script>
 	<!-- Isogenic Loader -->
 	<script type="text/javascript">var igeRoot = '../ige/engine/';</script>
 	<script type="text/javascript" src="../ige/engine/loader.js"></script>

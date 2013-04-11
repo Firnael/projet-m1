@@ -44,12 +44,19 @@ var Client = IgeClass.extend({
                         ige.network.define('getMap', self._onGetMap);
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
+                        ige.network.define('stopWalkAnim', self._onStopWalkAnim);
+                        ige.network.define('getCharacterName', self._onGetCharacterName);
 
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(160)
 							.stream.on('entityCreated', function (entity) {
                                 entity.drawBounds(false);
                                 entity.drawBoundsData(false);
+
+                                if(entity.classId() == 'Character') {
+                                    ige.network.send("getCharacterName", entity.id());
+                                }
+
 								this.log('Stream entity created with ID: ' + entity.id());
 							}
                         );
@@ -139,7 +146,7 @@ var Client = IgeClass.extend({
                         ige.network.send('getClientId');
 
                         // Ask the server to create the player entity
-                        ige.network.send('playerEntity');
+                        ige.network.send('playerEntity', teub);
 
                         // Ask the server to give us the map
                         ige.network.send('getMap');

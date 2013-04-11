@@ -2,7 +2,7 @@
 var Character = IgeEntityBox2d.extend({
 	classId: 'Character',
 
-	init: function () {
+	init: function (clientId, playerName) {
 		var self = this;
 		IgeEntityBox2d.prototype.init.call(this);
 
@@ -15,11 +15,12 @@ var Character = IgeEntityBox2d.extend({
 			.addComponent(IgeAnimationComponent);
 
         self.loginLabel = null;
+        self.playerName = playerName;
         self.nbTileOwned = 0;
 
 		// Load the character texture file and UI stuff
 		if (!ige.isServer) {
-			this._characterTexture = new IgeCellSheet('../assets/textures/sprites/vx_chara02_c.png', 12, 8);
+			this._characterTexture = new IgeCellSheet('../assets/textures/sprites/vx_chara02_d.png', 12, 8);
 
 			// Wait for the texture to load
 			this._characterTexture.on('loaded', function () {
@@ -36,23 +37,25 @@ var Character = IgeEntityBox2d.extend({
                 self.setType();
 
 			}, false, true);
-
-            // Create label
-            loginLabel = new IgeFontEntity()
-                .depth(3)
-                .width(300)
-                .textAlignX(1) // Center the text in the entity bounds
-                .colorOverlay('#ffffff') // Make the text white
-                .nativeFont('10pt Arial') // Use 26pt Arial
-                .textLineSpacing(0) // Set line spacing px
-                .text(loginOfThePlayer)
-                .center(0)
-                .middle(-20)
-                .drawBounds(false)
-                .drawBoundsData(false)
-                .mount(self);
 		}
 	},
+
+    createLabel: function(text) {
+        // Create label
+        this.loginLabel = new IgeFontEntity()
+            .id(this.id() + '_label')
+            .depth(3)
+            .textAlignX(1) // Center the text in the entity bounds
+            .colorOverlay('#ffffff') // Make the text white
+            .nativeFont('10pt Arial') // Use 26pt Arial
+            .textLineSpacing(0) // Set line spacing px
+            .text(text)
+            .center(0)
+            .middle(-20)
+            .drawBounds(false)
+            .drawBoundsData(false)
+            .mount(this);
+    },
 
 	setType: function () {
         this.imageEntity.animation.define('walkDown', [1, 2, 3, 2], 8, -1)
@@ -96,11 +99,6 @@ var Character = IgeEntityBox2d.extend({
 
             // Select the anim to draw
             character.imageEntity.animation.select(anim);
-
-            // Set the timeout for the animation so it stops when the tweening is over
-            setTimeout(function(){
-                character.imageEntity.animation.stop();
-            },time);
         }
 
         if(ige.isServer) {
@@ -122,6 +120,8 @@ var Character = IgeEntityBox2d.extend({
             var data = new IgePoint();
             data.x = x;
             data.y = y;
+
+            ige.network.send("stopWalkAnim", clientId);
             ige.server._setParcelle(data, clientId);
         }
     },

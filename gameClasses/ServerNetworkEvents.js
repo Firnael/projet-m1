@@ -23,7 +23,7 @@ var ServerNetworkEvents = {
 
     _onPlayerEntity: function (data, clientId) {
         if (!ige.server.players[clientId]) {
-            ige.server.players[clientId] = new Character(clientId)
+            ige.server.players[clientId] = new Character(clientId, data)
                 .box2dBody({
                     type: 'dynamic',
                     linearDamping: 0.0,
@@ -112,6 +112,13 @@ var ServerNetworkEvents = {
 
     _onStopWalkAnim: function (data, cliendId) {
         ige.server.log("Server : _onStopWalkAnim");
+    },
+
+    _onGetCharacterName: function(data, clientId) {
+        var stuff = new Array();
+        stuff[0] = data;
+        stuff[1] = ige.$(data).playerName;
+        ige.network.send("getCharacterName", stuff, clientId);
     }
 };
 
