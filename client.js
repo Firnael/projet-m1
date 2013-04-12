@@ -16,15 +16,13 @@ var Client = IgeClass.extend({
         var clientId = -1;
 
 		// Load our textures
-        var grassTile = new IgeTexture('../assets/textures/backgrounds/grassTile.png');
-        var grassSheet2 = new IgeCellSheet('../assets/textures/tiles/grassSheet.png', 4, 1);
-
         this.gameTexture = {};
-        this.gameTexture.background1 = new IgeTexture('../assets/textures/backgrounds/grassTile.png');
-        this.gameTexture.uiButtonSelect = new IgeTexture('../assets/textures/ui/uiButton_select.png');
-        this.gameTexture.uiButtonMove = new IgeTexture('../assets/textures/ui/uiButton_move.png');
-        this.gameTexture.uiButtonDelete = new IgeTexture('../assets/textures/ui/uiButton_delete.png');
-        this.gameTexture.uiButtonHouse = new IgeTexture('../assets/textures/ui/uiButton_house.png');
+        this.gameTexture.grassSheet = new IgeCellSheet('assets/textures/tiles/grassSheet.png', 4, 1);
+        this.gameTexture.background = new IgeTexture('assets/textures/backgrounds/grassTile.png');
+        this.gameTexture.uiButtonSelect = new IgeTexture('assets/textures/ui/uiButton_select.png');
+        this.gameTexture.uiButtonMove = new IgeTexture('assets/textures/ui/uiButton_move.png');
+        this.gameTexture.uiButtonDelete = new IgeTexture('assets/textures/ui/uiButton_delete.png');
+        this.gameTexture.uiButtonHouse = new IgeTexture('assets/textures/ui/uiButton_house.png');
 
 
 		// Wait for our textures to load before continuing
@@ -70,14 +68,14 @@ var Client = IgeClass.extend({
                             .translateTo(0, 0, 0);
 
                         // Resize the background and then create a background pattern
-                        self.gameTexture.background1.resize(40, 20);
+                        self.gameTexture.background.resize(40, 20);
 
                         self.backScene = new IgeScene2d()
                             .id('backScene')
                             .depth(0)
                             .drawBounds(false)
                             .drawBoundsData(false)
-                            .backgroundPattern(self.gameTexture.background1, 'repeat', true, true)
+                            .backgroundPattern(self.gameTexture.background, 'repeat', true, true)
                             .ignoreCamera(true) // We want the scene to remain static
                             .mount(self.mainScene);
 
@@ -116,7 +114,7 @@ var Client = IgeClass.extend({
                             .isometricMounts(true)
                             .mount(self.gameScene);
 
-                        self.terrainLayer.addTexture(grassSheet2);
+                        self.terrainLayer.addTexture(self.gameTexture.grassSheet);
 
                         self.objectLayer = new IgeTileMap2d()
                             .id('objectLayer')
@@ -126,13 +124,10 @@ var Client = IgeClass.extend({
                             .drawBoundsData(false)
                             .tileWidth(40)
                             .tileHeight(40)
-                            //.drawGrid(10)
                             .mount(self.gameScene);
 
                         // Create the main viewport
                         self.vp1 = new IgeViewport()
-                            //.addComponent(IgeMousePanComponent)
-                            //.mousePan.enabled(true)
                             .id('vp1')
                             .depth(1)
                             .autoSize(true)
