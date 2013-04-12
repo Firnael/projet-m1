@@ -9,6 +9,7 @@ var Server = IgeClass.extend({
         this.players = {};
         // Tableau contenant les tiles
         this.parcelles = [];
+        this.tileBag = new TileBag();
 
 		// Add physics and setup physics world
 		ige.addComponent(IgeBox2dComponent)
@@ -38,6 +39,7 @@ var Server = IgeClass.extend({
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
+                        ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);

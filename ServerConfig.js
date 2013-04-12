@@ -3,7 +3,8 @@ var igeConfig = {
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
 		{name: 'Character', path: './gameClasses/Character'},
 		{name: 'PlayerComponent', path: './gameClasses/PlayerComponent'},
-		{name: 'Tile', path: './gameClasses/Tile'}
+		{name: 'Tile', path: './gameClasses/Tile'},
+		{name: 'TileBag', path: './gameClasses/TileBag'}
 	]
 };
 

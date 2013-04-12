@@ -46,6 +46,7 @@ var Client = IgeClass.extend({
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
+                        ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
 
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(160)
@@ -358,7 +359,7 @@ var Client = IgeClass.extend({
             .colorOverlay('#ffffff') // Make the text white
             .nativeFont('10pt Arial') // Use 26pt Arial
             .textLineSpacing(0) // Set line spacing px
-            .text("Nombre de parcelles conquises : ")
+            .text("Nombre de parcelles conquises : 0")
             .drawBounds(true)
             .drawBoundsData(true)
             .mount(this.menuBar);
