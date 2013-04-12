@@ -16,11 +16,10 @@ var Character = IgeEntityBox2d.extend({
 
         self.loginLabel = null;
         self.playerName = playerName;
-        self.nbTileOwned = 0;
 
 		// Load the character texture file and UI stuff
 		if (!ige.isServer) {
-			this._characterTexture = new IgeCellSheet('../assets/textures/sprites/vx_chara02_d.png', 12, 8);
+			this._characterTexture = new IgeCellSheet('../assets/textures/sprites/vx_chara02_e.png', 12, 8);
 
 			// Wait for the texture to load
 			this._characterTexture.on('loaded', function () {

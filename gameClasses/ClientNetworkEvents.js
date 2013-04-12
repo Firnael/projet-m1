@@ -41,16 +41,13 @@ var ClientNetworkEvents = {
     _onGetMap: function (data, clientId) {
         if(ige.$(data)) {
             var i;
-            ige.$$('tiles').forEach( function(e) {
-                e.destroy();
-            })
-
-            for(i=0; i<data.length; i++) {
-                var tileData = new Tile(data[i].x, data[i].y, data[i].clientId);
+            var tiles = data;
+            for(i=0; i<tiles.length; i++) {
+                var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
                 var tileType;
 
-                if(data[i].clientId == clientId) { tileType = 1; }
-                else if(data[i].clientId == null) { tileType = 2; }
+                if(tiles[i].clientId == clientId) { tileType = 1; }
+                else if(tiles[i].clientId == null) { tileType = 2; }
                 else { tileType = 3 }
 
                 ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
@@ -63,14 +60,7 @@ var ClientNetworkEvents = {
             var tileData = new Tile(data.x, data.y, data.clientId);
             var tileType;
 
-            if(tileData.clientId == ige.client.clientId) {
-                tileType = 1;
-                //on incrémente le compteur de tile du player
-                ige.$("player_"+data.clientId).nbTileOwned = ige.$("player_"+data.clientId).nbTileOwned +1;
-                ige.client.log(ige.$("player_"+data.clientId).nbTileOwned + "tile");
-                ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + ige.$("player_"+data.clientId).nbTileOwned);
-
-            }
+            if(tileData.clientId == ige.client.clientId) { tileType = 1; }
             else if(tileData.clientId == null) { tileType = 2; }
             else { tileType = 3 }
 
@@ -92,6 +82,10 @@ var ClientNetworkEvents = {
         if (ige.$(data)) {
             ige.$(data[0]).createLabel(data[1]);
         }
+    },
+
+    _onParcelleAmountChange: function(data, clientId) {
+        ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + data);
     }
 };
 

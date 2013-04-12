@@ -76,42 +76,15 @@ var ServerNetworkEvents = {
         self = ige.server;
         var tilePoint = data;
         var tile = new Tile(tilePoint.x, tilePoint.y, clientId);
+        var updatedTile = self.tileBag.setTile(tile);
 
-        var i;
-        var currentTile;
-        var go = true;
-
-        for(i=0; i<self.parcelles.length; i++) {
-            currentTile = self.parcelles[i];
-
-            if(currentTile.clientId == clientId && currentTile.x == tilePoint.x  && currentTile.y == tilePoint.y) {
-                go = false;
-                break;
-            }
-            else if(currentTile.clientId != null && currentTile.x == tilePoint.x && currentTile.y == tilePoint.y) {
-                currentTile.clientId = clientId;
-                ige.network.send("getParcelle", currentTile);
-                go = false;
-                break;
-            }
-        }
-
-        if(go) {
-            self.parcelles.push(tile);
-            ige.network.send("getParcelle", tile);
+        if(updatedTile) {
+            ige.network.send("getParcelle", updatedTile);
         }
     },
 
     _onGetMap: function (data, clientId) {
-        ige.network.send('getMap', ige.server.parcelles, clientId);
-    },
-
-    _onGetParcelle: function (data, cliendId) {
-        ige.server.log("Server : _onGetParcelle");
-    },
-
-    _onStopWalkAnim: function (data, cliendId) {
-        ige.server.log("Server : _onStopWalkAnim");
+        ige.network.send('getMap', ige.server.tileBag.tiles, clientId);
     },
 
     _onGetCharacterName: function(data, clientId) {
@@ -119,6 +92,21 @@ var ServerNetworkEvents = {
         stuff[0] = data;
         stuff[1] = ige.$(data).playerName;
         ige.network.send("getCharacterName", stuff, clientId);
+    },
+
+    _onParcelleAmountChange: function(data, clientId) {
+        ige.network.send('parcelleAmountChange', data, clientId);
+    },
+
+
+    // =====
+
+    _onGetParcelle: function (data, cliendId) {
+        ige.server.log("Server : _onGetParcelle");
+    },
+
+    _onStopWalkAnim: function (data, cliendId) {
+        ige.server.log("Server : _onStopWalkAnim");
     }
 };
 
