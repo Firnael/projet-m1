@@ -14,6 +14,7 @@ var Client = IgeClass.extend({
 
         var self = this;
         var clientId = -1;
+        var tileBag = null;
 
 		// Load our textures
         this.gameTexture = {};
@@ -45,6 +46,8 @@ var Client = IgeClass.extend({
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
+
+                        self.tileBag = new TileBag();
 
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(160)
@@ -112,6 +115,24 @@ var Client = IgeClass.extend({
                             .drawBoundsData(true)
                             .drawGrid(10)
                             .isometricMounts(true)
+                            .drawMouse(true)
+                            .mouseOver(function () {
+                                if (ige.client.data('cursorMode') !== 'select') {
+                                    this.backgroundColor('#6b6b6b');
+                                }
+                                if(ige.client.tileBag){
+                                    console.log("oh shit");
+                                    var x = this._mouseTilePos.x;
+                                    var y = this._mouseTilePos.y;
+                                    var fertility = ige.client.tileBag.getFertilityByTile(x,y);
+                                    if(fertility){
+                                        ige.client.tileFertilityLabel.text("fertility = "+ fertility);
+                                    }else{
+                                        ige.client.tileFertilityLabel.text("fertility = 0");
+                                    }
+                                }
+                                ige.input.stopPropagation();
+                            })
                             .mount(self.gameScene);
 
                         self.terrainLayer.addTexture(self.gameTexture.grassSheet);
@@ -355,6 +376,21 @@ var Client = IgeClass.extend({
             .nativeFont('10pt Arial') // Use 26pt Arial
             .textLineSpacing(0) // Set line spacing px
             .text("Nombre de parcelles conquises : 0")
+            .drawBounds(true)
+            .drawBoundsData(true)
+            .mount(this.menuBar);
+
+        this.tileFertilityLabel = new IgeFontEntity()
+            .id('tileFertility')
+            .left(500)
+            .top(3)
+            .width(300)
+            .height(32)
+            .depth(3)
+            .colorOverlay('#ffffff') // Make the text white
+            .nativeFont('10pt Arial') // Use 26pt Arial
+            .textLineSpacing(0) // Set line spacing px
+            .text("fertility = 0")
             .drawBounds(true)
             .drawBoundsData(true)
             .mount(this.menuBar);

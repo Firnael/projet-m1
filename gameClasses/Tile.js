@@ -3,10 +3,11 @@ var Tile = IgeClass.extend({
 
     init: function (x, y, clientId) {
         var self = this;
-
         self.x = x;
         self.y = y;
         self.clientId = clientId;
+        self.fertility = 98;
+        console.log(self);
     },
 
     destroy: function () {

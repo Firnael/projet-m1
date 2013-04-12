@@ -36,7 +36,8 @@ var Character = IgeEntityBox2d.extend({
                 self.setType();
 
 			}, false, true);
-		}
+
+        }
 	},
 
     createLabel: function(text) {

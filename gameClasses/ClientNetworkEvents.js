@@ -43,6 +43,7 @@ var ClientNetworkEvents = {
             var i;
             var tiles = data;
             for(i=0; i<tiles.length; i++) {
+                ige.client.tileBag.addTile(tiles[i]);
                 var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
                 var tileType;
 
@@ -57,13 +58,19 @@ var ClientNetworkEvents = {
 
     _onGetParcelle: function (data) {
         if(ige.$(data)) {
-            var tileData = new Tile(data.x, data.y, data.clientId);
+            var tileData = new Tile();
+            tileData.x = data.x;
+            tileData.y = data.y;
+            tileData.clientId =data.clientId;
+            tileData.fertility =data.fertility;
+            ige.client.log(tileData.fertility);
             var tileType;
 
             if(tileData.clientId == ige.client.clientId) { tileType = 1; }
             else if(tileData.clientId == null) { tileType = 2; }
             else { tileType = 3 }
 
+            ige.client.tileBag.addTile(tileData);
             ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
         }
     },
