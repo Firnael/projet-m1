@@ -18,7 +18,7 @@ var Client = IgeClass.extend({
 		// Load our textures
         this.gameTexture = {};
         this.gameTexture.grassSheet = new IgeCellSheet('assets/textures/tiles/grassSheet.png', 4, 1);
-        this.gameTexture.fenceSheet = new IgeCellSheet('assets/textures/tiles/fenceSheet3.png', 6, 1);
+        this.gameTexture.fenceSheet = new IgeCellSheet('assets/textures/tiles/fenceSheet.png', 6, 1);
         this.gameTexture.background = new IgeTexture('assets/textures/backgrounds/grassTile.png');
         this.gameTexture.uiButtonSelect = new IgeTexture('assets/textures/ui/uiButton_select.png');
         this.gameTexture.uiButtonMove = new IgeTexture('assets/textures/ui/uiButton_move.png');
