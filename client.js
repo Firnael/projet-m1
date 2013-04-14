@@ -119,18 +119,18 @@ var Client = IgeClass.extend({
                         self.terrainLayer.addTexture(self.gameTexture.fenceSheet);
 
                         // Dessin de la fence
-                        self.terrainLayer.paintTile(1, 1, 1, 0);
-                        self.terrainLayer.paintTile(2, 1, 1, 3);
-                        self.terrainLayer.paintTile(3, 1, 1, 3);
-                        self.terrainLayer.paintTile(4, 1, 1, 4);
-                        self.terrainLayer.paintTile(4, 2, 1, 2);
-                        self.terrainLayer.paintTile(4, 3, 1, 2);
-                        self.terrainLayer.paintTile(4, 4, 1, 5);
-                        self.terrainLayer.paintTile(3, 4, 1, 3);
-                        self.terrainLayer.paintTile(2, 4, 1, 3);
-                        self.terrainLayer.paintTile(1, 4, 1, 6);
-                        self.terrainLayer.paintTile(1, 3, 1, 2);
-                        self.terrainLayer.paintTile(1, 2, 1, 2);
+                        self.terrainLayer.paintTile(0, 0, 1, 0);
+                        self.terrainLayer.paintTile(1, 0, 1, 3);
+                        self.terrainLayer.paintTile(2, 0, 1, 3);
+                        self.terrainLayer.paintTile(3, 0, 1, 4);
+                        self.terrainLayer.paintTile(3, 1, 1, 2);
+                        self.terrainLayer.paintTile(3, 2, 1, 2);
+                        self.terrainLayer.paintTile(3, 3, 1, 5);
+                        self.terrainLayer.paintTile(2, 3, 1, 3);
+                        self.terrainLayer.paintTile(1, 3, 1, 3);
+                        self.terrainLayer.paintTile(0, 3, 1, 6);
+                        self.terrainLayer.paintTile(0, 2, 1, 2);
+                        self.terrainLayer.paintTile(0, 1, 1, 2);
                         // ===
 
                         self.objectLayer = new IgeTileMap2d()

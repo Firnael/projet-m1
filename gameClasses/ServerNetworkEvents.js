@@ -47,6 +47,7 @@ var ServerNetworkEvents = {
                 })
                 .id('player_' + clientId)
                 .isometric(true)
+                .translateTo(40, 40, 0)
                 .streamMode(1)
                 .mount(ige.server.objectLayer);
 
