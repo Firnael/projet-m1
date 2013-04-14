@@ -18,6 +18,7 @@ var Client = IgeClass.extend({
 		// Load our textures
         this.gameTexture = {};
         this.gameTexture.grassSheet = new IgeCellSheet('assets/textures/tiles/grassSheet.png', 4, 1);
+        this.gameTexture.fenceSheet = new IgeCellSheet('assets/textures/tiles/fenceSheet3.png', 6, 1);
         this.gameTexture.background = new IgeTexture('assets/textures/backgrounds/grassTile.png');
         this.gameTexture.uiButtonSelect = new IgeTexture('assets/textures/ui/uiButton_select.png');
         this.gameTexture.uiButtonMove = new IgeTexture('assets/textures/ui/uiButton_move.png');
@@ -35,7 +36,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.21.19.109:2000', function () {
+					ige.network.start('http://192.168.1.85:2000', function () {
 
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
@@ -115,6 +116,22 @@ var Client = IgeClass.extend({
                             .mount(self.gameScene);
 
                         self.terrainLayer.addTexture(self.gameTexture.grassSheet);
+                        self.terrainLayer.addTexture(self.gameTexture.fenceSheet);
+
+                        // Dessin de la fence
+                        self.terrainLayer.paintTile(1, 1, 1, 0);
+                        self.terrainLayer.paintTile(2, 1, 1, 3);
+                        self.terrainLayer.paintTile(3, 1, 1, 3);
+                        self.terrainLayer.paintTile(4, 1, 1, 4);
+                        self.terrainLayer.paintTile(4, 2, 1, 2);
+                        self.terrainLayer.paintTile(4, 3, 1, 2);
+                        self.terrainLayer.paintTile(4, 4, 1, 5);
+                        self.terrainLayer.paintTile(3, 4, 1, 3);
+                        self.terrainLayer.paintTile(2, 4, 1, 3);
+                        self.terrainLayer.paintTile(1, 4, 1, 6);
+                        self.terrainLayer.paintTile(1, 3, 1, 2);
+                        self.terrainLayer.paintTile(1, 2, 1, 2);
+                        // ===
 
                         self.objectLayer = new IgeTileMap2d()
                             .id('objectLayer')
