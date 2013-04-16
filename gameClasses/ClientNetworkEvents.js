@@ -41,14 +41,22 @@ var ClientNetworkEvents = {
     _onGetMap: function (data, clientId) {
         if(ige.$(data)) {
             var i;
-            var tiles = data;
+            var tiles = data[0];
+            var myClientId = data[1];
+
             for(i=0; i<tiles.length; i++) {
                 var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
                 var tileType;
 
-                if(tiles[i].clientId == clientId) { tileType = 1; }
-                else if(tiles[i].clientId == null) { tileType = 2; }
-                else { tileType = 3 }
+                if(tiles[i].clientId == myClientId) {
+                    tileType = 1;
+                }
+                else if(tiles[i].clientId == null) {
+                    tileType = 2;
+                }
+                else {
+                    tileType = 3
+                }
 
                 ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
             }

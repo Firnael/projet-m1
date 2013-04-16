@@ -31,6 +31,10 @@ var TileBag = IgeClass.extend({
         return newtTile;
     },
 
+    addTile: function(tile) {
+        this.tiles.push(tile);
+    },
+
     getTileAmountByClientId: function (clientId) {
         var amount = 0;
         var i;
