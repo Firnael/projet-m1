@@ -117,7 +117,7 @@ var Client = IgeClass.extend({
                         self.terrainLayer.addTexture(self.gameTexture.grassSheet);
                         self.terrainLayer.addTexture(self.gameTexture.fenceSheet);
 
-                        // Dessin de la fence
+                        /* Dessin de la fence
                         self.terrainLayer.paintTile(0, 0, 1, 0);
                         self.terrainLayer.paintTile(1, 0, 1, 3);
                         self.terrainLayer.paintTile(2, 0, 1, 3);
@@ -130,7 +130,7 @@ var Client = IgeClass.extend({
                         self.terrainLayer.paintTile(0, 3, 1, 6);
                         self.terrainLayer.paintTile(0, 2, 1, 2);
                         self.terrainLayer.paintTile(0, 1, 1, 2);
-                        // ===
+                        */
 
                         self.objectLayer = new IgeTileMap2d()
                             .id('objectLayer')

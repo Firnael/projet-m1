@@ -97,21 +97,10 @@ var Server = IgeClass.extend({
 							.drawBounds(false)
 							.drawBoundsData(false)
 							.mount(ige);
-
-                        self.initTileBag();
 					}
 				});
 			});
-	},
-
-    initTileBag: function() {
-        var i, j;
-        for(i=0; i<10; i++) {
-            for(j=0; j<10; j++) {
-                this.tileBag.addTile(new Tile(i*40, j*40, null));
-            }
-        }
-    }
+	}
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Server; }

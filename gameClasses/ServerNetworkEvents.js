@@ -86,7 +86,7 @@ var ServerNetworkEvents = {
 
     _onGetMap: function (data, clientId) {
         var stuff = new Array();
-        stuff[0] = ige.server.tileBag.tiles;
+        stuff[0] = ige.server.tileBag;
         stuff[1] = clientId;
         ige.network.send('getMap', stuff, clientId);
     },
