@@ -45,7 +45,10 @@ var ClientNetworkEvents = {
             var width = data[0].width;
             var height = data[0].height;
             var myClientId = data[1];
+            ige.client.tileBag = new TileBag();
 
+
+            // dessiner les fences et les tiles
             for(i=0; i<tiles.length; i++) {
                 ige.client.tileBag.addTile(tiles[i]);
                 var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
@@ -113,6 +116,8 @@ var ClientNetworkEvents = {
                     ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
                 }
             }
+            // récuperer la colisionMap
+            ige.client.tileBag.setColisionMap(ige.client.objectLayer);
         }
     },
 

@@ -7,6 +7,11 @@ var TileBag = IgeClass.extend({
         self.width = 10;
         self.height = 10;
 
+    },
+
+    initTileBag: function () {
+        var self = this;
+
         var i, j;
         for(i=0; i<self.width; i++) {
             for(j=0; j<self.height; j++) {
@@ -75,6 +80,17 @@ var TileBag = IgeClass.extend({
         var tile = this.getTile(x,y);
         if(tile){
             return tile.fertility;
+        }
+    },
+
+    setColisionMap: function (tileMap){
+        var i;
+        for(i=0; i<this.tiles.length; i++) {
+            var currentTile = this.tiles[i];
+            if(!this.tiles[i].isFence){
+                tileMap.occupyTile(currentTile.x/40,currentTile.y/40,1,1,"walkable");
+                ige.client.log("lol"+tileMap.tileOccupiedBy(currentTile.x/40,currentTile.y/40));
+            }
         }
     },
 

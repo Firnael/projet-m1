@@ -14,7 +14,7 @@ var Client = IgeClass.extend({
 
         var self = this;
         var clientId = -1;
-        this.tileBag = new TileBag();
+        this.tileBag = null;
 
 		// Load our textures
         this.gameTexture = {};
@@ -122,7 +122,6 @@ var Client = IgeClass.extend({
                                     this.backgroundColor('#6b6b6b');
                                 }
                                 if(ige.client.tileBag){
-                                    console.log("oh shit");
                                     var x = this._mouseTilePos.x;
                                     var y = this._mouseTilePos.y;
                                     var fertility = ige.client.tileBag.getFertilityByTile(x,y);
@@ -162,7 +161,10 @@ var Client = IgeClass.extend({
                             .drawBoundsData(false)
                             .tileWidth(40)
                             .tileHeight(40)
+                            //.highlightOccupied(true)
                             .mount(self.gameScene);
+
+                        //self.objectLayer.occupyTile(1,1,1,1,1);
 
                         // Create the main viewport
                         self.vp1 = new IgeViewport()
