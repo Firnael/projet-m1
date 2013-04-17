@@ -1,13 +1,18 @@
 var Tile = IgeClass.extend({
     classId: 'Tile',
 
+    // 1 = à nous
+    // 2 = neutre
+    // 3 = à eux
+
     init: function (x, y, clientId) {
         var self = this;
+
         self.x = x;
         self.y = y;
         self.clientId = clientId;
         self.fertility = 98;
-        console.log(self);
+        self.isFence= false;
     },
 
     destroy: function () {

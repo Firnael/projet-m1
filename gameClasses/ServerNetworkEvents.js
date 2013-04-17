@@ -47,6 +47,7 @@ var ServerNetworkEvents = {
                 })
                 .id('player_' + clientId)
                 .isometric(true)
+                .translateTo(40, 40, 0)
                 .streamMode(1)
                 .mount(ige.server.objectLayer);
 
@@ -84,7 +85,10 @@ var ServerNetworkEvents = {
     },
 
     _onGetMap: function (data, clientId) {
-        ige.network.send('getMap', ige.server.tileBag.tiles, clientId);
+        var stuff = new Array();
+        stuff[0] = ige.server.tileBag;
+        stuff[1] = clientId;
+        ige.network.send('getMap', stuff, clientId);
     },
 
     _onGetCharacterName: function(data, clientId) {

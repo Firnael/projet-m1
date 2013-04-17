@@ -41,17 +41,77 @@ var ClientNetworkEvents = {
     _onGetMap: function (data, clientId) {
         if(ige.$(data)) {
             var i;
-            var tiles = data;
+            var tiles = data[0].tiles;
+            var width = data[0].width;
+            var height = data[0].height;
+            var myClientId = data[1];
+
             for(i=0; i<tiles.length; i++) {
                 ige.client.tileBag.addTile(tiles[i]);
                 var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
                 var tileType;
 
-                if(tiles[i].clientId == clientId) { tileType = 1; }
-                else if(tiles[i].clientId == null) { tileType = 2; }
-                else { tileType = 3 }
+                if(tiles[i].clientId == myClientId) {
+                    tileType = 1;
+                }
+                else if(tiles[i].clientId == null) {
+                    tileType = 2;
+                }
+                else {
+                    tileType = 3
+                }
 
-                ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
+                var x = tiles[i].x/40;
+                var y = tiles[i].y/40;
+
+                if(tiles[i].isFence) {
+                    if(x == 0) {
+                        if(y == 0) {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 1);
+                        }
+                        else if(y == height-1) {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 6);
+                        }
+                        else {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 2);
+                        }
+                    }
+                    if(y == 0) {
+                        if(x == 0) {
+                            // already done
+                        }
+                        else if(x == width-1) {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 4);
+                        }
+                        else {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 3);
+                        }
+                    }
+                    if(x == width-1) {
+                        if(y == 0) {
+                            // already done
+                        }
+                        else if(y == height-1) {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 5);
+                        }
+                        else {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 2);
+                        }
+                    }
+                    if(y == height-1) {
+                        if(x == 0) {
+                            // already done
+                        }
+                        else if(x == width-1) {
+                            // already done
+                        }
+                        else {
+                            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 3);
+                        }
+                    }
+                } else {
+                    ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
+                }
             }
         }
     },

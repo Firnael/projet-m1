@@ -14,11 +14,11 @@ var Client = IgeClass.extend({
 
         var self = this;
         var clientId = -1;
-        var tileBag = null;
 
 		// Load our textures
         this.gameTexture = {};
         this.gameTexture.grassSheet = new IgeCellSheet('assets/textures/tiles/grassSheet.png', 4, 1);
+        this.gameTexture.fenceSheet = new IgeCellSheet('assets/textures/tiles/fenceSheet.png', 6, 1);
         this.gameTexture.background = new IgeTexture('assets/textures/backgrounds/grassTile.png');
         this.gameTexture.uiButtonSelect = new IgeTexture('assets/textures/ui/uiButton_select.png');
         this.gameTexture.uiButtonMove = new IgeTexture('assets/textures/ui/uiButton_move.png');
@@ -36,7 +36,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://localhost:2000', function () {
+					ige.network.start('http://10.21.19.109:2000', function () {
 
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
@@ -46,8 +46,6 @@ var Client = IgeClass.extend({
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
-
-                        self.tileBag = new TileBag();
 
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(160)
@@ -136,6 +134,22 @@ var Client = IgeClass.extend({
                             .mount(self.gameScene);
 
                         self.terrainLayer.addTexture(self.gameTexture.grassSheet);
+                        self.terrainLayer.addTexture(self.gameTexture.fenceSheet);
+
+                        /* Dessin de la fence
+                        self.terrainLayer.paintTile(0, 0, 1, 0);
+                        self.terrainLayer.paintTile(1, 0, 1, 3);
+                        self.terrainLayer.paintTile(2, 0, 1, 3);
+                        self.terrainLayer.paintTile(3, 0, 1, 4);
+                        self.terrainLayer.paintTile(3, 1, 1, 2);
+                        self.terrainLayer.paintTile(3, 2, 1, 2);
+                        self.terrainLayer.paintTile(3, 3, 1, 5);
+                        self.terrainLayer.paintTile(2, 3, 1, 3);
+                        self.terrainLayer.paintTile(1, 3, 1, 3);
+                        self.terrainLayer.paintTile(0, 3, 1, 6);
+                        self.terrainLayer.paintTile(0, 2, 1, 2);
+                        self.terrainLayer.paintTile(0, 1, 1, 2);
+                        */
 
                         self.objectLayer = new IgeTileMap2d()
                             .id('objectLayer')
@@ -156,8 +170,6 @@ var Client = IgeClass.extend({
                             .drawBounds(false)
                             .drawBoundsData(false)
                             .mount(ige);
-
-
 
                         // Set client id
                         ige.network.send('getClientId');
