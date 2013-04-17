@@ -96,7 +96,6 @@ var TileBag = IgeClass.extend({
             var currentTile = this.tiles[i];
             if(!this.tiles[i].isFence){
                 tileMap.occupyTile(currentTile.x/40,currentTile.y/40,1,1,"walkable");
-                ige.client.log("lol"+tileMap.tileOccupiedBy(currentTile.x/40,currentTile.y/40));
             }
         }
     },
