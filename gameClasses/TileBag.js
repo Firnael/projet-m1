@@ -29,6 +29,17 @@ var TileBag = IgeClass.extend({
         this.tiles.push(tile);
     },
 
+    modifyTile: function(tile){
+        var i;
+        for(i=0; i<this.tiles.length; i++) {
+            var currentTile = this.tiles[i];
+            if(currentTile.clientId == tile.clientId && currentTile.x == tile.x  && currentTile.y == tile.y) {
+                currentTile.clientId = tile.clientId;
+            }
+        }
+
+    },
+
     setTile: function(tile) {
         var i;
         for(i=0; i<this.tiles.length; i++) {
@@ -49,10 +60,6 @@ var TileBag = IgeClass.extend({
         this.tiles.push(newtTile);
         ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
         return newtTile;
-    },
-
-    addTile: function(tile) {
-        this.tiles.push(tile);
     },
 
     getTileAmountByClientId: function (clientId) {

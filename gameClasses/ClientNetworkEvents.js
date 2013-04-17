@@ -135,7 +135,7 @@ var ClientNetworkEvents = {
             else if(tileData.clientId == null) { tileType = 2; }
             else { tileType = 3 }
 
-            ige.client.tileBag.addTile(tileData);
+            ige.client.tileBag.modifyTile(tileData);
             ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
         }
     },
