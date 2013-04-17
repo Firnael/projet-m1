@@ -14,7 +14,6 @@ var Client = IgeClass.extend({
 
         var self = this;
         var clientId = -1;
-        this.tileBag = null;
 
 		// Load our textures
         this.gameTexture = {};
@@ -31,16 +30,13 @@ var Client = IgeClass.extend({
 		ige.on('texturesLoaded', function () {
 
 			// Create the HTML canvas
-            var canvas = document.getElementById('gameCanvas');
-            ige.canvas(canvas);
 			ige.createFrontBuffer(true);
 			ige.viewportDepth(true);
 
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://localhost:2000', function () {
-
+					ige.network.start('http://10.21.16.15:2000', function () {
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
                         ige.network.define('getMap', self._onGetMap);
@@ -51,7 +47,7 @@ var Client = IgeClass.extend({
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
 
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.renderLatency(160)
+							.stream.renderLatency(120)
 							.stream.on('entityCreated', function (entity) {
                                 entity.drawBounds(false);
                                 entity.drawBoundsData(false);
@@ -83,12 +79,7 @@ var Client = IgeClass.extend({
                             .ignoreCamera(true) // We want the scene to remain static
                             .mount(self.mainScene);
 
-                        // Create the UI scene that will have all the UI
-                        // entities mounted to it. This scene is at a higher
-                        // depth than gameScene so it will always be rendered
-                        // "on top" of the other game items which will all
-                        // be mounted to off of gameScene somewhere down the
-                        // scenegraph.
+                        // Create the UI scene. It's painted on top of others scenes
                         self.uiScene = new IgeScene2d()
                             .id('uiScene')
                             .depth(3)
@@ -116,42 +107,10 @@ var Client = IgeClass.extend({
                             .drawBoundsData(true)
                             .drawGrid(10)
                             .isometricMounts(true)
-                            .drawMouse(true)
-                            .mouseOver(function () {
-                                if (ige.client.data('cursorMode') !== 'select') {
-                                    this.backgroundColor('#6b6b6b');
-                                }
-                                if(ige.client.tileBag){
-                                    var x = this._mouseTilePos.x;
-                                    var y = this._mouseTilePos.y;
-                                    var fertility = ige.client.tileBag.getFertilityByTile(x,y);
-                                    if(fertility){
-                                        ige.client.tileFertilityLabel.text("fertility = "+ fertility);
-                                    }else{
-                                        ige.client.tileFertilityLabel.text("fertility = 0");
-                                    }
-                                }
-                                ige.input.stopPropagation();
-                            })
                             .mount(self.gameScene);
 
                         self.terrainLayer.addTexture(self.gameTexture.grassSheet);
                         self.terrainLayer.addTexture(self.gameTexture.fenceSheet);
-
-                        /* Dessin de la fence
-                        self.terrainLayer.paintTile(0, 0, 1, 0);
-                        self.terrainLayer.paintTile(1, 0, 1, 3);
-                        self.terrainLayer.paintTile(2, 0, 1, 3);
-                        self.terrainLayer.paintTile(3, 0, 1, 4);
-                        self.terrainLayer.paintTile(3, 1, 1, 2);
-                        self.terrainLayer.paintTile(3, 2, 1, 2);
-                        self.terrainLayer.paintTile(3, 3, 1, 5);
-                        self.terrainLayer.paintTile(2, 3, 1, 3);
-                        self.terrainLayer.paintTile(1, 3, 1, 3);
-                        self.terrainLayer.paintTile(0, 3, 1, 6);
-                        self.terrainLayer.paintTile(0, 2, 1, 2);
-                        self.terrainLayer.paintTile(0, 1, 1, 2);
-                        */
 
                         self.objectLayer = new IgeTileMap2d()
                             .id('objectLayer')
@@ -161,10 +120,7 @@ var Client = IgeClass.extend({
                             .drawBoundsData(false)
                             .tileWidth(40)
                             .tileHeight(40)
-                            //.highlightOccupied(true)
                             .mount(self.gameScene);
-
-                        //self.objectLayer.occupyTile(1,1,1,1,1);
 
                         // Create the main viewport
                         self.vp1 = new IgeViewport()
@@ -393,21 +349,6 @@ var Client = IgeClass.extend({
             .nativeFont('10pt Arial') // Use 26pt Arial
             .textLineSpacing(0) // Set line spacing px
             .text("Nombre de parcelles conquises : 0")
-            .drawBounds(true)
-            .drawBoundsData(true)
-            .mount(this.menuBar);
-
-        this.tileFertilityLabel = new IgeFontEntity()
-            .id('tileFertility')
-            .left(500)
-            .top(3)
-            .width(300)
-            .height(32)
-            .depth(3)
-            .colorOverlay('#ffffff') // Make the text white
-            .nativeFont('10pt Arial') // Use 26pt Arial
-            .textLineSpacing(0) // Set line spacing px
-            .text("fertility = 0")
             .drawBounds(true)
             .drawBoundsData(true)
             .mount(this.menuBar);

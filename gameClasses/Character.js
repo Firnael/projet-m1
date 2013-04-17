@@ -11,14 +11,16 @@ var Character = IgeEntityBox2d.extend({
 			.size3d(20, 20, 40)
 			.isometric(true);
 
-		self.imageEntity = new IgeEntity()
-			.addComponent(IgeAnimationComponent);
-
+        self.level = 0;
         self.loginLabel = null;
         self.playerName = playerName;
+        self.inventory = new Inventory();
 
 		// Load the character texture file and UI stuff
 		if (!ige.isServer) {
+            self.imageEntity = new IgeEntity()
+                .addComponent(IgeAnimationComponent);
+
 			this._characterTexture = new IgeCellSheet('assets/textures/sprites/vx_chara02_e.png', 12, 8);
 
 			// Wait for the texture to load
@@ -36,8 +38,7 @@ var Character = IgeEntityBox2d.extend({
                 self.setType();
 
 			}, false, true);
-
-        }
+		}
 	},
 
     createLabel: function(text) {

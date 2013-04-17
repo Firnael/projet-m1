@@ -11,13 +11,12 @@ var Tile = IgeClass.extend({
         self.x = x;
         self.y = y;
         self.clientId = clientId;
-        self.fertility = 98;
         self.isFence= false;
     },
 
     destroy: function () {
         this.unOccupyTile(
-            x, y, 40, 40
+            this.x, this.y, 40, 40
         );
         IgeClass.prototype.destroy.call(this);
     }

@@ -2,7 +2,6 @@ var ClientNetworkEvents = {
 
     _onGetClientId: function (data, clientId) {
         ige.client.clientId = data;
-        ige.client.log("Received clientId : " + data);
         ige.client.setupUi();
     },
 
@@ -45,12 +44,8 @@ var ClientNetworkEvents = {
             var width = data[0].width;
             var height = data[0].height;
             var myClientId = data[1];
-            ige.client.tileBag = new TileBag();
 
-
-            // dessiner les fences et les tiles
             for(i=0; i<tiles.length; i++) {
-                ige.client.tileBag.addTile(tiles[i]);
                 var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
                 var tileType;
 
@@ -116,26 +111,18 @@ var ClientNetworkEvents = {
                     ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
                 }
             }
-            // récuperer la colisionMap
-            ige.client.tileBag.setColisionMap(ige.client.objectLayer);
         }
     },
 
     _onGetParcelle: function (data) {
         if(ige.$(data)) {
-            var tileData = new Tile();
-            tileData.x = data.x;
-            tileData.y = data.y;
-            tileData.clientId =data.clientId;
-            tileData.fertility =data.fertility;
-            ige.client.log(tileData.fertility);
+            var tileData = new Tile(data.x, data.y, data.clientId);
             var tileType;
 
             if(tileData.clientId == ige.client.clientId) { tileType = 1; }
             else if(tileData.clientId == null) { tileType = 2; }
             else { tileType = 3 }
 
-            ige.client.tileBag.modifyTile(tileData);
             ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
         }
     },
@@ -157,6 +144,10 @@ var ClientNetworkEvents = {
     },
 
     _onParcelleAmountChange: function(data, clientId) {
+        // Update the character lvl
+        ige.$("player_" + ige.client.clientId).level = data;
+
+        // Update the UI
         ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + data);
     }
 };

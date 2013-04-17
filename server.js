@@ -7,11 +7,9 @@ var Server = IgeClass.extend({
 
         // Define an object to hold references to our player entities
         this.players = {};
-        // Tableau contenant les tiles
-        this.parcelles = [];
+        // Container for the tiles
         this.tileBag = new TileBag();
-        this.tileBag.initTileBag();
-
+        
 		// Add physics and setup physics world
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
@@ -47,7 +45,7 @@ var Server = IgeClass.extend({
 
 						// Add the network stream component
 						ige.network.addComponent(IgeStreamComponent)
-							.stream.sendInterval(120) // Send a stream update once every 30 milliseconds
+							.stream.sendInterval(60) // Send a stream update once every 100 milliseconds
 							.stream.start(); // Start the stream
 
 						// Accept incoming connections
