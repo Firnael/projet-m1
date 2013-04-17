@@ -12,6 +12,8 @@ var Tile = IgeClass.extend({
         self.y = y;
         self.clientId = clientId;
         self.isFence= false;
+        self.fertility = 100;
+        self.humidity = 100;
     },
 
     destroy: function () {

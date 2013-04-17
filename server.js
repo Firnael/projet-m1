@@ -9,6 +9,7 @@ var Server = IgeClass.extend({
         this.players = {};
         // Container for the tiles
         this.tileBag = new TileBag();
+        this.tileBag.initTileBag();
         
 		// Add physics and setup physics world
 		ige.addComponent(IgeBox2dComponent)

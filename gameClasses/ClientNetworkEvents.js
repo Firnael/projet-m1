@@ -44,11 +44,24 @@ var ClientNetworkEvents = {
             var width = data[0].width;
             var height = data[0].height;
             var myClientId = data[1];
+            ige.client.tileBag = new TileBag();
 
             for(i=0; i<tiles.length; i++) {
                 var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
-                var tileType;
+                tileData.isFence = tiles[i].isFence;
+                tileData.fertility = tiles[i].fertility;
+                tileData.humidity = tiles[i].humidity;
 
+                /*
+                ige.client.log("TileData.humidity : " + tileData.humidity);
+                ige.client.log("Tiles[i].humidity : " + tiles[i].humidity);
+                ige.client.log("Tiles[i].isFence : " + tiles[i].isFence);
+                ige.client.log("tileData.isFence : " + tileData.isFence);
+                */
+
+                ige.client.tileBag.addTile(tileData);
+
+                var tileType;
                 if(tiles[i].clientId == myClientId) {
                     tileType = 1;
                 }
@@ -112,6 +125,9 @@ var ClientNetworkEvents = {
                 }
             }
         }
+
+        // Set collision map
+        ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
     },
 
     _onGetParcelle: function (data) {
@@ -123,6 +139,7 @@ var ClientNetworkEvents = {
             else if(tileData.clientId == null) { tileType = 2; }
             else { tileType = 3 }
 
+            ige.client.tileBag.modifyTileClientId(tileData.x, tileData.y, tileData.clientId);
             ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
         }
     },
