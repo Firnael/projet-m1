@@ -14,6 +14,7 @@ var Client = IgeClass.extend({
 
         var self = this;
         var clientId = -1;
+        this.tileBag = new TileBag();
 
 		// Load our textures
         this.gameTexture = {};
@@ -30,13 +31,15 @@ var Client = IgeClass.extend({
 		ige.on('texturesLoaded', function () {
 
 			// Create the HTML canvas
+            var canvas = document.getElementById('gameCanvas');
+            ige.canvas(canvas);
 			ige.createFrontBuffer(true);
 			ige.viewportDepth(true);
 
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.21.19.109:2000', function () {
+					ige.network.start('http://localhost:2000', function () {
 
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
