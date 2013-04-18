@@ -11,7 +11,8 @@ var Character = IgeEntityBox2d.extend({
 			.size3d(20, 20, 40)
 			.isometric(true);
 
-        self.level = 0;
+        self.level = null;
+        self.hp = null;
         self.loginLabel = null;
         self.playerName = playerName;
         self.inventory = new Inventory();
@@ -69,6 +70,22 @@ var Character = IgeEntityBox2d.extend({
 
 		return this;
 	},
+
+    setLevel: function (tilesAmount) {
+        self.level = tilesAmount;
+    },
+
+    getLevel: function () {
+        return self.level;
+    },
+
+    setHP: function () {
+        self.hp = self.level * 10;
+    },
+
+    getHP: function () {
+        return self.hp;
+    },
 
     walkTo: function (x, y, clientId) {
         var character = ige.$("player_" + clientId),

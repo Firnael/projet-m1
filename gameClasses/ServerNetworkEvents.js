@@ -7,11 +7,7 @@ var ServerNetworkEvents = {
 
     _onPlayerDisconnect: function (clientId) {
         if (ige.server.players[clientId]) {
-            // Remove the player from the game
             ige.server.players[clientId].destroy();
-
-            // Remove the reference to the player entity
-            // so that we don't leak memory
             delete ige.server.players[clientId];
         }
     },
@@ -141,11 +137,22 @@ var ServerNetworkEvents = {
     },
 
     _onParcelleAmountChange: function(data, clientId) {
-        // Set the character level according to the amount of tile he possesses.
-        ige.$("player_" + clientId).level = data;
-        ige.server.log("ClientId :" + clientId + " is lvl " + data + " now.");
-        // Notify the client that his tile amount changed
-        ige.network.send('parcelleAmountChange', data, clientId);
+        var player = ige.$("player_" + clientId);
+
+        if(player) {
+            // Set the character level according to the amount of tile he possesses.
+            player.setLevel(data);
+
+            // Set the character hp according to his lvl
+            player.setHP();
+
+            // Notify the client that his tile amount changed
+            var stuff = new Array();
+            stuff[0] = data;
+            stuff[1] = player.getLevel();
+            stuff[2] = player.getHP();
+            ige.network.send('parcelleAmountChange', stuff, clientId);
+        }
     },
 
     // =====

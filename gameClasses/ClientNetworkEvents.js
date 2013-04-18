@@ -51,14 +51,6 @@ var ClientNetworkEvents = {
                 tileData.isFence = tiles[i].isFence;
                 tileData.fertility = tiles[i].fertility;
                 tileData.humidity = tiles[i].humidity;
-
-                /*
-                ige.client.log("TileData.humidity : " + tileData.humidity);
-                ige.client.log("Tiles[i].humidity : " + tiles[i].humidity);
-                ige.client.log("Tiles[i].isFence : " + tiles[i].isFence);
-                ige.client.log("tileData.isFence : " + tileData.isFence);
-                */
-
                 ige.client.tileBag.addTile(tileData);
 
                 var tileType;
@@ -161,11 +153,13 @@ var ClientNetworkEvents = {
     },
 
     _onParcelleAmountChange: function(data, clientId) {
-        // Update the character lvl
-        ige.$("player_" + ige.client.clientId).level = data;
-
         // Update the UI
-        ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + data);
+        ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + data[0]);
+
+        // Update the player
+        var player = ige.$("player_" + ige.client.clientId);
+        player.level = data[1];
+        player.hp = data[2];
     }
 };
 

@@ -73,7 +73,7 @@ var Weapon = IgeEntityBox2d.extend({
     },
 
     toString: function () {
-        return "" + this.name
+        return "Weapon, name=" + this.name
             + " (P:" + this.power
             + ", HR:" + this.hitRatio
             + ", AS:" + this.attackSpeed

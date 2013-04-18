@@ -16,6 +16,15 @@ var Tile = IgeClass.extend({
         self.humidity = 100;
     },
 
+    toString: function () {
+        return 'Tile, clientId= ' + this.clientId
+            + ", x=" + this.x
+            + ", y=" + this.y
+            + ", isFence=" + this.isFence
+            + ", fertility=" + this.fertility
+            + ", humidity=" + this.humidity;
+    },
+
     destroy: function () {
         this.unOccupyTile(
             this.x, this.y, 40, 40

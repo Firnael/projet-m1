@@ -37,7 +37,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
 				// Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.21.16.15:2000', function () {
+					ige.network.start('http://10.21.16.54:2000', function () {
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
                         ige.network.define('getMap', self._onGetMap);
@@ -56,7 +56,6 @@ var Client = IgeClass.extend({
                                 if(entity.classId() == 'Character') {
                                     ige.network.send("getCharacterName", entity.id());
                                 }
-
 								this.log('Stream entity created with ID: ' + entity.id());
 							}
                         );
@@ -116,11 +115,23 @@ var Client = IgeClass.extend({
                                 if(ige.client.tileBag) {
                                     var x = this._mouseTilePos.x;
                                     var y = this._mouseTilePos.y;
-                                    var fertility = ige.client.tileBag.getFertilityByTile(x,y);
-                                    if(fertility){
-                                        ige.client.tileFertilityLabel.text("fertility = "+ fertility);
-                                    }else {
-                                        ige.client.tileFertilityLabel.text("fertility = 0");
+                                    var fertility = ige.client.tileBag.getFertilityByTile(x, y);
+                                    var humidity = ige.client.tileBag.getHumidityByTile(x, y);
+                                    var owner = ige.client.tileBag.getOwnerByTile(x, y);
+                                    if(fertility && humidity){
+                                        if(owner) {
+                                            ige.client.tileOwnerLabel.text("Owner = " + owner);
+                                        }
+                                        else {
+                                            ige.client.tileOwnerLabel.text("Owner = None");
+                                        }
+
+                                        ige.client.tileFertilityLabel.text("Fertility = " + fertility);
+                                        ige.client.tileHumidityLabel.text("Humidity = " + humidity);
+                                    }
+                                    else {
+                                        ige.client.tileFertilityLabel.text("Fertility = ???");
+                                        ige.client.tileHumidityLabel.text("Humidity = ???");
                                     }
                                 }
                                 // ige.input.stopPropagation();
@@ -164,10 +175,7 @@ var Client = IgeClass.extend({
 		});
 	},
 
-    /**
-     * Creates the UI entities that the user can interact with to
-     * perform certain tasks like placing and removing buildings.
-     */
+    // Creates the UI entities
     setupUi: function () {
         // Create the top menu bar
         this.menuBar = new IgeUiEntity()
@@ -181,6 +189,71 @@ var Client = IgeClass.extend({
             .mouseDown(function () { ige.input.stopPropagation(); })
             .mouseUp(function () { ige.input.stopPropagation(); })
             .mount(this.uiScene);
+
+        this.nbTileOwnedLabel = new IgeFontEntity()
+            .id('nbTileOwnedLabel')
+            .left(180)
+            .top(3)
+            .width(300)
+            .height(32)
+            .depth(3)
+            .colorOverlay('#ffffff')
+            .nativeFont('10pt Arial')
+            .textLineSpacing(0)
+            .text("Nombre de parcelles conquises : 0")
+            .drawBounds(false)
+            .drawBoundsData(false)
+            .mount(this.menuBar);
+
+        // === Tile informations frame
+        this.tileInfoFrame = new IgeEntity()
+            .id('tileInfoFrame')
+            .translateTo(500, -200, 0)
+            .texture(new IgeTexture('assets/textures/ui/tileInfoFrame.png'))
+            .width(200)
+            .height(160)
+            .mount(this.uiScene);
+
+        this.tileOwnerLabel = new IgeFontEntity()
+            .id('tileOwnerLabel')
+            .left(10)
+            .top(10)
+            .width('90%')
+            .height('10%')
+            .depth(3)
+            .colorOverlay('#ffffff')
+            .nativeFont('10pt Arial')
+            .textLineSpacing(0)
+            .text("Owner = None")
+            .mount(this.tileInfoFrame);
+
+        this.tileFertilityLabel = new IgeFontEntity()
+            .id('tileFertility')
+            .left(10)
+            .top(25)
+            .width('90%')
+            .height('10%')
+            .depth(3)
+            .colorOverlay('#ffffff')
+            .nativeFont('10pt Arial')
+            .textLineSpacing(0)
+            .text("Fertility = ???")
+            .mount(this.tileInfoFrame);
+
+        this.tileHumidityLabel = new IgeFontEntity()
+            .id('tileHumidityLabel')
+            .left(10)
+            .top(40)
+            .width("90%")
+            .height("10%")
+            .depth(3)
+            .colorOverlay('#ffffff')
+            .nativeFont('10pt Arial')
+            .textLineSpacing(0)
+            .text("Humidity = ???")
+            .mount(this.tileInfoFrame);
+
+        // ===
 
         // Create the menu bar buttons
         this.uiButtonSelect = new IgeUiRadioButton()
@@ -354,36 +427,6 @@ var Client = IgeClass.extend({
                     ige.client.data('ghostItem', false);
                 }
             })
-            .mount(this.menuBar);
-
-        this.nbTileOwnedLabel = new IgeFontEntity()
-            .id('nbTileOwnedLabel')
-            .left(180)
-            .top(3)
-            .width(300)
-            .height(32)
-            .depth(3)
-            .colorOverlay('#ffffff') // Make the text white
-            .nativeFont('10pt Arial') // Use 26pt Arial
-            .textLineSpacing(0) // Set line spacing px
-            .text("Nombre de parcelles conquises : 0")
-            .drawBounds(true)
-            .drawBoundsData(true)
-            .mount(this.menuBar);
-
-        this.tileFertilityLabel = new IgeFontEntity()
-            .id('tileFertility')
-            .left(500)
-            .top(3)
-            .width(300)
-            .height(32)
-            .depth(3)
-            .colorOverlay('#ffffff') // Make the text white
-            .nativeFont('10pt Arial') // Use 26pt Arial
-            .textLineSpacing(0) // Set line spacing px
-            .text("fertility = 0")
-            .drawBounds(true)
-            .drawBoundsData(true)
             .mount(this.menuBar);
     }
 });

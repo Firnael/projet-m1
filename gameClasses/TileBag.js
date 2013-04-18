@@ -30,16 +30,18 @@ var TileBag = IgeClass.extend({
         var i;
         for(i=0; i<this.tiles.length; i++) {
             var currentTile = this.tiles[i];
-            if(currentTile.x == tile.x  && currentTile.y == tile.y) {
-                if(currentTile.clientId == tile.clientId) {
-                    return null;
-                }
-                else if(currentTile.clientId != null) {
-                    var oldClientId = currentTile.clientId;
-                    currentTile.clientId = tile.clientId;
-                    ige.server._onParcelleAmountChange(this.getTileAmountByClientId(oldClientId), oldClientId);
-                    ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
-                    return currentTile;
+            if(currentTile.x == tile.x) {
+                if(currentTile.y == tile.y) {
+                    if(currentTile.clientId == tile.clientId) {
+                        return null;
+                    }
+                    else if(currentTile.clientId != null) {
+                        var oldClientId = currentTile.clientId;
+                        currentTile.clientId = tile.clientId;
+                        ige.server._onParcelleAmountChange(this.getTileAmountByClientId(oldClientId), oldClientId);
+                        ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
+                        return currentTile;
+                    }
                 }
             }
         }
@@ -63,12 +65,11 @@ var TileBag = IgeClass.extend({
         var i;
         for(i=0; i<this.tiles.length; i++) {
             var currentTile = this.tiles[i];
-            if(currentTile.x == x  && currentTile.y == y) {
-                if(currentTile.clientId == clientId) {
-                    currentTile.clientId = clientId;
-                }
-                else if(currentTile.clientId == null) {
-                    currentTile.clientId = clientId;
+            if(currentTile.x == x) {
+                if(currentTile.y == y) {
+                    if(currentTile.clientId == clientId || currentTile.clientId == null) {
+                        currentTile.clientId = clientId;
+                    }
                 }
             }
         }
@@ -96,10 +97,24 @@ var TileBag = IgeClass.extend({
         }
     },
 
+    getOwnerByTile: function (x,y){
+        var tile = this.getTile(x,y);
+        if(tile){
+            return tile.clientId;
+        }
+    },
+
     getFertilityByTile: function (x,y){
         var tile = this.getTile(x,y);
         if(tile){
             return tile.fertility;
+        }
+    },
+
+    getHumidityByTile: function (x,y){
+        var tile = this.getTile(x,y);
+        if(tile){
+            return tile.humidity;
         }
     },
 
