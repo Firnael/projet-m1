@@ -27,7 +27,7 @@ var Client = IgeClass.extend({
         this.gameTexture.uiButtonHouse = new IgeTexture('assets/textures/ui/uiButton_house.png');
 
         // Init scope variables
-        angular.element('body').scope().inventoryScope = [{name:'Ak-47'}, {name:"Fork à l'ancienne"}];
+
         angular.element('body').scope().tileAmountScope = "0";
         angular.element('body').scope().playerLevelScope = "0";
         angular.element('body').scope().playerHealthScope = "0";
@@ -66,7 +66,9 @@ var Client = IgeClass.extend({
                                     ige.network.send("getCharacterName", entity.id());
                                 }
 								this.log('Stream entity created with ID: ' + entity.id());
-							}
+                                angular.element('body').scope().inventoryScope = entity.inventory;
+
+                            }
                         );
 
                         // Create the scene
