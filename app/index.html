@@ -54,8 +54,9 @@
 <div id=hautDroiteDiv style="z-index: 1;position:absolute;
 left:80%;
 top:1%;" >
-    <a class="btn btn-primary" ng-click="inventory.showThis = !inventory.showThis">Inventory</a>
+    <a class="btn btn-primary" ng-click="inventory.showThis = !inventory.showThis" data-toggle="modal" href="#inventoryDiv">Inventory</a>
     <a class="btn" ng-click="market.showThis = !market.showThis">Market</a>
+
 </div>
 
 <div id=hautGaucheDiv style="z-index: 1;position:absolute;
@@ -68,13 +69,17 @@ top:10%;" class="well-small">
     </ul>
 </div>
 
-<div class="well" ng-show="inventory.showThis" style="z-index: 1000; width: 50%;height: 25; left: 25%; top: 25%;position:absolute;">
-    <h3>Inventaire :</h3>
-    <ul>
-        <li ng-repeat="friend in inventoryScope">
-            [{{$index + 1}}] {{friend.name}}
-        </li>
-    </ul>
+<div id="inventoryDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-show="inventory.showThis" style="z-index: 1050;">
+    <div class="modal-header">
+        <h3>Inventaire :</h3>
+    </div>
+    <div class="modal-body">
+        <ul>
+            <li ng-repeat="friend in inventoryScope">
+                [{{$index + 1}}] {{friend.name}}
+            </li>
+        </ul>
+    </div>
 </div>
 <div class="well" ng-show="market.showThis" style="z-index: 1000; width: 50%; height: 25; left: 25%; top: 25%;position:absolute;">
     {{yourName}}!
