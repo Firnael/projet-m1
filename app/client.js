@@ -31,9 +31,10 @@ var Client = IgeClass.extend({
         angular.element('body').scope().tileAmountScope = "0";
         angular.element('body').scope().playerLevelScope = "0";
         angular.element('body').scope().playerHealthScope = "0";
+        angular.element('body').scope().tileOwnerScope = "???";
+        angular.element('body').scope().tileHumidityScope = "???";
+        angular.element('body').scope().tileFertilityScope = "???";
         angular.element('body').scope().$apply();
-
-
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -122,9 +123,11 @@ var Client = IgeClass.extend({
                             .isometricMounts(true)
                             .drawMouse(true)
                             .mouseOver(function () {
+                                /*
                                 if (ige.client.data('cursorMode') !== 'select') {
                                     this.backgroundColor('#6b6b6b');
                                 }
+                                */
                                 if(ige.client.tileBag) {
                                     var x = this._mouseTilePos.x;
                                     var y = this._mouseTilePos.y;
@@ -133,21 +136,24 @@ var Client = IgeClass.extend({
                                     var owner = ige.client.tileBag.getOwnerByTile(x, y);
                                     if(fertility && humidity){
                                         if(owner) {
-                                            ige.client.tileOwnerLabel.text("Owner = " + owner);
+                                            angular.element('body').scope().tileOwnerScope = owner;
                                         }
                                         else {
-                                            ige.client.tileOwnerLabel.text("Owner = None");
+                                            angular.element('body').scope().tileOwnerScope = "None";
                                         }
 
-                                        ige.client.tileFertilityLabel.text("Fertility = " + fertility);
-                                        ige.client.tileHumidityLabel.text("Humidity = " + humidity);
+                                        angular.element('body').scope().tileHumidityScope = humidity;
+                                        angular.element('body').scope().tileFertilityScope = fertility;
                                     }
                                     else {
-                                        ige.client.tileFertilityLabel.text("Fertility = ???");
-                                        ige.client.tileHumidityLabel.text("Humidity = ???");
+                                        angular.element('body').scope().tileHumidityScope = "???";
+                                        angular.element('body').scope().tileFertilityScope = "???";
                                     }
                                 }
                                 // ige.input.stopPropagation();
+
+                                // Update GUI
+                                angular.element('body').scope().$apply();
                             })
                             .mount(self.gameScene);
 
@@ -190,257 +196,7 @@ var Client = IgeClass.extend({
 
     // Creates the UI entities
     setupUi: function () {
-        // Create the top menu bar
-        this.menuBar = new IgeUiEntity()
-            .id('menuBar')
-            .depth(10)
-            .backgroundColor('#333333')
-            .left(0)
-            .top(0)
-            .width('100%')
-            .height(40)
-            .mouseDown(function () { ige.input.stopPropagation(); })
-            .mouseUp(function () { ige.input.stopPropagation(); })
-            .mount(this.uiScene);
-
-        this.nbTileOwnedLabel = new IgeFontEntity()
-            .id('nbTileOwnedLabel')
-            .left(180)
-            .top(3)
-            .width(300)
-            .height(32)
-            .depth(3)
-            .colorOverlay('#ffffff')
-            .nativeFont('10pt Arial')
-            .textLineSpacing(0)
-            .text("Nombre de parcelles conquises : 0")
-            .drawBounds(false)
-            .drawBoundsData(false)
-            .mount(this.menuBar);
-
-        // === Tile informations frame
-        this.tileInfoFrame = new IgeEntity()
-            .id('tileInfoFrame')
-            .translateTo(500, -200, 0)
-            .texture(new IgeTexture('assets/textures/ui/tileInfoFrame.png'))
-            .width(200)
-            .height(160)
-            .mount(this.uiScene);
-
-        this.tileOwnerLabel = new IgeFontEntity()
-            .id('tileOwnerLabel')
-            .left(10)
-            .top(10)
-            .width('90%')
-            .height('10%')
-            .depth(3)
-            .colorOverlay('#ffffff')
-            .nativeFont('10pt Arial')
-            .textLineSpacing(0)
-            .text("Owner = None")
-            .mount(this.tileInfoFrame);
-
-        this.tileFertilityLabel = new IgeFontEntity()
-            .id('tileFertility')
-            .left(10)
-            .top(25)
-            .width('90%')
-            .height('10%')
-            .depth(3)
-            .colorOverlay('#ffffff')
-            .nativeFont('10pt Arial')
-            .textLineSpacing(0)
-            .text("Fertility = ???")
-            .mount(this.tileInfoFrame);
-
-        this.tileHumidityLabel = new IgeFontEntity()
-            .id('tileHumidityLabel')
-            .left(10)
-            .top(40)
-            .width("90%")
-            .height("10%")
-            .depth(3)
-            .colorOverlay('#ffffff')
-            .nativeFont('10pt Arial')
-            .textLineSpacing(0)
-            .text("Humidity = ???")
-            .mount(this.tileInfoFrame);
-
-        // ===
-
-        // Create the menu bar buttons
-        this.uiButtonSelect = new IgeUiRadioButton()
-            .id('uiButtonSelect')
-            .left(3)
-            .top(3)
-            .width(32)
-            .height(32)
-            .texture(ige.client.gameTexture.uiButtonSelect)
-            // Set the radio group so the controls will receive group events
-            .radioGroup('menuControl')
-            .mouseOver(function () {
-                if (ige.client.data('cursorMode') !== 'select') {
-                    this.backgroundColor('#6b6b6b');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseOut(function () {
-                if (ige.client.data('cursorMode') !== 'select') {
-                    this.backgroundColor('');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseUp(function () {
-                this.select();
-                ige.input.stopPropagation();
-            })
-            // Define the callback when the radio button is selected
-            .select(function () {
-                ige.client.data('cursorMode', 'select');
-                this.backgroundColor('#00baff');
-            })
-            // Define the callback when the radio button is de-selected
-            .deSelect(function () {
-                this.backgroundColor('');
-                ige.client.data('currentlyHighlighted', false);
-            })
-            .select() // Start with this default selected
-            .mount(this.menuBar);
-
-        this.uiButtonMove = new IgeUiRadioButton()
-            .id('uiButtonMove')
-            .left(40)
-            .top(3)
-            .width(32)
-            .height(32)
-            .texture(ige.client.gameTexture.uiButtonMove)
-            // Set the radio group so the controls will receive group events
-            .radioGroup('menuControl')
-            .mouseOver(function () {
-                if (ige.client.data('cursorMode') !== 'move') {
-                    this.backgroundColor('#6b6b6b');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseOut(function () {
-                if (ige.client.data('cursorMode') !== 'move') {
-                    this.backgroundColor('');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseUp(function () {
-                this.select();
-                ige.input.stopPropagation();
-            })
-            // Define the callback when the radio button is selected
-            .select(function () {
-                ige.client.data('cursorMode', 'move');
-                this.backgroundColor('#00baff');
-            })
-            // Define the callback when the radio button is de-selected
-            .deSelect(function () {
-                this.backgroundColor('');
-                ige.client.data('currentlyHighlighted', false);
-            })
-            .mount(this.menuBar);
-
-        this.uiButtonDelete = new IgeUiRadioButton()
-            .id('uiButtonDelete')
-            .left(77)
-            .top(3)
-            .width(32)
-            .height(32)
-            .texture(ige.client.gameTexture.uiButtonDelete)
-            // Set the radio group so the controls will receive group events
-            .radioGroup('menuControl')
-            .mouseOver(function () {
-                if (ige.client.data('cursorMode') !== 'delete') {
-                    this.backgroundColor('#6b6b6b');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseOut(function () {
-                if (ige.client.data('cursorMode') !== 'delete') {
-                    this.backgroundColor('');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseUp(function () {
-                this.select();
-                ige.input.stopPropagation();
-            })
-            // Define the callback when the radio button is selected
-            .select(function () {
-                ige.client.data('cursorMode', 'delete');
-                this.backgroundColor('#00baff');
-            })
-            // Define the callback when the radio button is de-selected
-            .deSelect(function () {
-                this.backgroundColor('');
-                ige.client.data('currentlyHighlighted', false);
-            })
-            .mount(this.menuBar);
-
-        this.uiButtonBuildings = new IgeUiRadioButton()
-            .id('uiButtonBuildings')
-            .left(124)
-            .top(3)
-            .width(32)
-            .height(32)
-            .texture(ige.client.gameTexture.uiButtonHouse)
-            // Set the radio group so the controls will receive group events
-            .radioGroup('menuControl')
-            .mouseOver(function () {
-                if (ige.client.data('cursorMode') !== 'build') {
-                    this.backgroundColor('#6b6b6b');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseOut(function () {
-                if (ige.client.data('cursorMode') !== 'build') {
-                    this.backgroundColor('');
-                }
-
-                ige.input.stopPropagation();
-            })
-            .mouseUp(function () {
-                this.select();
-                ige.input.stopPropagation();
-            })
-            // Define the callback when the radio button is selected
-            .select(function () {
-                ige.client.data('cursorMode', 'build');
-                this.backgroundColor('#00baff');
-
-                // Because this is just a demo we are going to assume the user
-                // wants to build a skyscraper but actually we should probably
-                // fire up a menu here and let them pick from available buildings
-                //  Make this show a menu of buildings and let the user pick
-                var tempItem = ige.client.createTemporaryItem('Bank')
-                    .opacity(0.7);
-
-                ige.client.data('ghostItem', tempItem);
-            })
-            // Define the callback when the radio button is de-selected
-            .deSelect(function () {
-                ige.client.data('currentlyHighlighted', false);
-                this.backgroundColor('');
-
-                // If we had a temporary building, kill it
-                var item = ige.client.data('ghostItem');
-                if (item) {
-                    item.destroy();
-                    ige.client.data('ghostItem', false);
-                }
-            })
-            .mount(this.menuBar);
+        ige.client.log("UI loaded !");
     }
 });
 

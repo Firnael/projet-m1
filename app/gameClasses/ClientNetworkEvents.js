@@ -154,8 +154,6 @@ var ClientNetworkEvents = {
 
     _onParcelleAmountChange: function(data, clientId) {
         // Update the UI
-        ige.client.nbTileOwnedLabel.text("Nombre de parcelles conquises : " + data[0]);
-
         angular.element('body').scope().tileAmountScope = data[0];
         angular.element('body').scope().playerLevelScope = data[1];
         angular.element('body').scope().playerHealthScope = data[2];

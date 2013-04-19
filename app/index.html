@@ -43,29 +43,44 @@
     <a href="http://www.isogenicengine.com" target="_blank">http://www.isogenicengine.com</a>
 </div>
 
+<!--  Canvas -->
 <div id="gameDiv">
     <canvas id="gameCanvas"></canvas>
 </div>
 
-
-
-
-<!--HUD avec angular-->
-<div id=hautDroiteDiv style="z-index: 1;position:absolute;
-left:80%;
-top:1%;" >
-    <a class="btn btn-primary" ng-click="inventory.showThis = !inventory.showThis" data-toggle="modal" href="#inventoryDiv">Inventory</a>
-    <a class="btn" ng-click="market.showThis = !market.showThis">Market</a>
-
+<!--  MenuBar -->
+<div id="navbar" class="navbar navbar-inverse" style="z-index:1;position:absolute;left:0%;top:0%;width:100%">
+    <div class="navbar-inner">
+        <a class="brand" href="#">Menu</a>
+        <ul class="nav pull-right">
+            <li class="divider-vertical"></li>
+            <a class="btn btn-primary" data-toggle="modal" href="#inventoryDiv" ng-click="inventory.showThis = !inventory.showThis">Inventory</a>
+            <a class="btn" ng-click="market.showThis = !market.showThis">Market</a>
+        </ul>
+    </div>
 </div>
 
-<div id=hautGaucheDiv style="z-index: 1;position:absolute;
-left:0%;
-top:10%;" class="well-small">
+<!-- HautGaucheDiv -->
+<div id=playerInfoDiv style="z-index:1;position:absolute;
+left:1%;
+top:8%;" class="well well-small">
     <ul>
         <li><i class="icon-thumbs-up"></i> : {{tileAmountScope}}</li>
         <li>lvl : {{playerLevelScope}}</li>
         <li><i class="icon-heart"></i> x {{playerHealthScope}}</li>
+    </ul>
+</div>
+
+<!--  HautDroiteDiv -->
+<div id=tileInfoDiv style="z-index: 1;position:absolute;
+left:80%;
+top:8%;
+width:15%;
+height:10%;" class="well well-small">
+    <ul>
+        <li>Owner : {{tileOwnerScope}}</li>
+        <li>Humidity : {{tileHumidityScope}}</li>
+        <li>Fertility : {{tileFertilityScope}}</li>
     </ul>
 </div>
 
@@ -81,6 +96,7 @@ top:10%;" class="well-small">
         </ul>
     </div>
 </div>
+
 <div class="well" ng-show="market.showThis" style="z-index: 1000; width: 50%; height: 25; left: 25%; top: 25%;position:absolute;">
     {{yourName}}!
 </div>
@@ -88,7 +104,6 @@ top:10%;" class="well-small">
 <!-- In production use:
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 -->
-
 
 </body>
 </html>
