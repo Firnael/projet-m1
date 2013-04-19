@@ -60,7 +60,8 @@ var Character = IgeEntityBox2d.extend({
     },
 
 	setType: function () {
-        this.imageEntity.animation.define('walkDown', [1, 2, 3, 2], 8, -1)
+        this.imageEntity
+            .animation.define('walkDown', [1, 2, 3, 2], 8, -1)
             .animation.define('walkLeft', [13, 14, 15, 14], 8, -1)
             .animation.define('walkRight', [25, 26, 27, 26], 8, -1)
             .animation.define('walkUp', [37, 38, 39, 38], 8, -1)
@@ -72,19 +73,25 @@ var Character = IgeEntityBox2d.extend({
 	},
 
     setLevel: function (tilesAmount) {
-        self.level = tilesAmount;
+        if(ige.isServer) {
+            // We set one level for every 5 tiles the player owns
+            this.level = Math.floor(tilesAmount / 5);
+        }
     },
 
     getLevel: function () {
-        return self.level;
+        return this.level;
     },
 
-    setHP: function () {
-        self.hp = self.level * 10;
+    setHP: function (tilesAmount) {
+        if(ige.isServer) {
+            // We set 10 hp for every level the player owns.
+            this.hp = tilesAmount * 10;
+        }
     },
 
     getHP: function () {
-        return self.hp;
+        return this.hp;
     },
 
     walkTo: function (x, y, clientId) {

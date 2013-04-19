@@ -163,6 +163,10 @@ var ClientNetworkEvents = {
         var player = ige.$("player_" + ige.client.clientId);
         player.level = data[1];
         player.hp = data[2];
+    },
+
+    _onPlayerAttack: function (data, cliendId) {
+        ige.client.log(data);
     }
 };
 

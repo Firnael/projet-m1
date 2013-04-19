@@ -22,8 +22,6 @@ var Server = IgeClass.extend({
 		this.implement(ServerNetworkEvents);
 
 		// Add the networking component
-
-
         ige.addComponent(IgeNetIoComponent)
 
 
@@ -45,6 +43,8 @@ var Server = IgeClass.extend({
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
+                        ige.network.define('playerAttack', self._onPlayerAttack);
+
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);

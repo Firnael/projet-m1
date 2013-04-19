@@ -53,49 +53,7 @@ var ServerNetworkEvents = {
     },
 
     _onPlayerKeyUp: function (data, clientId) {
-        // ige.server.log("player_" + clientId + " : keyUp !")
-
-        var playerAttacker = new Character("1", "Nael");
-        playerAttacker.inventory.setWeapon(4);
-        var playerDefender = new Character("2", "Cecca");
-        playerDefender.inventory.setWeapon(4);
-
-        var paHP = 100;
-        var pdHP = 100;
-        var output = "Fight !\n";
-        while(paHP > 0 && pdHP > 0) {
-            output += playerAttacker.playerName + " attacks " + playerDefender.playerName
-                + " with a " + playerAttacker.inventory.weapon.name
-                + " for " + playerAttacker.inventory.weapon.getDamages() + " damages !\n";
-
-            pdHP -= playerAttacker.inventory.weapon.getDamages();
-
-            if(pdHP <= 0) {
-                break;
-            }
-
-            output += playerDefender.playerName + " attacks " + playerAttacker.playerName
-                + " with a " + playerDefender.inventory.weapon.name
-                + " for " + playerDefender.inventory.weapon.getDamages() + " damages !\n";
-            paHP -= playerDefender.inventory.weapon.getDamages();
-
-            output += "" + playerAttacker.playerName + " HP = " + paHP + "\n";
-            output += "" + playerDefender.playerName + " HP = " + pdHP + "\n";
-        }
-
-        if(paHP <= 0) {
-            output += "" + playerDefender.playerName + " won the fight !";
-        }
-        else {
-            output += "" + playerAttacker.playerName + " won the fight !";
-        }
-
-        ige.server.log(output);
-
-        /*
-         ige.network.send("playerAttack", output, clientId);
-         ige.network.send("playerAttack", output, data);
-         */
+        ige.server.log("player_" + clientId + " : keyUp !")
     },
 
     _onPlayerMove: function (data, clientId) {
@@ -144,7 +102,7 @@ var ServerNetworkEvents = {
             player.setLevel(data);
 
             // Set the character hp according to his lvl
-            player.setHP();
+            player.setHP(data);
 
             // Notify the client that his tile amount changed
             var stuff = new Array();
@@ -163,6 +121,10 @@ var ServerNetworkEvents = {
 
     _onStopWalkAnim: function (data, cliendId) {
         ige.server.log("Server : _onStopWalkAnim");
+    },
+
+    _onPlayerAttack: function (data, cliendId) {
+        ige.server.log("Server : _onPlayerAttack");
     }
 };
 

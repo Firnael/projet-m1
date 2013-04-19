@@ -56,6 +56,7 @@ var Client = IgeClass.extend({
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
+                        ige.network.define('playerAttack', self._onPlayerAttack);
 
                         ige.addComponent(IgeChatComponent);
 

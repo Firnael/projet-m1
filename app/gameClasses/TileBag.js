@@ -33,14 +33,23 @@ var TileBag = IgeClass.extend({
             if(currentTile.x == tile.x) {
                 if(currentTile.y == tile.y) {
                     if(currentTile.clientId == tile.clientId) {
+                        // This is one of our tile, nothing to do
                         return null;
                     }
                     else if(currentTile.clientId != null) {
-                        var oldClientId = currentTile.clientId;
-                        currentTile.clientId = tile.clientId;
-                        ige.server._onParcelleAmountChange(this.getTileAmountByClientId(oldClientId), oldClientId);
-                        ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
-                        return currentTile;
+                        // This is an enemy tile, start the fight !
+                        var winnerId = this.fight(tile.clientId ,currentTile.clientId);
+
+                        // If the winner is the attacker
+                        if(winnerId == tile.clientId) {
+                            var oldClientId = currentTile.clientId;
+                            currentTile.clientId = tile.clientId;
+                            ige.server._onParcelleAmountChange(this.getTileAmountByClientId(oldClientId), oldClientId);
+                            ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
+                            return currentTile;
+                        }
+
+                        return null;
                     }
                 }
             }
@@ -49,7 +58,7 @@ var TileBag = IgeClass.extend({
         // Set this neutral tile to this client
         this.modifyTileClientId(tile.x, tile.y, tile.clientId);
 
-        // Notify the cleint that his tile amount just changed
+        // Notify the client that his tile amount just changed
         ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
 
         // Return the modified tile
@@ -126,6 +135,57 @@ var TileBag = IgeClass.extend({
                 tileMap.occupyTile(currentTile.x/40,currentTile.y/40, 1, 1,"walkable");
             }
         }
+    },
+
+    fight: function (attackerId, defenderId) {
+        var playerAttacker = ige.$("player_" + attackerId);
+        var playerDefender = ige.$("player_" + defenderId);
+
+        ige.server.log(playerAttacker.hp);
+        ige.server.log(playerDefender.hp);
+        ige.server.log(playerAttacker.getHP());
+        ige.server.log(playerDefender.getHP());
+
+        var paHP = playerAttacker.getHP();
+        var pdHP = playerDefender.getHP();
+
+        var output = "Fight !\n";
+
+        while(paHP > 0 && pdHP > 0) {
+            output += "" + playerAttacker.playerName + " HP = " + paHP + "\n";
+            output += "" + playerDefender.playerName + " HP = " + pdHP + "\n";
+
+            output += playerAttacker.playerName + " attacks " + playerDefender.playerName
+                + " with a " + playerAttacker.inventory.weapon.name
+                + " for " + playerAttacker.inventory.weapon.getDamages() + " damages !\n";
+            pdHP -= playerAttacker.inventory.weapon.getDamages();
+
+            if(pdHP <= 0) {
+                break;
+            }
+
+            output += playerDefender.playerName + " attacks " + playerAttacker.playerName
+                + " with a " + playerDefender.inventory.weapon.name
+                + " for " + playerDefender.inventory.weapon.getDamages() + " damages !\n";
+            paHP -= playerDefender.inventory.weapon.getDamages();
+        }
+
+        var winnerId;
+        if(paHP <= 0) {
+            output += "" + playerDefender.playerName + " won the fight !";
+            winnerId = defenderId;
+        }
+        else {
+            output += "" + playerAttacker.playerName + " won the fight !";
+            winnerId = attackerId;
+        }
+
+        ige.server.log(output);
+
+        ige.network.send("playerAttack", output, attackerId);
+        ige.network.send("playerAttack", output, defenderId);
+
+        return winnerId;
     },
 
     destroy: function () {
