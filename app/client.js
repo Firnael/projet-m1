@@ -26,11 +26,20 @@ var Client = IgeClass.extend({
         this.gameTexture.uiButtonDelete = new IgeTexture('assets/textures/ui/uiButton_delete.png');
         this.gameTexture.uiButtonHouse = new IgeTexture('assets/textures/ui/uiButton_house.png');
 
+        // Init scope variables
+        angular.element('body').scope().inventoryScope = [{name:'Ak-47'}, {name:"Fork à l'ancienne"}];
+        angular.element('body').scope().tileAmountScope = "0";
+        angular.element('body').scope().playerLevelScope = "0";
+        angular.element('body').scope().playerHealthScope = "0";
+        angular.element('body').scope().$apply();
+
+
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
 
 			// Create the HTML canvas
+            ige.canvas(document.getElementById('gameCanvas'),true);
 			ige.createFrontBuffer(true);
 			ige.viewportDepth(true);
 

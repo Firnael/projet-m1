@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="game-engine-origin" content="http://www.isogenicengine.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=9" >
+    <title>Iso Game</title>
+    <link rel="stylesheet" href="css/app.css"/>
+    <!-- STYLES -->
+    <link href="../../css/default.css" rel="stylesheet" type="text/css" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+    <script type="text/javascript">var teub = location.search.substring(1).split('&')[0].split('=')[1];</script>
+    <!-- Isogenic Loader -->
+    <script type="text/javascript">var igeRoot = '../../ige/engine/';</script>
+    <script type="text/javascript" src="../../ige/engine/loader.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="lib/angular/angular.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<body data-ng-controller="IsoGame">
+
+<div class="igeLoading loadingFloat">
+    <div class="loadingLogo"></div>
+    <div class="loadingCircle"></div>
+    <div class="loadingCircleInner"></div>
+    <div class="loadingText" id="loadingText">
+        Loading
+    </div>
+    <div id="loadingProgress">
+        <div id="loadingProgressBar"></div>
+    </div>
+</div>
+<div class="igeLoading loadingLink">
+    Powered By Isogenic Game Engine
+    <a href="http://www.isogenicengine.com" target="_blank">http://www.isogenicengine.com</a>
+</div>
+
+<div id="gameDiv">
+    <canvas id="gameCanvas"></canvas>
+</div>
+
+
+
+
+<!--HUD avec angular-->
+<div id=hautDroiteDiv style="z-index: 1;position:absolute;
+left:80%;
+top:1%;" >
+    <a class="btn btn-primary" ng-click="inventory.showThis = !inventory.showThis">Inventory</a>
+    <a class="btn" ng-click="market.showThis = !market.showThis">Market</a>
+</div>
+
+<div id=hautGaucheDiv style="z-index: 1;position:absolute;
+left:0%;
+top:10%;" class="well-small">
+    <ul>
+        <li><i class="icon-thumbs-up"></i> : {{tileAmountScope}}</li>
+        <li>lvl : {{playerLevelScope}}</li>
+        <li><i class="icon-heart"></i> x {{playerHealthScope}}</li>
+    </ul>
+</div>
+
+<div class="well" ng-show="inventory.showThis" style="z-index: 1000; width: 50%;height: 25; left: 25%; top: 25%;position:absolute;">
+    <h3>Inventaire :</h3>
+    <ul>
+        <li ng-repeat="friend in inventoryScope">
+            [{{$index + 1}}] {{friend.name}}
+        </li>
+    </ul>
+</div>
+<div class="well" ng-show="market.showThis" style="z-index: 1000; width: 50%; height: 25; left: 25%; top: 25%;position:absolute;">
+    {{yourName}}!
+</div>
+
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+-->
+
+
+</body>
+</html>
