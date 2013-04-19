@@ -22,12 +22,17 @@ var Server = IgeClass.extend({
 		this.implement(ServerNetworkEvents);
 
 		// Add the networking component
-		ige.addComponent(IgeNetIoComponent)
-			// Start the network server
+
+
+        ige.addComponent(IgeNetIoComponent)
+
+
+        // Start the network server
 			.network.start(2000, function () {
 				// Start the game engine
 				ige.start(function (success) {
-					// Check if the engine started successfully
+                    ige.addComponent(IgeChatComponent);
+                    // Check if the engine started successfully
 					if (success) {
                         // Create some network commands we will need
                         ige.network.define('getClientId', self._onGetClientId);
@@ -97,6 +102,9 @@ var Server = IgeClass.extend({
 							.drawBounds(false)
 							.drawBoundsData(false)
 							.mount(ige);
+
+                        // Create a new chat room
+                        ige.chat.createRoom('The Lobby', {}, 'lobby');
 					}
 				});
 			});

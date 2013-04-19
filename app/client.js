@@ -44,9 +44,9 @@ var Client = IgeClass.extend({
 			ige.viewportDepth(true);
 
 			ige.start(function (success) {
-				// Check if the engine started successfully
+                // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.21.16.54:2000', function () {
+					ige.network.start('http://localhost:2000', function () {
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
                         ige.network.define('getMap', self._onGetMap);
@@ -55,6 +55,8 @@ var Client = IgeClass.extend({
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
+
+                        ige.addComponent(IgeChatComponent);
 
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(120)
