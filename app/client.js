@@ -1,6 +1,12 @@
 var Client = IgeClass.extend({
 	classId: 'Client',
 	init: function () {
+
+        if(username == null) {
+            alert("No username");
+            return;
+        }
+
 		ige.showStats(1);
 
 		// Enabled texture smoothing when scaling textures
@@ -48,9 +54,6 @@ var Client = IgeClass.extend({
                 // Check if the engine started successfully
 				if (success) {
 					ige.network.start('http://localhost:2000', function () {
-                        ige.network.define('getClientId', self._onGetClientId);
-                        ige.network.define('playerEntity', self._onPlayerEntity);
-                        ige.network.define('getMap', self._onGetMap);
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
@@ -124,11 +127,6 @@ var Client = IgeClass.extend({
                             .isometricMounts(true)
                             .drawMouse(true)
                             .mouseOver(function () {
-                                /*
-                                if (ige.client.data('cursorMode') !== 'select') {
-                                    this.backgroundColor('#6b6b6b');
-                                }
-                                */
                                 if(ige.client.tileBag) {
                                     var x = this._mouseTilePos.x;
                                     var y = this._mouseTilePos.y;
@@ -151,7 +149,6 @@ var Client = IgeClass.extend({
                                         angular.element('body').scope().tileFertilityScope = "???";
                                     }
                                 }
-                                // ige.input.stopPropagation();
 
                                 // Update GUI
                                 angular.element('body').scope().$apply();
@@ -181,14 +178,21 @@ var Client = IgeClass.extend({
                             .drawBoundsData(false)
                             .mount(ige);
 
-                        // Set client id
-                        ige.network.send('getClientId');
+                        // Wait for something
+                        ige.network.request('getClientId', {}, function (commandName, data) {
+                            ige.client.clientId = data;
+                            ige.client.setupUi();
 
-                        // Ask the server to create the player entity
-                        ige.network.send('playerEntity', teub);
+                            ige.network.request('playerEntity', username, function (commandName, data) {
+                                ige.client.createCharacter(data);
+                                ige.client.log("Character loaded !");
+                            });
 
-                        // Ask the server to give us the map
-                        ige.network.send('getMap');
+                            ige.network.request('getMap', {}, function (commandName, data) {
+                                ige.client.createMap(data);
+                                ige.client.log("Map loaded !");
+                            });
+                        });
                     });
 				}
 			});
@@ -198,6 +202,122 @@ var Client = IgeClass.extend({
     // Creates the UI entities
     setupUi: function () {
         ige.client.log("UI loaded !");
+    },
+
+    // Creates the player's character
+    createCharacter: function(data) {
+        if (ige.$(data)) {
+            var client = ige.$(data);
+            client.addComponent(PlayerComponent)
+                .drawBounds(false)
+                .drawBoundsData(false);
+
+            ige.client.vp1.camera.lookAt(client);
+            ige.client.vp1.camera.trackTranslate(client, 50);
+        }
+        else {
+            var self = this;
+            self._eventListener = ige.network.stream.on('entityCreated', function (entity) {
+                if (entity.id() === data) {
+                    var client = ige.$(data);
+                    client.addComponent(PlayerComponent)
+                        .drawBounds(false)
+                        .drawBoundsData(false);
+
+                    ige.client.vp1.camera.lookAt(client);
+                    ige.client.vp1.camera.trackTranslate(client, 50);
+
+                    ige.network.stream.off('entityCreated', self._eventListener, function (result) {
+                        if (!result) {
+                            this.log('Could not disable event listener!', 'warning');
+                        }
+                    });
+                }
+            });
+        }
+    },
+
+    // Creates the map
+    createMap: function (data) {
+        var i;
+        var tiles = data[0].tiles;
+        var width = data[0].width;
+        var height = data[0].height;
+        var myClientId = data[1];
+        ige.client.tileBag = new TileBag();
+
+        for(i=0; i<tiles.length; i++) {
+            var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
+            tileData.isFence = tiles[i].isFence;
+            tileData.fertility = tiles[i].fertility;
+            tileData.humidity = tiles[i].humidity;
+            ige.client.tileBag.addTile(tileData);
+
+            var tileType;
+            if(tiles[i].clientId == myClientId) {
+                tileType = 1;
+            }
+            else if(tiles[i].clientId == null) {
+                tileType = 2;
+            }
+            else {
+                tileType = 3
+            }
+
+            var x = tiles[i].x/40;
+            var y = tiles[i].y/40;
+
+            if(tiles[i].isFence) {
+                if(x == 0) {
+                    if(y == 0) {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 1);
+                    }
+                    else if(y == height-1) {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 6);
+                    }
+                    else {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 2);
+                    }
+                }
+                if(y == 0) {
+                    if(x == 0) {
+                        // already done
+                    }
+                    else if(x == width-1) {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 4);
+                    }
+                    else {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 3);
+                    }
+                }
+                if(x == width-1) {
+                    if(y == 0) {
+                        // already done
+                    }
+                    else if(y == height-1) {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 5);
+                    }
+                    else {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 2);
+                    }
+                }
+                if(y == height-1) {
+                    if(x == 0) {
+                        // already done
+                    }
+                    else if(x == width-1) {
+                        // already done
+                    }
+                    else {
+                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 3);
+                    }
+                }
+            } else {
+                ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
+            }
+        }
+        // Set collision map
+        ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
     }
 });
 

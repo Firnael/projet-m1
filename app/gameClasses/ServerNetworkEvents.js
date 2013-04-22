@@ -12,12 +12,13 @@ var ServerNetworkEvents = {
         }
     },
 
-    _onGetClientId: function (data, clientId) {
+    _onGetClientId: function (data, clientId, requestId) {
         var newClientId = clientId;
-        ige.network.send('getClientId', newClientId, clientId);
+        ige.network.response(requestId, newClientId);
     },
 
-    _onPlayerEntity: function (data, clientId) {
+    // data = client's user name
+    _onPlayerEntity: function (data, clientId, requestId) {
         if (!ige.server.players[clientId]) {
             ige.server.players[clientId] = new Character(clientId, data)
                 .box2dBody({
@@ -48,8 +49,15 @@ var ServerNetworkEvents = {
                 .mount(ige.server.objectLayer);
 
             // Tell the client to track their player entity
-            ige.network.send('playerEntity', ige.server.players[clientId].id(), clientId);
+            ige.network.response(requestId, ige.server.players[clientId].id());
         }
+    },
+
+    _onGetMap: function (data, clientId, requestId) {
+        var stuff = new Array();
+        stuff[0] = ige.server.tileBag;
+        stuff[1] = clientId;
+        ige.network.response(requestId, stuff);
     },
 
     _onPlayerKeyUp: function (data, clientId) {
@@ -78,13 +86,6 @@ var ServerNetworkEvents = {
         if(updatedTile) {
             ige.network.send("getParcelle", updatedTile);
         }
-    },
-
-    _onGetMap: function (data, clientId) {
-        var stuff = new Array();
-        stuff[0] = ige.server.tileBag;
-        stuff[1] = clientId;
-        ige.network.send('getMap', stuff, clientId);
     },
 
     _onGetCharacterName: function(data, clientId) {

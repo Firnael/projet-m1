@@ -7,6 +7,8 @@ var Server = IgeClass.extend({
 
         // Define an object to hold references to our player entities
         this.players = {};
+        this.characters = {};
+
         // Container for the tiles
         this.tileBag = new TileBag();
         this.tileBag.initTileBag();
@@ -32,7 +34,7 @@ var Server = IgeClass.extend({
                     ige.addComponent(IgeChatComponent);
                     // Check if the engine started successfully
 					if (success) {
-                        // Create some network commands we will need
+                        // Create the network commands we will need
                         ige.network.define('getClientId', self._onGetClientId);
                         ige.network.define('playerEntity', self._onPlayerEntity);
                         ige.network.define('playerMove', self._onPlayerMove);
@@ -44,7 +46,6 @@ var Server = IgeClass.extend({
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('playerAttack', self._onPlayerAttack);
-
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);
