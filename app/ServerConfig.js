@@ -6,7 +6,8 @@ var igeConfig = {
 		{name: 'Tile', path: './gameClasses/Tile'},
 		{name: 'TileBag', path: './gameClasses/TileBag'},
 		{name: 'Weapon', path: './gameClasses/Weapon'},
-		{name: 'Inventory', path: './gameClasses/Inventory'}
+		{name: 'Inventory', path: './gameClasses/Inventory'},
+		{name: 'Inventory', path: './gameClasses/Player'}
 	]
 };
 
