@@ -33,7 +33,6 @@ var Client = IgeClass.extend({
         this.gameTexture.uiButtonHouse = new IgeTexture('assets/textures/ui/uiButton_house.png');
 
         // Init scope variables
-
         angular.element('body').scope().tileAmountScope = "0";
         angular.element('body').scope().playerLevelScope = "0";
         angular.element('body').scope().playerHealthScope = "0";
@@ -60,6 +59,7 @@ var Client = IgeClass.extend({
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('playerAttack', self._onPlayerAttack);
+                        ige.network.define('toggleCharacterHide', self._onToggleCharacterHide);
 
                         ige.addComponent(IgeChatComponent);
 
@@ -178,7 +178,7 @@ var Client = IgeClass.extend({
                             .drawBoundsData(false)
                             .mount(ige);
 
-                        // Wait for something
+                        // Wait for the server send us our id
                         ige.network.request('getClientId', {}, function (commandName, data) {
                             ige.client.clientId = data;
                             ige.client.setupUi();
@@ -186,6 +186,14 @@ var Client = IgeClass.extend({
                             ige.network.request('playerEntity', username, function (commandName, data) {
                                 ige.client.createCharacter(data);
                                 ige.client.log("Character loaded !");
+
+                                ige.network.request('getCharacterData', username, function (commandName, data) {
+                                    angular.element('body').scope().tileAmountScope = data[0];
+                                    angular.element('body').scope().playerLevelScope = data[1];
+                                    angular.element('body').scope().playerHealthScope = data[2];
+                                    angular.element('body').scope().$apply();
+                                    ige.client.log("Character data loaded !");
+                                });
                             });
 
                             ige.network.request('getMap', {}, function (commandName, data) {
@@ -239,29 +247,28 @@ var Client = IgeClass.extend({
 
     // Creates the map
     createMap: function (data) {
-        var i;
-        var tiles = data[0].tiles;
-        var width = data[0].width;
-        var height = data[0].height;
-        var myClientId = data[1];
+        var tiles = data[0];
+        var width = data[1];
+        var height = data[2];
         ige.client.tileBag = new TileBag();
 
+        var i;
         for(i=0; i<tiles.length; i++) {
-            var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].clientId);
+            var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].owner);
             tileData.isFence = tiles[i].isFence;
             tileData.fertility = tiles[i].fertility;
             tileData.humidity = tiles[i].humidity;
             ige.client.tileBag.addTile(tileData);
 
             var tileType;
-            if(tiles[i].clientId == myClientId) {
+            if(tiles[i].owner == username) { // A nous
                 tileType = 1;
             }
-            else if(tiles[i].clientId == null) {
+            else if(tiles[i].owner == null) { // Neutre
                 tileType = 2;
             }
             else {
-                tileType = 3
+                tileType = 3; // A eux
             }
 
             var x = tiles[i].x/40;

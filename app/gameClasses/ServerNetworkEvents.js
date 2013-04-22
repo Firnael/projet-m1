@@ -6,9 +6,20 @@ var ServerNetworkEvents = {
     },
 
     _onPlayerDisconnect: function (clientId) {
-        if (ige.server.players[clientId]) {
-            ige.server.players[clientId].destroy();
-            delete ige.server.players[clientId];
+        var username = ige.server.playerBag.getPlayerUsernameByClientId(clientId);
+        var disconnectingPlayer = ige.server.characters[username];
+
+        if (disconnectingPlayer) {
+            ige.server.playerBag.getPlayerByUsername(username).setIsConnected(false);
+            disconnectingPlayer.hide();
+
+            var stuff = new Array();
+            stuff[0] = username;
+            stuff[1] = true;
+            ige.network.send('toggleCharacterHide', stuff);
+
+            // ige.server.characters[clientId].destroy();
+            // delete ige.server.characters[clientId];
         }
     },
 
@@ -17,10 +28,20 @@ var ServerNetworkEvents = {
         ige.network.response(requestId, newClientId);
     },
 
-    // data = client's user name
+    // data = Client's username
     _onPlayerEntity: function (data, clientId, requestId) {
-        if (!ige.server.players[clientId]) {
-            ige.server.players[clientId] = new Character(clientId, data)
+        // Check if this player already exists in the list
+        var username = data;
+        if(ige.server.playerBag.checkPlayerExistence(username)) {
+            ige.server.playerBag.updatePlayer(username, clientId, true);
+            ige.$("character_" + username).show();
+            var stuff = new Array();
+            stuff[0] = username;
+            stuff[1] = false;
+            ige.network.send('toggleCharacterHide', stuff);
+        }
+        else {
+            ige.server.characters[username] = new Character(username)
                 .box2dBody({
                     type: 'dynamic',
                     linearDamping: 0.0,
@@ -42,46 +63,61 @@ var ServerNetworkEvents = {
                         }
                     }]
                 })
-                .id('player_' + clientId)
+                .id('character_' + username)
                 .isometric(true)
                 .translateTo(40, 40, 0)
                 .streamMode(1)
                 .mount(ige.server.objectLayer);
 
-            // Tell the client to track their player entity
-            ige.network.response(requestId, ige.server.players[clientId].id());
+            // Add the new player to the player list
+            ige.server.playerBag.addPlayer(new Player(clientId, username));
         }
+
+        // Tell the client to track their player entity
+        ige.network.response(requestId, ige.server.characters[username].id());
+    },
+
+    _onGetCharacterData: function (data, clientId, requestId) {
+        var character = ige.$("character_" + data);
+        var tileAmount = ige.server.tileBag.getTileAmountByOwner(data);
+        var stuff = new Array();
+        stuff[0] = tileAmount;
+        stuff[1] = character.getLevel();
+        stuff[2] = character.getHP();
+        ige.network.response(requestId, stuff);
     },
 
     _onGetMap: function (data, clientId, requestId) {
         var stuff = new Array();
-        stuff[0] = ige.server.tileBag;
-        stuff[1] = clientId;
+        stuff[0] = ige.server.tileBag.getTiles();
+        stuff[1] = ige.server.tileBag.getWidth();
+        stuff[2] = ige.server.tileBag.getHeight();
         ige.network.response(requestId, stuff);
     },
 
     _onPlayerKeyUp: function (data, clientId) {
-        ige.server.log("player_" + clientId + " : keyUp !")
+        ige.server.log("character_" + clientId + " : keyUp !")
     },
 
     _onPlayerMove: function (data, clientId) {
         if(ige.$(data)) {
             var tilePoint = data;
-            var player = ige.server.players[clientId];
-            player.walkTo(tilePoint.x, tilePoint.y, clientId);
+            var username = ige.server.playerBag.getPlayerUsernameByClientId(clientId);
+            var player = ige.server.characters[username];
+            player.walkTo(tilePoint.x, tilePoint.y, username, clientId);
 
-            var data = new Array();
-            data[0] = tilePoint;
-            data[1] = clientId;
-            ige.network.send('playerMove', data);
+            var stuff = new Array();
+            stuff[0] = tilePoint;
+            stuff[1] = username;
+            ige.network.send('playerMove', stuff);
         }
     },
 
     _setParcelle: function (data, clientId) {
-        self = ige.server;
         var tilePoint = data;
-        var tile = new Tile(tilePoint.x, tilePoint.y, clientId);
-        var updatedTile = self.tileBag.setTile(tile);
+        var newOwner = ige.server.playerBag.getPlayerUsernameByClientId(clientId);
+        var tile = new Tile(tilePoint.x, tilePoint.y, newOwner);
+        var updatedTile = ige.server.tileBag.setTile(tile);
 
         if(updatedTile) {
             ige.network.send("getParcelle", updatedTile);
@@ -96,7 +132,8 @@ var ServerNetworkEvents = {
     },
 
     _onParcelleAmountChange: function(data, clientId) {
-        var player = ige.$("player_" + clientId);
+        var username = ige.server.playerBag.getPlayerUsernameByClientId(clientId);
+        var player = ige.$("character_" + username);
 
         if(player) {
             // Set the character level according to the amount of tile he possesses.

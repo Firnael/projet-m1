@@ -2,26 +2,26 @@ var ClientNetworkEvents = {
 
     _onGetParcelle: function (data) {
         if(ige.$(data)) {
-            var tileData = new Tile(data.x, data.y, data.clientId);
+            var tile = new Tile(data.x, data.y, data.owner);
             var tileType;
 
-            if(tileData.clientId == ige.client.clientId) { tileType = 1; }
-            else if(tileData.clientId == null) { tileType = 2; }
+            if(tile.owner == username) { tileType = 1; }
+            else if(tile.owner == null) { tileType = 2; }
             else { tileType = 3 }
 
-            ige.client.tileBag.modifyTileClientId(tileData.x, tileData.y, tileData.clientId);
-            ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
+            ige.client.tileBag.modifyTileOwner(tile.x, tile.y, tile.owner);
+            ige.client.terrainLayer.paintTile((tile.x/40), (tile.y/40), 0, tileType);
         }
     },
 
     _onPlayerMove: function (data) {
         var tilePoint = data[0];
-        var clientId = data[1];
-        ige.$("player_" + clientId).walkTo(tilePoint.x, tilePoint.y, clientId);
+        var username = data[1];
+        ige.$("character_" + username).walkTo(tilePoint.x, tilePoint.y, username, null);
     },
 
     _onStopWalkAnim: function (data) {
-        ige.$("player_" + data).imageEntity.animation.stop();
+        ige.$("character_" + data).imageEntity.animation.stop();
     },
 
     _onGetCharacterName: function(data) {
@@ -38,13 +38,22 @@ var ClientNetworkEvents = {
         angular.element('body').scope().$apply();
 
         // Update the player
-        var player = ige.$("player_" + ige.client.clientId);
+        var player = ige.$("character_" + username);
         player.level = data[1];
         player.hp = data[2];
     },
 
     _onPlayerAttack: function (data, cliendId) {
         ige.client.log(data);
+    },
+
+    // Data : 0 = username, 1 = boolean
+    _onToggleCharacterHide: function (data, clientId) {
+        if(data[1]) {
+            ige.$("character_" + data[0]).hide();
+        } else {
+            ige.$("character_" + data[0]).show();
+        }
     }
 };
 

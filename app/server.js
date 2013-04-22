@@ -5,9 +5,9 @@ var Server = IgeClass.extend({
 	init: function (options) {
 		var self = this;
 
-        // Define an object to hold references to our player entities
-        this.players = {};
+        // Define an object to hold references to our character entities
         this.characters = {};
+        this.playerBag = new PlayerBag();
 
         // Container for the tiles
         this.tileBag = new TileBag();
@@ -46,6 +46,8 @@ var Server = IgeClass.extend({
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('playerAttack', self._onPlayerAttack);
+                        ige.network.define('getCharacterData', self._onGetCharacterData);
+                        ige.network.define('toggleCharacterHide');
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);

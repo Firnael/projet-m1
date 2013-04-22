@@ -5,19 +5,19 @@ var Tile = IgeClass.extend({
     // 2 = neutre
     // 3 = à eux
 
-    init: function (x, y, clientId) {
+    init: function (x, y, owner) {
         var self = this;
 
         self.x = x;
         self.y = y;
-        self.clientId = clientId;
+        self.owner = owner;
         self.isFence= false;
         self.fertility = 100;
         self.humidity = 100;
     },
 
     toString: function () {
-        return 'Tile, clientId= ' + this.clientId
+        return 'Tile, Owner= ' + this.owner
             + ", x=" + this.x
             + ", y=" + this.y
             + ", isFence=" + this.isFence

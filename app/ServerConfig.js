@@ -1,5 +1,6 @@
 var igeConfig = {
-	include: [
+	include:
+    [
 		{name: 'ServerNetworkEvents', path: './gameClasses/ServerNetworkEvents'},
 		{name: 'Character', path: './gameClasses/Character'},
 		{name: 'PlayerComponent', path: './gameClasses/PlayerComponent'},
@@ -7,7 +8,8 @@ var igeConfig = {
 		{name: 'TileBag', path: './gameClasses/TileBag'},
 		{name: 'Weapon', path: './gameClasses/Weapon'},
 		{name: 'Inventory', path: './gameClasses/Inventory'},
-		{name: 'Inventory', path: './gameClasses/Player'}
+		{name: 'Player', path: './gameClasses/Player'},
+		{name: 'PlayerBag', path: './gameClasses/PlayerBag'}
 	]
 };
 

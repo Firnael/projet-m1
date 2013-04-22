@@ -2,7 +2,7 @@
 var Character = IgeEntityBox2d.extend({
 	classId: 'Character',
 
-	init: function (clientId, playerName) {
+	init: function (playerName) {
 		var self = this;
 		IgeEntityBox2d.prototype.init.call(this);
 
@@ -11,11 +11,12 @@ var Character = IgeEntityBox2d.extend({
 			.size3d(20, 20, 40)
 			.isometric(true);
 
-        self.level = null;
-        self.hp = null;
-        self.loginLabel = null;
+        self.level = 0;
+        self.hp = 0;
         self.playerName = playerName;
         self.inventory = new Inventory();
+
+        self.loginLabel = null;
 
 		// Load the character texture file and UI stuff
 		if (!ige.isServer) {
@@ -94,8 +95,8 @@ var Character = IgeEntityBox2d.extend({
         return this.hp;
     },
 
-    walkTo: function (x, y, clientId) {
-        var character = ige.$("player_" + clientId),
+    walkTo: function (x, y, username, clientId) {
+        var character = ige.$("character_" + username),
             distance = Math.distance(this.translate().x(), this.translate().y(), x, y),
             speed = 0.1,
             time = (distance / speed);
@@ -132,7 +133,7 @@ var Character = IgeEntityBox2d.extend({
                 .properties({x: x, y: y})
                 .duration(time)
                 .afterTween(function () {
-                    onTweenEnd(x, y, clientId);
+                    onTweenEnd(x, y, username, clientId);
                 })
                 .start();
         }
@@ -140,13 +141,13 @@ var Character = IgeEntityBox2d.extend({
         return character;
 
         // What happens when the tweening is over server-side
-        function onTweenEnd(x, y, clientId) {
-            ige.$("player_" + clientId).translateTo(x, y, 0);
+        function onTweenEnd(x, y, username, clientId) {
+            ige.$("character_" + username).translateTo(x, y, 0);
             var data = new IgePoint();
             data.x = x;
             data.y = y;
 
-            ige.network.send("stopWalkAnim", clientId);
+            ige.network.send("stopWalkAnim", username);
             ige.server._setParcelle(data, clientId);
         }
     },

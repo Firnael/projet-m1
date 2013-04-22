@@ -8,6 +8,18 @@ var TileBag = IgeClass.extend({
         self.height = 10;
     },
 
+    getTiles: function () {
+        return this.tiles;
+    },
+
+    getWidth: function () {
+        return this.width;
+    },
+
+    getHeight: function () {
+        return this.height;
+    },
+
     // Used only by the server
     initTileBag: function () {
         var self = this;
@@ -32,20 +44,23 @@ var TileBag = IgeClass.extend({
             var currentTile = this.tiles[i];
             if(currentTile.x == tile.x) {
                 if(currentTile.y == tile.y) {
-                    if(currentTile.clientId == tile.clientId) {
+                    if(currentTile.owner == tile.owner) {
                         // This is one of our tile, nothing to do
                         return null;
                     }
-                    else if(currentTile.clientId != null) {
+                    else if(currentTile.owner != null) {
                         // This is an enemy tile, start the fight !
-                        var winnerId = this.fight(tile.clientId ,currentTile.clientId);
+                        var winnerName = this.fight(tile.owner ,currentTile.owner);
 
                         // If the winner is the attacker
-                        if(winnerId == tile.clientId) {
-                            var oldClientId = currentTile.clientId;
-                            currentTile.clientId = tile.clientId;
-                            ige.server._onParcelleAmountChange(this.getTileAmountByClientId(oldClientId), oldClientId);
-                            ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
+                        if(winnerName == tile.owner) {
+                            var oldOwner = currentTile.owner;
+                            currentTile.owner = tile.owner;
+
+                            var oldOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(oldOwner);
+                            var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(tile.owner);
+                            ige.server._onParcelleAmountChange(this.getTileAmountByOwner(oldOwner), oldOwnerClientId);
+                            ige.server._onParcelleAmountChange(this.getTileAmountByOwner(tile.owner), newOwnerClientId);
                             return currentTile;
                         }
 
@@ -56,13 +71,14 @@ var TileBag = IgeClass.extend({
         }
 
         // Set this neutral tile to this client
-        this.modifyTileClientId(tile.x, tile.y, tile.clientId);
+        this.modifyTileOwner(tile.x, tile.y, tile.owner);
 
         // Notify the client that his tile amount just changed
-        ige.server._onParcelleAmountChange(this.getTileAmountByClientId(tile.clientId), tile.clientId);
+        var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(tile.owner);
+        ige.server._onParcelleAmountChange(this.getTileAmountByOwner(tile.owner), newOwnerClientId);
 
         // Return the modified tile
-        var newTile = new Tile(tile.x, tile.y, tile.clientId);
+        var newTile = new Tile(tile.x, tile.y, tile.owner);
         return newTile;
     },
 
@@ -70,25 +86,23 @@ var TileBag = IgeClass.extend({
         this.tiles.push(tile);
     },
 
-    modifyTileClientId: function (x, y, clientId) {
+    modifyTileOwner: function (x, y, owner) {
         var i;
         for(i=0; i<this.tiles.length; i++) {
             var currentTile = this.tiles[i];
             if(currentTile.x == x) {
                 if(currentTile.y == y) {
-                    if(currentTile.clientId == clientId || currentTile.clientId == null) {
-                        currentTile.clientId = clientId;
-                    }
+                    currentTile.owner = owner;
                 }
             }
         }
     },
 
-    getTileAmountByClientId: function (clientId) {
+    getTileAmountByOwner: function (owner) {
         var amount = 0;
         var i;
         for(i=0; i<this.tiles.length; i++) {
-            if(this.tiles[i].clientId == clientId) {
+            if(this.tiles[i].owner == owner) {
                 amount++;
             }
         }
@@ -109,7 +123,7 @@ var TileBag = IgeClass.extend({
     getOwnerByTile: function (x,y){
         var tile = this.getTile(x,y);
         if(tile){
-            return tile.clientId;
+            return tile.owner;
         }
     },
 
@@ -137,9 +151,9 @@ var TileBag = IgeClass.extend({
         }
     },
 
-    fight: function (attackerId, defenderId) {
-        var playerAttacker = ige.$("player_" + attackerId);
-        var playerDefender = ige.$("player_" + defenderId);
+    fight: function (attackerName, defenderName) {
+        var playerAttacker = ige.$("character_" + attackerName);
+        var playerDefender = ige.$("character_" + defenderName);
 
         ige.server.log(playerAttacker.hp);
         ige.server.log(playerDefender.hp);
@@ -170,22 +184,24 @@ var TileBag = IgeClass.extend({
             paHP -= playerDefender.inventory.weapon.getDamages();
         }
 
-        var winnerId;
+        var winnerName;
         if(paHP <= 0) {
             output += "" + playerDefender.playerName + " won the fight !";
-            winnerId = defenderId;
+            winnerName = defenderName;
         }
         else {
             output += "" + playerAttacker.playerName + " won the fight !";
-            winnerId = attackerId;
+            winnerName = attackerName;
         }
 
         ige.server.log(output);
 
-        ige.network.send("playerAttack", output, attackerId);
-        ige.network.send("playerAttack", output, defenderId);
+        var attackerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
+        var defenderClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
+        ige.network.send("playerAttack", output, attackerClientId);
+        ige.network.send("playerAttack", output, defenderClientId);
 
-        return winnerId;
+        return winnerName;
     },
 
     destroy: function () {

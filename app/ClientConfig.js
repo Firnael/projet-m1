@@ -9,6 +9,7 @@ var igeClientConfig = {
 		'./gameClasses/Weapon.js',
 		'./gameClasses/Inventory.js',
 		'./gameClasses/Player.js',
+		'./gameClasses/PlayerBag.js',
 		/* Standard game scripts */
 		'./client.js',
 		'./index.js'
