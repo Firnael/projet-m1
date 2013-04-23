@@ -11,10 +11,14 @@
     <title>Iso Game</title>
     <link rel="stylesheet" href="css/app.css"/>
     <!-- STYLES -->
-    <link href="../../css/default.css" rel="stylesheet" type="text/css" />
+    <link href="css/ige.css" rel="stylesheet" type="text/css" />
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 
-    <script type="text/javascript">var username = location.search.substring(1).split('&')[0].split('=')[1];</script>
+    <!-- -->
+    <script type="text/javascript">
+        var username = location.search.substring(1).split('&')[0].split('=')[1];
+    </script>
+
     <!-- Isogenic Loader -->
     <script type="text/javascript">var igeRoot = '../../ige/engine/';</script>
     <script type="text/javascript" src="../../ige/engine/loader.js"></script>
@@ -54,6 +58,7 @@
         <a class="brand" href="#">Menu</a>
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>
+            <a class="btn" ng-click="fightAlertShow = !fightAlertShow">Fight Alert</a>
             <a class="btn btn-primary" data-toggle="modal" href="#inventoryDiv" ng-click="inventory.showThis = !inventory.showThis">Inventory</a>
             <a class="btn" ng-click="market.showThis = !market.showThis">Market</a>
         </ul>
@@ -62,22 +67,30 @@
 
 <!-- HautGaucheDiv -->
 <div id=playerInfoDiv style="z-index:1;position:absolute;left:1%;top:8%;" class="well well-small">
-    <ul>
-        <li><i class="icon-thumbs-up"></i> : {{tileAmountScope}}</li>
-        <li>lvl : {{playerLevelScope}}</li>
-        <li><i class="icon-heart"></i> x {{playerHealthScope}}</li>
-    </ul>
+    <p>
+        <img src="assets/textures/ui/tile.png" width="20" height="20"/> - {{tileAmountScope}}</br>
+        <img src="assets/textures/ui/levelup.png" width="20" height="20"/> - {{playerLevelScope}}</br>
+        <img src="assets/textures/ui/heart.png" width="20" height="20"/> - {{playerHealthScope}}</br>
+    </p>
 </div>
 
 <!--  HautDroiteDiv -->
-<div id=tileInfoDiv style="z-index: 1;position:absolute;left:80%;top:8%;" class="well well-small">
-    <ul>
-        <li>Owner : {{tileOwnerScope}}</li>
-        <li>Humidity : {{tileHumidityScope}}</li>
-        <li>Fertility : {{tileFertilityScope}}</li>
-    </ul>
+<div id=tileInfoDiv style="z-index: 1;position:absolute;left:90%;top:8%;" class="well well-small">
+    <p>
+        <img src="assets/textures/ui/owner.png" width="20" height="20"/> - {{tileOwnerScope}} %</br>
+        <img src="assets/textures/ui/water.png" width="20" height="20"/> - {{tileHumidityScope}} %</br>
+        <img src="assets/textures/ui/plant.png" width="20" height="20"/> - {{tileFertilityScope}} %</br>
+    </p>
 </div>
 
+<!-- Fight alert -->
+<div id="fightAlertDiv" style="z-index:1;position:absolute;left:80%;top:80%;" class="alert alert-block alert-error fade in" ng-show="fightAlertShow" >
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4 class="alert-heading">Your field is under attack !</h4>
+    <p>{{fightAlertText}}</p>
+</div>
+
+<!-- Inventory Modal -->
 <div id="inventoryDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-show="inventory.showThis" style="z-index: 1050;">
     <div class="modal-header">
         <h3>Inventaire :</h3>

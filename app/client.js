@@ -27,18 +27,19 @@ var Client = IgeClass.extend({
         this.gameTexture.grassSheet = new IgeCellSheet('assets/textures/tiles/grassSheet.png', 4, 1);
         this.gameTexture.fenceSheet = new IgeCellSheet('assets/textures/tiles/fenceSheet.png', 6, 1);
         this.gameTexture.background = new IgeTexture('assets/textures/backgrounds/grassTile.png');
-        this.gameTexture.uiButtonSelect = new IgeTexture('assets/textures/ui/uiButton_select.png');
-        this.gameTexture.uiButtonMove = new IgeTexture('assets/textures/ui/uiButton_move.png');
-        this.gameTexture.uiButtonDelete = new IgeTexture('assets/textures/ui/uiButton_delete.png');
-        this.gameTexture.uiButtonHouse = new IgeTexture('assets/textures/ui/uiButton_house.png');
 
         // Init scope variables
+        // Player data
         angular.element('body').scope().tileAmountScope = "0";
         angular.element('body').scope().playerLevelScope = "0";
         angular.element('body').scope().playerHealthScope = "0";
+        // Tile data
         angular.element('body').scope().tileOwnerScope = "???";
         angular.element('body').scope().tileHumidityScope = "???";
         angular.element('body').scope().tileFertilityScope = "???";
+        // Fight alert
+        angular.element('body').scope().fightAlertShow = false;
+        angular.element('body').scope().fightAlertText = "Oh shit !";
         angular.element('body').scope().$apply();
 
 		// Wait for our textures to load before continuing
