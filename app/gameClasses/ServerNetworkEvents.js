@@ -1,7 +1,6 @@
 var ServerNetworkEvents = {
 
     _onPlayerConnect: function (socket) {
-        // Don't reject the client connection
         return false;
     },
 

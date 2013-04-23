@@ -9,7 +9,10 @@ var igeConfig = {
 		{name: 'Weapon', path: './gameClasses/Weapon'},
 		{name: 'Inventory', path: './gameClasses/Inventory'},
 		{name: 'Player', path: './gameClasses/Player'},
-		{name: 'PlayerBag', path: './gameClasses/PlayerBag'}
+		{name: 'PlayerBag', path: './gameClasses/PlayerBag'},
+		{name: 'ChatClient', path: './gameClasses/chat/ChatClient'},
+		{name: 'ChatServer', path: './gameClasses/chat/ChatServer'},
+		{name: 'ChatComponent', path: './gameClasses/chat/ChatComponent'}
 	]
 };
 

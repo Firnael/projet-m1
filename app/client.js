@@ -44,6 +44,8 @@ var Client = IgeClass.extend({
         angular.element('body').scope().fightAlertText = "...";
         angular.element('body').scope().attackAlertShow = true;
         angular.element('body').scope().$apply();
+        // Chat data
+        angular.element('body').scope().chatTextArrayScope = [];
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -65,7 +67,7 @@ var Client = IgeClass.extend({
                         ige.network.define('playerAttack', self._onPlayerAttack);
                         ige.network.define('toggleCharacterHide', self._onToggleCharacterHide);
 
-                        ige.addComponent(IgeChatComponent);
+                        ige.addComponent(ChatComponent);
 
 						ige.network.addComponent(IgeStreamComponent)
 							.stream.renderLatency(120)
@@ -203,6 +205,9 @@ var Client = IgeClass.extend({
                                 ige.client.createMap(data);
                                 ige.client.log("Map loaded !");
                             });
+
+                            // Join chat room
+                            ige.chat.joinRoom('lobby')
                         });
                     });
 				}

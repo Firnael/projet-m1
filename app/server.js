@@ -31,7 +31,7 @@ var Server = IgeClass.extend({
 			.network.start(2000, function () {
 				// Start the game engine
 				ige.start(function (success) {
-                    ige.addComponent(IgeChatComponent);
+                    ige.addComponent(ChatComponent);
                     // Check if the engine started successfully
 					if (success) {
                         // Create the network commands we will need
