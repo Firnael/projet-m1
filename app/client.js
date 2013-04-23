@@ -38,8 +38,11 @@ var Client = IgeClass.extend({
         angular.element('body').scope().tileHumidityScope = "???";
         angular.element('body').scope().tileFertilityScope = "???";
         // Fight alert
+        angular.element('body').scope().attackAlertShow = false;
+        angular.element('body').scope().attackAlertText = "You are on *playerName* property.";
         angular.element('body').scope().fightAlertShow = false;
-        angular.element('body').scope().fightAlertText = "Oh shit !";
+        angular.element('body').scope().fightAlertText = "...";
+        angular.element('body').scope().attackAlertShow = true;
         angular.element('body').scope().$apply();
 
 		// Wait for our textures to load before continuing
@@ -53,7 +56,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://localhost:2000', function () {
+					ige.network.start('http://192.168.1.97:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
@@ -75,7 +78,6 @@ var Client = IgeClass.extend({
                                 }
 								this.log('Stream entity created with ID: ' + entity.id());
                                 angular.element('body').scope().inventoryScope = entity.inventory;
-
                             }
                         );
 

@@ -90,6 +90,21 @@
     <p>{{fightAlertText}}</p>
 </div>
 
+<!-- Attack alert -->
+<div id="attackAlertDiv" style="z-index:1;position:absolute;left:40%;top:20%;width:16%;" class="alert alert-block alert-warning fade in" ng-show="attackAlertShow" >
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4 class="alert-heading">You're entering an enemy land !</h4>
+    {{attackAlertText}}
+    Attack this tile ?
+    </br></br>
+    <div class="btn-toolbar" style="margin: 0;">
+        <div class="btn-group">
+            <button id="acceptAttackBtn" class="btn btn-danger">Sure</button>
+            <button id="denyAttackBtn" class="btn btn-warning">Nope</button>
+        </div>
+    </div>
+</div>
+
 <!-- Inventory Modal -->
 <div id="inventoryDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-show="inventory.showThis" style="z-index: 1050;">
     <div class="modal-header">
