@@ -19,6 +19,7 @@ var Client = IgeClass.extend({
 
         var self = this;
         var clientId = -1;
+        this.username = username;
         this.tileBag = null;
 
 		// Load our textures
@@ -37,13 +38,18 @@ var Client = IgeClass.extend({
         self.angularScope.tileOwnerScope = "???";
         self.angularScope.tileHumidityScope = "???";
         self.angularScope.tileFertilityScope = "???";
-        // Fight alert
+        // Attack alert
         self.angularScope.attackAlertShow = false;
-        self.angularScope.attackAlertText = "You are on *playerName* property.";
+        self.angularScope.attackAlertText = "...";
+        self.angularScope.attackAlertTargetTile = null;
+        self.angularScope.attackTile = function () {
+            ige.network.send("setParcelle", self.angularScope.attackAlertTargetTile);
+            self.angularScope.attackAlertShow = false;
+            self.angularScope.$apply();
+        }
+        // Fight alert
         self.angularScope.fightAlertShow = false;
         self.angularScope.fightAlertText = "...";
-        self.angularScope.attackAlertShow = true;
-        self.angularScope.$apply();
         // Chat data
         self.angularScope.chatTextArrayScope = [];
         self.angularScope.sendChatMessage = function () {
@@ -51,6 +57,8 @@ var Client = IgeClass.extend({
             self.angularScope.chatInput = "";
             self.angularScope.$apply();
         }
+        self.angularScope.$apply();
+
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -66,7 +74,7 @@ var Client = IgeClass.extend({
 					ige.network.start('http://10.21.17.17:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
-                        ige.network.define('stopWalkAnim', self._onStopWalkAnim);
+                        ige.network.define('playerReachDestination', self._onPlayerReachDestination);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('playerAttack', self._onPlayerAttack);

@@ -93,15 +93,14 @@
 
 <!-- Attack alert -->
 <div id="attackAlertDiv" style="z-index:1;position:absolute;left:40%;top:20%;width:16%;" class="alert alert-block alert-warning fade in" ng-show="attackAlertShow" >
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <h4 class="alert-heading">You're entering an enemy land !</h4>
+    <h4 class="alert-heading">You are entering an enemy land !</h4>
     {{attackAlertText}}
     Attack this tile ?
     </br></br>
     <div class="btn-toolbar" style="margin: 0;">
         <div class="btn-group">
-            <button id="acceptAttackBtn" class="btn btn-danger">Sure</button>
-            <button id="denyAttackBtn" class="btn btn-warning">Nope</button>
+            <button id="acceptAttackBtn" class="btn btn-danger" data-ng-click="attackTile()">Sure</button>
+            <button id="denyAttackBtn" class="btn btn-warning" data-ng-click="attackAlertShow = false">Nope</button>
         </div>
     </div>
 </div>
@@ -120,10 +119,9 @@
     </div>
 </div>
 
+<!-- Market modal -->
 <div class="well" data-ng-show="market.showThis" style="z-index: 1000; width: 50%; height: 25; left: 25%; top: 25%;position:absolute;">
-    {{yourName}}!
 </div>
-
 
 <!-- Chat -->
 <div id=chatComponentDiv style="z-index:1;position:absolute;bottom:1%;height:20%;width:50%;left:25%;">

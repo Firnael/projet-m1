@@ -143,17 +143,23 @@ var Character = IgeEntityBox2d.extend({
         // What happens when the tweening is over server-side
         function onTweenEnd(x, y, username, clientId) {
             ige.$("character_" + username).translateTo(x, y, 0);
+
+            var stuff= new Array();
+            stuff[0] = username;
+            stuff[1] = ige.server.tileBag.canAttack(x, y, username);
+            stuff[2] = new IgePoint(x/40, y/40);
+            ige.network.send("playerReachDestination", stuff);
+
+            /*
             var data = new IgePoint();
             data.x = x;
             data.y = y;
-
-            ige.network.send("stopWalkAnim", username);
             ige.server._setParcelle(data, clientId);
+            */
         }
     },
 
     tick: function (ctx) {
-        // Call the super class
         IgeEntityBox2d.prototype.tick.call(this, ctx);
     },
 

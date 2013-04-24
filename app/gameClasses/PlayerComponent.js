@@ -20,7 +20,6 @@ var PlayerComponent = IgeClass.extend({
 
     _mouseUp: function (event, x, y, button) {
         var tilePoint = ige.$('objectLayer').mouseTileWorldXY().to2d();
-
         var endTile = ige.$('objectLayer').mouseToTile();
         if(ige.client.objectLayer.tileOccupiedBy(endTile.x, endTile.y) == "walkable") {
             ige.network.send('playerMove', tilePoint);

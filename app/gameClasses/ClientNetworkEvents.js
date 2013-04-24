@@ -20,8 +20,24 @@ var ClientNetworkEvents = {
         ige.$("character_" + username).walkTo(tilePoint.x, tilePoint.y, username, null);
     },
 
-    _onStopWalkAnim: function (data) {
-        ige.$("character_" + data).imageEntity.animation.stop();
+    _onPlayerReachDestination: function (data) {
+        ige.$("character_" + data[0]).imageEntity.animation.stop();
+
+        // If it's us, pop up the alert
+        if(data[0] == ige.client.username) {
+            var tile = ige.client.tileBag.getTile(data[2].x, data[2].y);
+            // Trigger a popup fight
+            if(data[1]) {
+                ige.client.angularScope.attackAlertShow = true;
+                ige.client.angularScope.attackAlertText = "You are on " + tile.owner + " lands, you're doomed !";
+                ige.client.angularScope.attackAlertTargetTile = new IgePoint(data[2].x*40, data[2].y*40);
+                ige.client.angularScope.$apply();
+            }
+            // The tile is either ours, or neutral, no fight
+            else {
+                ige.network.send("setParcelle", new IgePoint(data[2].x*40, data[2].y*40));
+            }
+        }
     },
 
     _onGetCharacterName: function(data) {

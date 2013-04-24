@@ -16,6 +16,14 @@ var Tile = IgeClass.extend({
         self.humidity = 100;
     },
 
+    getTileX: function () {
+        return this.x/40;
+    },
+
+    getTileY: function () {
+        return this.y/40;
+    },
+
     toString: function () {
         return 'Tile, Owner= ' + this.owner
             + ", x=" + this.x

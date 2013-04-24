@@ -114,7 +114,7 @@ var TileBag = IgeClass.extend({
         var i;
         for(i=0; i<this.tiles.length; i++) {
             var currentTile = this.tiles[i];
-            if(currentTile.x/40 == x  && currentTile.y/40 == y) {
+            if(currentTile.getTileX() == x  && currentTile.getTileY() == y) {
                 return currentTile;
             }
         }
@@ -147,6 +147,23 @@ var TileBag = IgeClass.extend({
             var currentTile = this.tiles[i];
             if(!this.tiles[i].isFence){
                 tileMap.occupyTile(currentTile.x/40,currentTile.y/40, 1, 1,"walkable");
+            }
+        }
+    },
+
+    canAttack: function(x, y, owner) {
+        var i;
+        for(i=0; i<this.tiles.length; i++) {
+            var currentTile = this.tiles[i];
+            if(currentTile.x == x) {
+                if(currentTile.y == y) {
+                    if(currentTile.owner != owner && currentTile.owner != null) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
             }
         }
     },

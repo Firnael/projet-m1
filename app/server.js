@@ -42,7 +42,7 @@ var Server = IgeClass.extend({
                         ige.network.define('setParcelle', self._setParcelle);
                         ige.network.define('getMap', self._onGetMap);
                         ige.network.define('getParcelle', self._onGetParcelle);
-                        ige.network.define('stopWalkAnim', self._onStopWalkAnim);
+                        ige.network.define('playerReachDestination', self._onPlayerReachDestination);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('playerAttack', self._onPlayerAttack);

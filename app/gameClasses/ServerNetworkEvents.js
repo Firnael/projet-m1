@@ -156,7 +156,7 @@ var ServerNetworkEvents = {
         ige.server.log("Server : _onGetParcelle");
     },
 
-    _onStopWalkAnim: function (data, cliendId) {
+    _onPlayerReachDestination: function (data, cliendId) {
         ige.server.log("Server : _onStopWalkAnim");
     },
 
