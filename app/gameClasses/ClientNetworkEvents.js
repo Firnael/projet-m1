@@ -52,7 +52,7 @@ var ClientNetworkEvents = {
         ige.client.angularScope.$apply();
 
         // Update the player
-        var player = ige.$("character_" + username);
+        var player = ige.$("character_" + ige.client.username);
         player.level = data[1];
         player.hp = data[2];
     },

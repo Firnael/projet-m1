@@ -1,37 +1,16 @@
-/* app css stylesheet */
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
-}
-
-.menu:before {
-  content: "[";
-}
-
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li:before {
-  content: "|";
-  padding-right: 0.3em;
-}
-
-.menu > li:nth-child(1):before {
-  content: "";
-  padding: 0;
-}
-
 #gameDiv {
     width: 100%;
     height: 100%;
+}
+
+#rain {
+    z-index:1;
+    position:absolute;
+    left:0%;
+    top:0%;
+    width:100%;
+    height:100%;
+    pointer-events:none
 }
 
 .drop {
@@ -43,8 +22,24 @@
     bottom:200px;
     -webkit-animation: fall 1s linear infinite;
     -moz-animation: fall 1s linear infinite;
-
 }
+
+#playerInfoDiv{
+    z-index:1;
+    position:absolute;
+    left:1%;
+    top:8%;
+}
+
+#navbar{
+    z-index:1;
+    position:absolute;
+    left:0%;
+    top:0%;
+    width:100%;
+}
+
+
 
 /* animate the drops*/
 @-webkit-keyframes fall {
@@ -52,5 +47,72 @@
 }
 @-moz-keyframes fall {
     to {margin-top:900px;}
+}
+
+#tileInfoDiv {
+    z-index: 1;
+    position: absolute;
+    left: 90%;
+    top: 8%;
+}
+
+#fightAlertDiv {
+    z-index: 1;
+    position: absolute;
+    left: 80%;
+    top: 80%;
+}
+
+#attackAlertDiv {
+    z-index: 1;
+    position: absolute;
+    left: 40%;
+    top: 20%;
+    width: 16%;
+}
+
+#marketModalDiv {
+    z-index: 1000;
+    width: 50%;
+    height: 25;
+    left: 25%;
+    top: 25%;
+    position: absolute;
+}
+
+#chatComponentDiv {
+    z-index: 1;
+    position: absolute;
+    bottom: 1%;
+    left: 1%;
+    width: 30%;
+    height: 30%;
+}
+
+#chatComponentText {
+    position: relative;
+    width: 100%;
+    height: 50%;
+    overflow: auto;
+    overflow-wrap: break-word;
+    opacity: 0.7;
+}
+
+#chatInputDiv {
+    position: relative;
+    width: 100%;
+    bottom: 2%;
+    height: 25%;
+    opacity: 0.7;
+}
+
+#chatInput {
+    position: relative;
+    width: 85%;
+}
+
+#chatButton {
+    position: relative;
+    width: 17%;
 }
 

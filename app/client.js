@@ -1,11 +1,6 @@
 var Client = IgeClass.extend({
 	classId: 'Client',
 	init: function () {
-        if(username == null) {
-            alert("No username");
-            return;
-        }
-
 		ige.showStats(1);
 
 		// Enabled texture smoothing when scaling textures
@@ -19,7 +14,11 @@ var Client = IgeClass.extend({
 
         var self = this;
         var clientId = -1;
-        this.username = username;
+        this.username = location.search.substring(1).split('&')[0].split('=')[1];
+        if(typeof this.username === 'undefined') {
+            alert("No username");
+            return;
+        }
         this.tileBag = null;
 
 		// Load our textures
@@ -34,6 +33,8 @@ var Client = IgeClass.extend({
         self.angularScope.tileAmountScope = "0";
         self.angularScope.playerLevelScope = "0";
         self.angularScope.playerHealthScope = "0";
+        // Inventory data
+        self.angularScope.inventoryScope = {};
         // Tile data
         self.angularScope.tileOwnerScope = "???";
         self.angularScope.tileHumidityScope = "???";
@@ -231,11 +232,11 @@ var Client = IgeClass.extend({
                             ige.client.clientId = data;
                             ige.client.setupUi();
 
-                            ige.network.request('playerEntity', username, function (commandName, data) {
+                            ige.network.request('playerEntity', self.username, function (commandName, data) {
                                 ige.client.createCharacter(data);
                                 ige.client.log("Character loaded !");
 
-                                ige.network.request('getCharacterData', username, function (commandName, data) {
+                                ige.network.request('getCharacterData', self.username, function (commandName, data) {
                                     self.angularScope.tileAmountScope = data[0];
                                     self.angularScope.playerLevelScope = data[1];
                                     self.angularScope.playerHealthScope = data[2];
