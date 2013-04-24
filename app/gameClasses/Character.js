@@ -152,11 +152,21 @@ var Character = IgeEntityBox2d.extend({
 
             // We need the target tile index, not the position as pixels
             var tileIndex = new IgePoint(x/40, y/40);
+            var canAttack = ige.server.tileBag.canAttack(tileIndex.x, tileIndex.y, username);
+            var stuff = {};
+            stuff["username"] = username;
+            stuff["tileIndex"] = tileIndex;
 
-            var stuff= new Array();
-            stuff[0] = username;
-            stuff[1] = ige.server.tileBag.canAttack(tileIndex.x, tileIndex.y, username);
-            stuff[2] = tileIndex;
+            // If the player can attack the tile, we send him a invitation to do so
+            if(canAttack) {
+                stuff["canAttack"] = true;
+            }
+            else {
+                // The player can't attack the tile, don't let him the choice.
+                stuff["canAttack"] = false;
+                ige.server._setParcelle(tileIndex, ige.server.playerBag.getPlayerClientIdByUsername(username));
+            }
+
             ige.network.send("playerReachDestination", stuff);
         }
     },

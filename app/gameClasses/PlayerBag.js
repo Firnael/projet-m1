@@ -7,56 +7,38 @@ var PlayerBag = IgeClass.extend({
     },
 
     addPlayer: function (player) {
-        this.players.push(player);
+        this.players[player.getUsername()] = player;
     },
 
     getPlayerByUsername: function(username) {
-        var i;
-        for(i=0; i<this.players.length; i++) {
-            if(this.players[i].getUsername() == username) {
-                return this.players[i];
-            }
-        }
-        return null;
+        return this.players[username];
     },
 
     getPlayerUsernameByClientId: function (clientId) {
-        var i;
-        for(i=0; i<this.players.length; i++) {
-            if(this.players[i].getClientId() == clientId) {
-                return this.players[i].getUsername();
+        for(var p in this.players) {
+            if(this.players[p].getClientId() == clientId) {
+                return this.players[p].getUsername();
             }
         }
         return null;
     },
 
     getPlayerClientIdByUsername: function (username) {
-        var i;
-        for(i=0; i<this.players.length; i++) {
-            if(this.players[i].getUsername() == username) {
-                return this.players[i].getClientId();
-            }
-        }
-        return null;
+         return this.players[username].getClientId();
     },
 
     checkPlayerExistence: function(username) {
-        var i;
-        for(i=0; i<this.players.length; i++) {
-            if(this.players[i].getUsername() == username) {
-                return true;
-            }
+        if(this.players[username]) {
+            return true;
         }
         return false;
     },
 
     updatePlayer: function (username, clientId, isConnected) {
-        var i;
-        for(i=0; i<this.players.length; i++) {
-            if(this.players[i].getUsername() == username) {
-                this.players[i].setClientId(clientId);
-                this.players[i].setIsConnected(isConnected);
-                break;
+        for(var p in this.players) {
+            if(this.players[p].getUsername() == username) {
+                this.players[p].setClientId(clientId);
+                this.players[p].setIsConnected(isConnected);
             }
         }
     },

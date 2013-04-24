@@ -22,21 +22,17 @@ var ClientNetworkEvents = {
 
     _onPlayerReachDestination: function (data) {
         // Stop the walking animation
-        ige.$("character_" + data[0]).imageEntity.animation.stop();
+        ige.$("character_" + data["username"]).imageEntity.animation.stop();
 
         // If it's us, pop up the alert
-        if(data[0] == ige.client.username) {
-            var tile = ige.client.tileBag.getTile(data[2].x, data[2].y);
+        if(data["username"] == ige.client.username) {
+            var tile = ige.client.tileBag.getTile(data["tileIndex"].x, data["tileIndex"].y);
             // Trigger a popup fight
-            if(data[1]) {
+            if(data["canAttack"]) {
                 ige.client.angularScope.attackAlertShow = true;
                 ige.client.angularScope.attackAlertText = "You are on " + tile.getOwner() + " lands, you're doomed !";
                 ige.client.angularScope.attackAlertTargetTile = new IgePoint(tile.getTileX(), tile.getTileY());
                 ige.client.angularScope.$apply();
-            }
-            // The tile is either ours, or neutral, no fight
-            else {
-                ige.network.send("setParcelle", new IgePoint(tile.getTileX(), tile.getTileY()));
             }
         }
     },
