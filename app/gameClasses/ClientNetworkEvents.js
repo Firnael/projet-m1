@@ -1,26 +1,27 @@
 var ClientNetworkEvents = {
 
     _onGetParcelle: function (data) {
-        if(ige.$(data)) {
-            var tile = new Tile(data.x, data.y, data.owner);
-            var tileType;
+        var tileX = data["tileX"];
+        var tileY = data["tileY"];
+        var tileOwner = data["tileOwner"];
+        var tileType;
 
-            if(tile.owner == username) { tileType = 1; }
-            else if(tile.owner == null) { tileType = 2; }
-            else { tileType = 3 }
+        if(tileOwner == ige.client.username) { tileType = 1; }
+        else if(tileOwner == null) { tileType = 2; }
+        else { tileType = 3 }
 
-            ige.client.tileBag.modifyTileOwner(tile.x, tile.y, tile.owner);
-            ige.client.terrainLayer.paintTile((tile.x/40), (tile.y/40), 0, tileType);
-        }
+        ige.client.tileBag.modifyTileOwner(tileX, tileY, tileOwner);
+        ige.client.terrainLayer.paintTile(tileX, tileY, 0, tileType);
     },
 
     _onPlayerMove: function (data) {
-        var tilePoint = data[0];
-        var username = data[1];
-        ige.$("character_" + username).walkTo(tilePoint.x, tilePoint.y, username, null);
+        var tilePoint = new IgePoint(data["tilePointX"], data["tilePointY"]);
+        var username = data["username"];
+        ige.$("character_" + username).walkTo(tilePoint.x, tilePoint.y, username);
     },
 
     _onPlayerReachDestination: function (data) {
+        // Stop the walking animation
         ige.$("character_" + data[0]).imageEntity.animation.stop();
 
         // If it's us, pop up the alert
@@ -29,13 +30,13 @@ var ClientNetworkEvents = {
             // Trigger a popup fight
             if(data[1]) {
                 ige.client.angularScope.attackAlertShow = true;
-                ige.client.angularScope.attackAlertText = "You are on " + tile.owner + " lands, you're doomed !";
-                ige.client.angularScope.attackAlertTargetTile = new IgePoint(data[2].x*40, data[2].y*40);
+                ige.client.angularScope.attackAlertText = "You are on " + tile.getOwner() + " lands, you're doomed !";
+                ige.client.angularScope.attackAlertTargetTile = new IgePoint(tile.getTileX(), tile.getTileY());
                 ige.client.angularScope.$apply();
             }
             // The tile is either ours, or neutral, no fight
             else {
-                ige.network.send("setParcelle", new IgePoint(data[2].x*40, data[2].y*40));
+                ige.network.send("setParcelle", new IgePoint(tile.getTileX(), tile.getTileY()));
             }
         }
     },

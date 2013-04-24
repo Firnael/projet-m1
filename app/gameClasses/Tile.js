@@ -8,6 +8,8 @@ var Tile = IgeClass.extend({
     init: function (x, y, owner) {
         var self = this;
 
+        self.tileWidth = 40;
+        self.tileHeight = 40;
         self.x = x;
         self.y = y;
         self.owner = owner;
@@ -16,13 +18,43 @@ var Tile = IgeClass.extend({
         self.humidity = 100;
     },
 
-    getTileX: function () {
-        return this.x/40;
+    // Return the x position as pixels
+    getX: function () {
+        return this.x * this.tileWidth;
     },
 
-    getTileY: function () {
-        return this.y/40;
+    // Return the y position as pixels
+    getY: function () {
+        return this.y * this.tileHeight;
     },
+
+    // Return the x index
+    getTileX: function () {
+        return this.x;
+    },
+
+    // Return the y index
+    getTileY: function () {
+        return this.y;
+    },
+
+    getOwner: function () {
+        return this.owner;
+    },
+
+    getFertility: function () {
+        return this.fertility;
+    },
+
+    getHumidity: function () {
+        return this.humidity;
+    },
+
+    getIsFence: function () {
+        return this.isFence;
+    },
+
+    // ===
 
     toString: function () {
         return 'Tile, Owner= ' + this.owner

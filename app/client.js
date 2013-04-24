@@ -306,13 +306,14 @@ var Client = IgeClass.extend({
         var i;
         for(i=0; i<tiles.length; i++) {
             var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].owner);
+
             tileData.isFence = tiles[i].isFence;
             tileData.fertility = tiles[i].fertility;
             tileData.humidity = tiles[i].humidity;
             ige.client.tileBag.addTile(tileData);
 
             var tileType;
-            if(tiles[i].owner == username) { // A nous
+            if(tiles[i].owner == ige.client.username) { // A nous
                 tileType = 1;
             }
             else if(tiles[i].owner == null) { // Neutre
@@ -322,19 +323,19 @@ var Client = IgeClass.extend({
                 tileType = 3; // A eux
             }
 
-            var x = tiles[i].x/40;
-            var y = tiles[i].y/40;
+            var x = tiles[i].x;
+            var y = tiles[i].y;
 
             if(tiles[i].isFence) {
                 if(x == 0) {
                     if(y == 0) {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 1);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 1);
                     }
                     else if(y == height-1) {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 6);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 6);
                     }
                     else {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 2);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
                     }
                 }
                 if(y == 0) {
@@ -342,10 +343,10 @@ var Client = IgeClass.extend({
                         // already done
                     }
                     else if(x == width-1) {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 4);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 4);
                     }
                     else {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 3);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
                     }
                 }
                 if(x == width-1) {
@@ -353,10 +354,10 @@ var Client = IgeClass.extend({
                         // already done
                     }
                     else if(y == height-1) {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 5);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 5);
                     }
                     else {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 2);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
                     }
                 }
                 if(y == height-1) {
@@ -367,11 +368,11 @@ var Client = IgeClass.extend({
                         // already done
                     }
                     else {
-                        ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 1, 3);
+                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
                     }
                 }
             } else {
-                ige.client.terrainLayer.paintTile((tileData.x/40), (tileData.y/40), 0, tileType);
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 0, tileType);
             }
         }
         // Set collision map

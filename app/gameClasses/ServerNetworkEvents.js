@@ -27,19 +27,27 @@ var ServerNetworkEvents = {
         ige.network.response(requestId, newClientId);
     },
 
-    // data = Client's username
+    // data = client's username
     _onPlayerEntity: function (data, clientId, requestId) {
         // Check if this player already exists in the list
         var username = data;
         if(ige.server.playerBag.checkPlayerExistence(username)) {
+            // The player exists on the list, do not re-create it
+
+            // Update his data (new clientId and new connection state)
             ige.server.playerBag.updatePlayer(username, clientId, true);
+
+            // Enable the entity
             ige.$("character_" + username).show();
+
+            // Tell the client to enable is too
             var stuff = new Array();
             stuff[0] = username;
             stuff[1] = false;
             ige.network.send('toggleCharacterHide', stuff);
         }
         else {
+            // This is a new client, create his character entity
             ige.server.characters[username] = new Character(username)
                 .box2dBody({
                     type: 'dynamic',
@@ -76,6 +84,7 @@ var ServerNetworkEvents = {
         ige.network.response(requestId, ige.server.characters[username].id());
     },
 
+    // data = client's username
     _onGetCharacterData: function (data, clientId, requestId) {
         var character = ige.$("character_" + data);
         var tileAmount = ige.server.tileBag.getTileAmountByOwner(data);
@@ -102,24 +111,33 @@ var ServerNetworkEvents = {
         if(ige.$(data)) {
             var tilePoint = data;
             var username = ige.server.playerBag.getPlayerUsernameByClientId(clientId);
-            var player = ige.server.characters[username];
-            player.walkTo(tilePoint.x, tilePoint.y, username, clientId);
+            var character = ige.server.characters[username];
 
-            var stuff = new Array();
-            stuff[0] = tilePoint;
-            stuff[1] = username;
+            // Move the character server-side, its position is streamed
+            character.walkTo(tilePoint.x, tilePoint.y, username);
+
+            // Tell all clients to update the walk animation of the moving character
+            var stuff = {};
+            stuff["tilePointX"] = tilePoint.x;
+            stuff["tilePointY"] = tilePoint.y;
+            stuff["username"] = username;
             ige.network.send('playerMove', stuff);
         }
     },
 
+    // data = tile index
     _setParcelle: function (data, clientId) {
-        var tilePoint = data;
+        var tileIndex = data;
         var newOwner = ige.server.playerBag.getPlayerUsernameByClientId(clientId);
-        var tile = new Tile(tilePoint.x, tilePoint.y, newOwner);
+        var tile = new Tile(tileIndex.x, tileIndex.y, newOwner);
         var updatedTile = ige.server.tileBag.setTile(tile);
 
         if(updatedTile) {
-            ige.network.send("getParcelle", updatedTile);
+            var stuff = {};
+            stuff["tileX"] = updatedTile.getTileX();
+            stuff["tileY"] = updatedTile.getTileY();
+            stuff["tileOwner"] = updatedTile.getOwner();
+            ige.network.send("getParcelle", stuff);
         }
     },
 
