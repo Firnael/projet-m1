@@ -57,6 +57,39 @@ var Client = IgeClass.extend({
             self.angularScope.chatInput = "";
             self.angularScope.$apply();
         }
+        // Rain event
+        self.angularScope.rainEvent = function(){
+            // number of drops created.
+            var nbDrop = 50;
+            // function to generate a random number range.
+            function randRange( minNum, maxNum) {
+                return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+            }
+            // function to generate drops
+            function createRain() {
+
+                for( i=1;i<nbDrop;i++) {
+                    var dropLeft = randRange(0,1600);
+                    var dropTop = randRange(-1000,1400);
+
+                    $('.rain').append('<div class="drop" id="drop'+i+'"></div>');
+                    $('#drop'+i).css('left',dropLeft);
+                    $('#drop'+i).css('top',dropTop);
+                    $('.rain').css('background-color','black');
+                    $('.rain').css('opacity','0.2');
+                }
+            }
+            createRain();
+
+            function killDrops(){
+                $('.rain').empty();
+                $('.rain').css('background-color','');
+                $('.rain').css('opacity','');
+            }
+            setTimeout(killDrops, 6000);
+        }
+
+
         self.angularScope.$apply();
 
 
@@ -71,7 +104,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.21.17.17:2000', function () {
+					ige.network.start('http://localhost:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);
@@ -79,6 +112,7 @@ var Client = IgeClass.extend({
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('playerAttack', self._onPlayerAttack);
                         ige.network.define('toggleCharacterHide', self._onToggleCharacterHide);
+                        ige.network.define('onRainingEvent', self._onRainingEvent);
 
                         ige.addComponent(ChatComponent);
 

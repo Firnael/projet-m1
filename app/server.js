@@ -48,6 +48,7 @@ var Server = IgeClass.extend({
                         ige.network.define('playerAttack', self._onPlayerAttack);
                         ige.network.define('getCharacterData', self._onGetCharacterData);
                         ige.network.define('toggleCharacterHide');
+                        ige.network.define('onRainingEvent');
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);
@@ -105,6 +106,9 @@ var Server = IgeClass.extend({
 							.drawBounds(false)
 							.drawBoundsData(false)
 							.mount(ige);
+
+                        self.timer = new Timer()
+                            .mount(self.gameScene);
 
                         // Create a new chat room
                         ige.chat.createRoom('The Lobby', {}, 'lobby');

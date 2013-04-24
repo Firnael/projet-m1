@@ -71,6 +71,10 @@ var ClientNetworkEvents = {
         } else {
             ige.$("character_" + data[0]).show();
         }
+    },
+
+    _onRainingEvent: function(data){
+        ige.client.angularScope.rainEvent();
     }
 };
 
