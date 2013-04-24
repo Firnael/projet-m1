@@ -120,7 +120,7 @@ var TileBag = IgeClass.extend({
         }
     },
 
-    getOwnerByTile: function (x,y){
+    getOwnerByTile: function (x,y) {
         var tile = this.getTile(x,y);
         if(tile){
             return tile.owner;

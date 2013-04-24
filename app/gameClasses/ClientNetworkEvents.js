@@ -27,15 +27,16 @@ var ClientNetworkEvents = {
     _onGetCharacterName: function(data) {
         if (ige.$(data)) {
             ige.$(data[0]).createLabel(data[1]);
+            ige.$(data[0]).playerName = data[1];
         }
     },
 
     _onParcelleAmountChange: function(data, clientId) {
         // Update the UI
-        angular.element('body').scope().tileAmountScope = data[0];
-        angular.element('body').scope().playerLevelScope = data[1];
-        angular.element('body').scope().playerHealthScope = data[2];
-        angular.element('body').scope().$apply();
+        ige.client.angularScope.tileAmountScope = data[0];
+        ige.client.angularScope.playerLevelScope = data[1];
+        ige.client.angularScope.playerHealthScope = data[2];
+        ige.client.angularScope.$apply();
 
         // Update the player
         var player = ige.$("character_" + username);

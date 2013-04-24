@@ -29,10 +29,13 @@ var ChatClient = {
 		// Emit the event and if it wasn't cancelled (by returning true) then
 		// process this ourselves
 		if (!self.emit('messageFromServer', [data])) {
+            /*
 			console.log('Server sent us a message in the room "' + data.roomId + '" from the user id "'
                 + data.fromUsername +
                 '":', data.text);
-            angular.element('body').scope().chatTextArrayScope.push(data);
+            */
+            ige.client.angularScope.chatTextArrayScope.push(data);
+            ige.client.angularScope.$apply();
 		}
 	},
 

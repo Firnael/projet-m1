@@ -1,7 +1,6 @@
 var Client = IgeClass.extend({
 	classId: 'Client',
 	init: function () {
-
         if(username == null) {
             alert("No username");
             return;
@@ -29,23 +28,29 @@ var Client = IgeClass.extend({
         this.gameTexture.background = new IgeTexture('assets/textures/backgrounds/grassTile.png');
 
         // Init scope variables
+        this.angularScope = angular.element('body').scope();
         // Player data
-        angular.element('body').scope().tileAmountScope = "0";
-        angular.element('body').scope().playerLevelScope = "0";
-        angular.element('body').scope().playerHealthScope = "0";
+        self.angularScope.tileAmountScope = "0";
+        self.angularScope.playerLevelScope = "0";
+        self.angularScope.playerHealthScope = "0";
         // Tile data
-        angular.element('body').scope().tileOwnerScope = "???";
-        angular.element('body').scope().tileHumidityScope = "???";
-        angular.element('body').scope().tileFertilityScope = "???";
+        self.angularScope.tileOwnerScope = "???";
+        self.angularScope.tileHumidityScope = "???";
+        self.angularScope.tileFertilityScope = "???";
         // Fight alert
-        angular.element('body').scope().attackAlertShow = false;
-        angular.element('body').scope().attackAlertText = "You are on *playerName* property.";
-        angular.element('body').scope().fightAlertShow = false;
-        angular.element('body').scope().fightAlertText = "...";
-        angular.element('body').scope().attackAlertShow = true;
-        angular.element('body').scope().$apply();
+        self.angularScope.attackAlertShow = false;
+        self.angularScope.attackAlertText = "You are on *playerName* property.";
+        self.angularScope.fightAlertShow = false;
+        self.angularScope.fightAlertText = "...";
+        self.angularScope.attackAlertShow = true;
+        self.angularScope.$apply();
         // Chat data
-        angular.element('body').scope().chatTextArrayScope = [];
+        self.angularScope.chatTextArrayScope = [];
+        self.angularScope.sendChatMessage = function () {
+            ige.chat.sendToRoom('lobby', self.angularScope.chatInput);
+            self.angularScope.chatInput = "";
+            self.angularScope.$apply();
+        }
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -58,7 +63,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://192.168.1.97:2000', function () {
+					ige.network.start('http://10.21.17.17:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('stopWalkAnim', self._onStopWalkAnim);
@@ -79,7 +84,7 @@ var Client = IgeClass.extend({
                                     ige.network.send("getCharacterName", entity.id());
                                 }
 								this.log('Stream entity created with ID: ' + entity.id());
-                                angular.element('body').scope().inventoryScope = entity.inventory;
+                                self.angularScope.inventoryScope = entity.inventory;
                             }
                         );
 
@@ -139,24 +144,20 @@ var Client = IgeClass.extend({
                                     var humidity = ige.client.tileBag.getHumidityByTile(x, y);
                                     var owner = ige.client.tileBag.getOwnerByTile(x, y);
                                     if(fertility && humidity){
-                                        if(owner) {
-                                            angular.element('body').scope().tileOwnerScope = owner;
-                                        }
-                                        else {
-                                            angular.element('body').scope().tileOwnerScope = "None";
-                                        }
-
-                                        angular.element('body').scope().tileHumidityScope = humidity;
-                                        angular.element('body').scope().tileFertilityScope = fertility;
+                                        var playerName = "None";
+                                        if(owner) { playerName = owner; }
+                                        self.angularScope.tileOwnerScope = playerName;
+                                        self.angularScope.tileHumidityScope = humidity;
+                                        self.angularScope.tileFertilityScope = fertility;
                                     }
                                     else {
-                                        angular.element('body').scope().tileHumidityScope = "???";
-                                        angular.element('body').scope().tileFertilityScope = "???";
+                                        self.angularScope.tileHumidityScope = "???";
+                                        self.angularScope.tileFertilityScope = "???";
                                     }
                                 }
 
                                 // Update GUI
-                                angular.element('body').scope().$apply();
+                                self.angularScope.$apply();
                             })
                             .mount(self.gameScene);
 
@@ -193,10 +194,10 @@ var Client = IgeClass.extend({
                                 ige.client.log("Character loaded !");
 
                                 ige.network.request('getCharacterData', username, function (commandName, data) {
-                                    angular.element('body').scope().tileAmountScope = data[0];
-                                    angular.element('body').scope().playerLevelScope = data[1];
-                                    angular.element('body').scope().playerHealthScope = data[2];
-                                    angular.element('body').scope().$apply();
+                                    self.angularScope.tileAmountScope = data[0];
+                                    self.angularScope.playerLevelScope = data[1];
+                                    self.angularScope.playerHealthScope = data[2];
+                                    self.angularScope.$apply();
                                     ige.client.log("Character data loaded !");
                                 });
                             });
@@ -207,7 +208,7 @@ var Client = IgeClass.extend({
                             });
 
                             // Join chat room
-                            ige.chat.joinRoom('lobby')
+                            ige.chat.joinRoom('lobby');
                         });
                     });
 				}
