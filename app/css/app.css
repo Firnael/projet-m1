@@ -24,11 +24,12 @@
     -moz-animation: fall 1s linear infinite;
 }
 
-#playerInfoDiv{
-    z-index:1;
-    position:absolute;
-    left:1%;
-    top:8%;
+/* animate the drops*/
+@-webkit-keyframes fall {
+    to {margin-top:900px;}
+}
+@-moz-keyframes fall {
+    to {margin-top:900px;}
 }
 
 #navbar{
@@ -39,14 +40,11 @@
     width:100%;
 }
 
-
-
-/* animate the drops*/
-@-webkit-keyframes fall {
-    to {margin-top:900px;}
-}
-@-moz-keyframes fall {
-    to {margin-top:900px;}
+#playerInfoDiv{
+    z-index:1;
+    position:absolute;
+    left:1%;
+    top:8%;
 }
 
 #tileInfoDiv {
@@ -59,25 +57,22 @@
 #fightAlertDiv {
     z-index: 1;
     position: absolute;
-    left: 80%;
-    top: 80%;
+    left: 75%;
+    top: 75%;
+    width: 20%;
 }
 
 #attackAlertDiv {
     z-index: 1;
     position: absolute;
-    left: 40%;
+    left: 35%;
     top: 20%;
-    width: 16%;
+    width: 25%;
 }
 
-#marketModalDiv {
-    z-index: 1000;
-    width: 50%;
-    height: 25;
-    left: 25%;
-    top: 25%;
-    position: absolute;
+#attackAlertButtons {
+    position: relative;
+    left: 30%;
 }
 
 #chatComponentDiv {
@@ -116,4 +111,3 @@
     position: relative;
     width: 17%;
 }
-

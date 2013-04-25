@@ -9,9 +9,10 @@
     <meta name="game-engine-origin" content="http://www.isogenicengine.com">
     <meta http-equiv="X-UA-Compatible" content="IE=9" >
     <title>TremendousFarm</title>
-    <link rel="stylesheet" href="css/app.css"/>
+
     <!-- STYLES -->
-    <link href="css/ige.css" rel="stylesheet" type="text/css" />
+    <link href="css/ige.css" rel="stylesheet" type="text/css"/>
+    <link href="css/app.css" rel="stylesheet" type="text/css"/>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 
     <!-- Isogenic Loader -->
@@ -56,14 +57,17 @@
         <a class="brand" href="#">TremendousFarm</a>
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>
-            <a class="btn" data-ng-click="fightAlertShow = !fightAlertShow">Fight Alert</a>
-            <a class="btn btn-primary" data-toggle="modal" href="#inventoryDiv" data-ng-click="inventory.showThis = !inventory.showThis">Inventory</a>
-            <a class="btn" data-ng-click="market.showThis = !market.showThis">Market</a>
+            <a class="btn btn-primary" data-toggle="modal" href="#inventoryModalDiv">
+                <img src="assets/textures/ui/chest.png"/> Inventory
+            </a>
+            <a class="btn btn-success" data-toggle="modal" href="#marketModalDiv">
+                <img src="assets/textures/ui/coin.png"/> Market
+            </a>
         </ul>
     </div>
 </div>
 
-<!-- HautGaucheDiv -->
+<!-- Player Info -->
 <div id=playerInfoDiv class="well well-small">
     <p>
         <img src="assets/textures/ui/tile.png" width="20" height="20"/> - {{tileAmountScope}}</br>
@@ -72,7 +76,7 @@
     </p>
 </div>
 
-<!--  HautDroiteDiv -->
+<!--  Tile Info -->
 <div id=tileInfoDiv  class="well well-small">
     <p>
         <img src="assets/textures/ui/owner.png" width="20" height="20"/> - {{tileOwnerScope}}</br>
@@ -82,42 +86,61 @@
 </div>
 
 <!-- Fight alert -->
-<div id="fightAlertDiv" class="alert alert-block alert-error fade in" data-ng-show="fightAlertShow" >
-    <button type="button" class="close" data-dismiss="alert">×</button>
+<div id="fightAlertDiv" class="alert alert-block alert-error fade in" data-ng-show="fightAlertShow">
+    <button id="fightAlertCloseBtn" class="close" data-ng-click="fightAlertShow = false">×</button>
     <h4 class="alert-heading">Your field is under attack !</h4>
-    <p>{{fightAlertText}}</p>
+    <p>
+        {{fightAlertText}}
+        <button id="showFightRecapBtn" class="btn btn-danger" data-toggle="modal" href="#fightRecapDiv">Show recap</button>
+    </p>
+</div>
+
+<!-- Fight Recap Modal -->
+<div id="fightRecapDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fightRecap" aria-hidden="true" style="z-index: 1050;">
+    <div class="modal-header">
+        <h3>Fight Recap</h3>
+    </div>
+    <div class="modal-body">
+        <p>
+            {{fightRecapText}}
+        </p>
+    </div>
 </div>
 
 <!-- Attack alert -->
-<div id="attackAlertDiv" class="alert alert-block alert-warning fade in" ng-show="attackAlertShow" >
+<div id="attackAlertDiv" class="alert alert-block alert-warning fade in" data-ng-show="attackAlertShow" >
     <h4 class="alert-heading">You are entering an enemy land !</h4>
     {{attackAlertText}}
     Attack this tile ?
     </br></br>
-    <div class="btn-toolbar">
-        <div class="btn-group">
-            <button id="acceptAttackBtn" class="btn btn-danger" data-ng-click="attackTile()">Sure</button>
-            <button id="denyAttackBtn" class="btn btn-warning" data-ng-click="attackAlertShow = false">Nope</button>
-        </div>
+    <div id="attackAlertButtons">
+        <button id="acceptAttackBtn" class="btn btn-danger" data-ng-click="attackTile()">Sure</button>
+        <button id="denyAttackBtn" class="btn btn-warning" data-ng-click="attackAlertShow = false">Nope</button>
     </div>
 </div>
 
 <!-- Inventory Modal -->
-<div id="inventoryDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-ng-show="inventory.showThis" style="z-index: 1050;">
+<div id="inventoryModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="inventoryModal" aria-hidden="true" style="z-index: 1050;">
     <div class="modal-header">
-        <h3>Inventaire :</h3>
+        <h3>Inventory</h3>
     </div>
     <div class="modal-body">
         <ul>
-            <li data-ng-repeat="friend in inventoryScope">
-                [{{$index + 1}}] {{friend.name}}
+            <li data-ng-repeat="item in inventoryScope">
+                [{{$index + 1}}] {{item.name}}
             </li>
         </ul>
     </div>
 </div>
 
 <!-- Market modal -->
-<div id="marketModalDiv" class="well" data-ng-show="market.showThis">
+<div id="marketModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marketModal" aria-hidden="true" style="z-index: 1050;">
+    <div class="modal-header">
+        <h3>Market Place</h3>
+    </div>
+    <div class="modal-body">
+        <p>== Insert here Market Place ==</p>
+    </div>
 </div>
 
 <!-- Chat -->
@@ -134,14 +157,5 @@
         </form>
     </div>
 </div>
-<script>
-
-</script>
-
-
-<!-- In production use:
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
--->
-
 </body>
 </html>

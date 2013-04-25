@@ -29,7 +29,7 @@ var ClientNetworkEvents = {
             // Trigger a popup fight
             if(data["canAttack"]) {
                 ige.client.angularScope.attackAlertShow = true;
-                ige.client.angularScope.attackAlertText = "You are on " + data["username"] + " lands.";
+                ige.client.angularScope.attackAlertText = "You are on " + data["targetTileOwner"] + " lands.";
                 ige.client.angularScope.attackAlertData = data;
                 ige.client.angularScope.$apply();
             }
@@ -37,17 +37,15 @@ var ClientNetworkEvents = {
     },
 
     _onGetCharacterName: function(data) {
-        if (ige.$(data)) {
-            ige.$(data[0]).createLabel(data[1]);
-            ige.$(data[0]).playerName = data[1];
-        }
+        ige.$(data["characterId"]).createLabel(data["characterName"]);
+        ige.$(data["characterId"]).playerName = data["characterName"];
     },
 
     _onParcelleAmountChange: function(data, clientId) {
         // Update the UI
-        ige.client.angularScope.tileAmountScope = data[0];
-        ige.client.angularScope.playerLevelScope = data[1];
-        ige.client.angularScope.playerHealthScope = data[2];
+        ige.client.angularScope.tileAmountScope = data["tileAmount"];
+        ige.client.angularScope.playerLevelScope = data["characterLevel"];
+        ige.client.angularScope.playerHealthScope = data["characterHP"];
         ige.client.angularScope.$apply();
 
         // Update the player
@@ -57,15 +55,20 @@ var ClientNetworkEvents = {
     },
 
     _onPlayerAttack: function (data, cliendId) {
-        ige.client.log(data);
+        if(data["attackerName"]) {
+            ige.client.angularScope.fightAlertShow = true;
+            ige.client.angularScope.fightAlertText = "You are attacked by " + data["attackerName"] + " !";
+            ige.client.angularScope.fightRecapText = data["output"];
+            ige.client.angularScope.$apply();
+        }
+        ige.client.log(data["output"]);
     },
 
-    // Data : 0 = username, 1 = boolean
     _onToggleCharacterHide: function (data, clientId) {
-        if(data[1]) {
-            ige.$("character_" + data[0]).hide();
+        if(data["boolean"]) {
+            ige.$("character_" + data["username"]).hide();
         } else {
-            ige.$("character_" + data[0]).show();
+            ige.$("character_" + data["username"]).show();
         }
     },
 

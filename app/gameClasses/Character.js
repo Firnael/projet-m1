@@ -99,7 +99,6 @@ var Character = IgeEntityBox2d.extend({
         return this.hp;
     },
 
-    // (x, y) = target tile position as pixels
     walkTo: function (x, y, username) {
         var character = ige.$("character_" + username),
             distance = Math.distance(this.translate().x(), this.translate().y(), x, y),
@@ -159,12 +158,12 @@ var Character = IgeEntityBox2d.extend({
 
             if(canAttack) {
                 stuff["canAttack"] = true;
+                stuff["targetTileOwner"] = ige.server.tileBag.getOwnerByTile(tileIndex.x, tileIndex.y);
             }
             else {
                 // The player can't attack the tile, don't let him the choice.
                 stuff["canAttack"] = false;
                 ige.server._onPlayerAttackTile(stuff, ige.server.playerBag.getPlayerClientIdByUsername(username));
-                //ige.server._setParcelle(tileIndex, ige.server.playerBag.getPlayerClientIdByUsername(username));
             }
 
             ige.network.send("playerReachDestination", stuff);

@@ -176,8 +176,11 @@ var TileBag = IgeClass.extend({
 
         var attackerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
         var defenderClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
-        ige.network.send("playerAttack", output, attackerClientId);
-        ige.network.send("playerAttack", output, defenderClientId);
+        var stuff = {};
+        stuff["output"] = output;
+        ige.network.send("playerAttack", stuff, attackerClientId);
+        stuff["attackerName"] = attackerName;
+        ige.network.send("playerAttack", stuff, defenderClientId);
 
         return winnerName;
     },

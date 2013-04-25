@@ -51,6 +51,8 @@ var Client = IgeClass.extend({
         // Fight alert
         self.angularScope.fightAlertShow = false;
         self.angularScope.fightAlertText = "...";
+        // Fight recap
+        self.angularScope.fightRecapText = "...";
         // Chat data
         self.angularScope.chatTextArrayScope = [];
         self.angularScope.sendChatMessage = function () {
@@ -236,9 +238,9 @@ var Client = IgeClass.extend({
                                 ige.client.log("Character loaded !");
 
                                 ige.network.request('getCharacterData', self.username, function (commandName, data) {
-                                    self.angularScope.tileAmountScope = data[0];
-                                    self.angularScope.playerLevelScope = data[1];
-                                    self.angularScope.playerHealthScope = data[2];
+                                    self.angularScope.tileAmountScope = data["tileAmount"];
+                                    self.angularScope.playerLevelScope = data["characterLevel"];
+                                    self.angularScope.playerHealthScope = data["characterHP"];
                                     self.angularScope.$apply();
                                     ige.client.log("Character data loaded !");
                                 });
@@ -298,9 +300,9 @@ var Client = IgeClass.extend({
 
     // Creates the map
     createMap: function (data) {
-        var tiles = data[0];
-        var width = data[1];
-        var height = data[2];
+        var tiles = data["tiles"];
+        var width = data["width"];
+        var height = data["height"];
         ige.client.tileBag = new TileBag();
 
         var i;
