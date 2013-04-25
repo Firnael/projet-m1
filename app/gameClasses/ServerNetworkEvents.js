@@ -130,7 +130,7 @@ var ServerNetworkEvents = {
         var defenderName = targetTile.getOwner();
 
         if(data["canAttack"]) {
-            var winnerName = ige.server.tileBag.fight(attackerName, defenderName);
+            var winnerName = ige.server.tileBag.fight(attackerName, defenderName, tileIndex);
             if(winnerName == attackerName) {
                 ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
 

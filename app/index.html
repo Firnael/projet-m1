@@ -101,9 +101,34 @@
         <h3>Fight Recap</h3>
     </div>
     <div class="modal-body">
-        <p>
-            {{fightRecapText}}
-        </p>
+        <div class="bs-docs-grid">
+            <div id="playersNameRow" class="row">
+                <div class="span2">{{fightRecapText.attackerName}}</div>
+                <div class="span2">{{fightRecapText.defenderName}}</div>
+            </div>
+            <div id="playersAnimRow" class="row">
+                <div class="span2"><img src="assets/textures/sprites/attackAnimChainsawRight.gif"/></div>
+                <div class="span2"><img src="assets/textures/sprites/attackAnimChainsawLeft.gif"/></div>
+            </div>
+            <p>{{fightRecapText.tileIndex}}<p>
+            <div id="playersHealthRow" class="row">
+                <div class="span2">{{fightRecapText.attackerHealth}}</div>
+                <div class="span2">{{fightRecapText.defenderHealth}}</div>
+            </div>
+            <div id="playersWeaponRow" class="row">
+                <div class="span2">{{fightRecapText.attackerWeapon}}</div>
+                <div class="span2">{{fightRecapText.defenderWeapon}}</div>
+            </div>
+            <div id="playersHitCountRow" class="row">
+                <div class="span2">{{fightRecapText.attackerHitCount}}</div>
+                <div class="span2">{{fightRecapText.defenderHitCount}}</div>
+            </div>
+            <div id="playersMissCountRow" class="row">
+                <div class="span2">{{fightRecapText.attackerMissCount}}</div>
+                <div class="span2">{{fightRecapText.defenderMissCount}}</div>
+            </div>
+        </div>
+        <p>{{fightRecapText.winnerName}}<p>
     </div>
 </div>
 

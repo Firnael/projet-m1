@@ -61,7 +61,6 @@ var ClientNetworkEvents = {
             ige.client.angularScope.fightRecapText = data["output"];
             ige.client.angularScope.$apply();
         }
-        ige.client.log(data["output"]);
     },
 
     _onToggleCharacterHide: function (data, clientId) {

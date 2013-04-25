@@ -133,51 +133,64 @@ var TileBag = IgeClass.extend({
         }
     },
 
-    fight: function (attackerName, defenderName) {
+    fight: function (attackerName, defenderName, tileIndex) {
         var playerAttacker = ige.$("character_" + attackerName);
         var playerDefender = ige.$("character_" + defenderName);
         var paHP = playerAttacker.getHP();
         var pdHP = playerDefender.getHP();
 
-        var output = "Fight !\n";
+        var data = {};
+        data["attackerName"] = playerAttacker.getPlayerName(); // (1)
+        data["defenderName"] = playerDefender.getPlayerName(); // (2)
+        data["tileIndex"] = "(" + tileIndex.x + ", " + tileIndex.y + ")"; // (3)
+        data["attackerHealth"] = paHP; // (4)
+        data["defenderHealth"] = pdHP; // (5)
+        data["attackerWeapon"] = playerAttacker.inventory.weapon.name; // (6)
+        data["defenderWeapon"] = playerDefender.inventory.weapon.name; // (7)
+        data["attackerHitCount"] = 0; // (8)
+        data["defenderHitCount"] = 0; // (9)
+        data["attackerMissCount"] = 0; // (10)
+        data["defenderMissCount"] = 0; // (11)
+        data["winnerName"] = null; // (12)
 
         while(paHP > 0 && pdHP > 0) {
-            output += "" + playerAttacker.getPlayerName() + " HP = " + paHP + "\n";
-            output += "" + playerDefender.getPlayerName() + " HP = " + pdHP + "\n";
-
             var damages = playerAttacker.inventory.weapon.getDamages();
-            output += playerAttacker.getPlayerName() + " attacks " + playerDefender.getPlayerName()
-                + " with a " + playerAttacker.inventory.weapon.name
-                + " for " + damages + " damages !\n";
             pdHP -= damages;
+            if(damages == 0) {
+                data["attackerMissCount"] =  data["attackerMissCount"] + 1;
+            }
+            else {
+                data["attackerHitCount"] = data["attackerHitCount"] + 1;
+            }
 
             if(pdHP <= 0) {
                 break;
             }
 
             var damages = playerDefender.inventory.weapon.getDamages();
-            output += playerDefender.getPlayerName() + " attacks " + playerAttacker.getPlayerName()
-                + " with a " + playerDefender.inventory.weapon.name
-                + " for " + damages + " damages !\n";
             paHP -= damages;
+            if(damages == 0) {
+                data["defenderMissCount"] = data["defenderMissCount"] + 1;
+            }
+            else {
+                data["defenderHitCount"] = data["defenderHitCount"] + 1;
+            }
         }
 
         var winnerName;
         if(paHP <= 0) {
-            output += "" + playerDefender.getPlayerName() + " won the fight !";
             winnerName = defenderName;
         }
         else {
-            output += "" + playerAttacker.getPlayerName() + " won the fight !";
             winnerName = attackerName;
         }
 
-        ige.server.log(output);
+        data["winnerName"] = winnerName;
 
         var attackerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
         var defenderClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
         var stuff = {};
-        stuff["output"] = output;
+        stuff["output"] = data;
         ige.network.send("playerAttack", stuff, attackerClientId);
         stuff["attackerName"] = attackerName;
         ige.network.send("playerAttack", stuff, defenderClientId);

@@ -94,7 +94,6 @@ var Client = IgeClass.extend({
 
         self.angularScope.$apply();
 
-
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
 
