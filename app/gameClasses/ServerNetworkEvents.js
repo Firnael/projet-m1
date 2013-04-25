@@ -125,20 +125,39 @@ var ServerNetworkEvents = {
         }
     },
 
-    // data = tile index
-    _setParcelle: function (data, clientId) {
-        var tileIndex = data;
-        var newOwner = ige.server.playerBag.getPlayerUsernameByClientId(clientId);
-        var tile = new Tile(tileIndex.x, tileIndex.y, newOwner);
-        var updatedTile = ige.server.tileBag.setTile(tile);
+    _onPlayerAttackTile: function (data, clientId) {
+        var attackerName = data["username"];
+        var tileIndex = data["tileIndex"];
+        var targetTile = ige.server.tileBag.getTile(tileIndex.x, tileIndex.y);
+        var defenderName = targetTile.getOwner();
 
-        if(updatedTile) {
-            var stuff = {};
-            stuff["tileX"] = updatedTile.getTileX();
-            stuff["tileY"] = updatedTile.getTileY();
-            stuff["tileOwner"] = updatedTile.getOwner();
-            ige.network.send("getParcelle", stuff);
+        if(data["canAttack"]) {
+            var winnerName = ige.server.tileBag.fight(attackerName, defenderName);
+            if(winnerName == attackerName) {
+                ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
+
+                var oldOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
+                var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
+                var oldOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(defenderName);
+                var newOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(attackerName);
+                ige.server._onParcelleAmountChange(oldOwnerTileAmount, oldOwnerClientId);
+                ige.server._onParcelleAmountChange(newOwnerTileAmount, newOwnerClientId);
+            }
         }
+        // The tile is either ours already or neutral
+        else {
+            ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
+
+            // Notify the client that his parcelle amount inscreased
+            ige.server._onParcelleAmountChange(ige.server.tileBag.getTileAmountByOwner(attackerName), clientId);
+        }
+
+        // Broadcast the tile to update
+        var stuff = {};
+        stuff["tileX"] = targetTile.getTileX();
+        stuff["tileY"] = targetTile.getTileY();
+        stuff["tileOwner"] = targetTile.getOwner();
+        ige.network.send("getParcelle", stuff);
     },
 
     _onGetCharacterName: function(data, clientId) {

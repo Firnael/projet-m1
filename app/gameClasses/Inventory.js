@@ -4,6 +4,11 @@ var Inventory = IgeEntityBox2d.extend({
     init: function () {
         var self = this;
         self.weapon = new Weapon(1);
+        self.crops = {};
+        self.seeds = {};
+        self.money = 0;
+        self.fertilizerUnits = 0;
+        self.waterUnits = 0;
     },
 
     setWeapon: function (type) {

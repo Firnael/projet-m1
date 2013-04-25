@@ -26,12 +26,11 @@ var ClientNetworkEvents = {
 
         // If it's us, pop up the alert
         if(data["username"] == ige.client.username) {
-            var tile = ige.client.tileBag.getTile(data["tileIndex"].x, data["tileIndex"].y);
             // Trigger a popup fight
             if(data["canAttack"]) {
                 ige.client.angularScope.attackAlertShow = true;
-                ige.client.angularScope.attackAlertText = "You are on " + tile.getOwner() + " lands, you're doomed !";
-                ige.client.angularScope.attackAlertTargetTile = new IgePoint(tile.getTileX(), tile.getTileY());
+                ige.client.angularScope.attackAlertText = "You are on " + data["username"] + " lands.";
+                ige.client.angularScope.attackAlertData = data;
                 ige.client.angularScope.$apply();
             }
         }

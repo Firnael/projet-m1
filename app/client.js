@@ -42,9 +42,9 @@ var Client = IgeClass.extend({
         // Attack alert
         self.angularScope.attackAlertShow = false;
         self.angularScope.attackAlertText = "...";
-        self.angularScope.attackAlertTargetTile = null;
+        self.angularScope.attackAlertData = null;
         self.angularScope.attackTile = function () {
-            ige.network.send("setParcelle", self.angularScope.attackAlertTargetTile);
+            ige.network.send("playerAttackTile", self.angularScope.attackAlertData);
             self.angularScope.attackAlertShow = false;
             self.angularScope.$apply();
         }
@@ -68,8 +68,8 @@ var Client = IgeClass.extend({
             }
             // function to generate drops
             function createRain() {
-
-                for( i=1;i<nbDrop;i++) {
+                var i;
+                for(i=1;i<nbDrop;i++) {
                     var dropLeft = randRange(0,1600);
                     var dropTop = randRange(-1000,1400);
 
@@ -90,7 +90,6 @@ var Client = IgeClass.extend({
             setTimeout(killDrops, 6000);
         }
 
-
         self.angularScope.$apply();
 
 
@@ -105,7 +104,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://localhost:2000', function () {
+					ige.network.start('http://10.21.17.17:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);

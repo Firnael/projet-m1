@@ -39,14 +39,14 @@ var Server = IgeClass.extend({
                         ige.network.define('playerEntity', self._onPlayerEntity);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerKeyUp', self._onPlayerKeyUp);
-                        ige.network.define('setParcelle', self._setParcelle);
                         ige.network.define('getMap', self._onGetMap);
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
-                        ige.network.define('playerAttack', self._onPlayerAttack);
                         ige.network.define('getCharacterData', self._onGetCharacterData);
+                        ige.network.define('playerAttackTile', self._onPlayerAttackTile);
+                        ige.network.define('playerAttack');
                         ige.network.define('toggleCharacterHide');
                         ige.network.define('onRainingEvent');
 

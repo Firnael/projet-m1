@@ -49,49 +49,6 @@ var TileBag = IgeClass.extend({
         this.tiles.push(tile);
     },
 
-    setTile: function(tile) {
-        var i;
-        for(i=0; i<this.tiles.length; i++) {
-            var currentTile = this.tiles[i];
-            if(currentTile.getTileX() == tile.getTileX()) {
-                if(currentTile.getTileY() == tile.getTileY()) {
-                    if(currentTile.getOwner()== tile.getOwner()) {
-                        // This is one of our tile, nothing to do
-                        return null;
-                    }
-                    else if(currentTile.getOwner() != null) {
-                        // This is an enemy tile, start the fight !
-                        var winnerName = this.fight(tile.getOwner() ,currentTile.getOwner());
-                        // If the winner is the attacker
-                        if(winnerName == tile.getOwner()) {
-                            var oldOwner = currentTile.getOwner();
-                            currentTile.owner = tile.getOwner();
-
-                            var oldOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(oldOwner);
-                            var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(tile.getOwner());
-                            ige.server._onParcelleAmountChange(this.getTileAmountByOwner(oldOwner), oldOwnerClientId);
-                            ige.server._onParcelleAmountChange(this.getTileAmountByOwner(tile.getOwner()), newOwnerClientId);
-                            return currentTile;
-                        }
-
-                        return null;
-                    }
-                }
-            }
-        }
-
-        // If we end up here, the tile is neutral, we set its first owner
-        this.modifyTileOwner(tile.getTileX(), tile.getTileY(), tile.getOwner());
-
-        // Notify the client that his tile amount just changed
-        var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(tile.getOwner());
-        ige.server._onParcelleAmountChange(this.getTileAmountByOwner(tile.getOwner()), newOwnerClientId);
-
-        // Return the modified tile
-        var newTile = new Tile(tile.getTileX(), tile.getTileY(), tile.getOwner());
-        return newTile;
-    },
-
     modifyTileOwner: function (x, y, owner) {
         var i;
         for(i=0; i<this.tiles.length; i++) {
@@ -188,19 +145,21 @@ var TileBag = IgeClass.extend({
             output += "" + playerAttacker.getPlayerName() + " HP = " + paHP + "\n";
             output += "" + playerDefender.getPlayerName() + " HP = " + pdHP + "\n";
 
-            output += playerAttacker.getPlayerName() + " attacks " + playerDefender.getPlayerName();
+            var damages = playerAttacker.inventory.weapon.getDamages();
+            output += playerAttacker.getPlayerName() + " attacks " + playerDefender.getPlayerName()
                 + " with a " + playerAttacker.inventory.weapon.name
-                + " for " + playerAttacker.inventory.weapon.getDamages() + " damages !\n";
-            pdHP -= playerAttacker.inventory.weapon.getDamages();
+                + " for " + damages + " damages !\n";
+            pdHP -= damages;
 
             if(pdHP <= 0) {
                 break;
             }
 
+            var damages = playerDefender.inventory.weapon.getDamages();
             output += playerDefender.getPlayerName() + " attacks " + playerAttacker.getPlayerName()
                 + " with a " + playerDefender.inventory.weapon.name
-                + " for " + playerDefender.inventory.weapon.getDamages() + " damages !\n";
-            paHP -= playerDefender.inventory.weapon.getDamages();
+                + " for " + damages + " damages !\n";
+            paHP -= damages;
         }
 
         var winnerName;

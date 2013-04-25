@@ -157,14 +157,14 @@ var Character = IgeEntityBox2d.extend({
             stuff["username"] = username;
             stuff["tileIndex"] = tileIndex;
 
-            // If the player can attack the tile, we send him a invitation to do so
             if(canAttack) {
                 stuff["canAttack"] = true;
             }
             else {
                 // The player can't attack the tile, don't let him the choice.
                 stuff["canAttack"] = false;
-                ige.server._setParcelle(tileIndex, ige.server.playerBag.getPlayerClientIdByUsername(username));
+                ige.server._onPlayerAttackTile(stuff, ige.server.playerBag.getPlayerClientIdByUsername(username));
+                //ige.server._setParcelle(tileIndex, ige.server.playerBag.getPlayerClientIdByUsername(username));
             }
 
             ige.network.send("playerReachDestination", stuff);
