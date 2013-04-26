@@ -91,44 +91,45 @@
     <h4 class="alert-heading">Your field is under attack !</h4>
     <p>
         {{fightAlertText}}
-        <button id="showFightRecapBtn" class="btn btn-danger" data-toggle="modal" href="#fightRecapDiv">Show recap</button>
+        <button id="showFightRecapBtn" class="btn btn-danger" data-toggle="modal" href="#fightRecapDiv" data-ng-click="fightAlertShow = false">Show recap</button>
     </p>
 </div>
 
 <!-- Fight Recap Modal -->
-<div id="fightRecapDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fightRecap" aria-hidden="true" style="z-index: 1050;">
+<div id="fightRecapDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fightRecap" aria-hidden="true" style="position:absolute; z-index: 1050; left:55%;width:32%">
     <div class="modal-header">
         <h3>Fight Recap</h3>
     </div>
     <div class="modal-body">
         <div class="bs-docs-grid">
             <div id="playersNameRow" class="row">
-                <div class="span2">{{fightRecapText.attackerName}}</div>
-                <div class="span2">{{fightRecapText.defenderName}}</div>
+                <div class="span1">{{fightRecapText.attackerName}}</div>
+                <div class="span1">{{fightRecapText.defenderName}}</div>
+                <div class="span2">{{fightRecapText.winnerName}}</div>
             </div>
             <div id="playersAnimRow" class="row">
-                <div class="span2"><img src="assets/textures/sprites/attackAnimChainsawRight.gif"/></div>
-                <div class="span2"><img src="assets/textures/sprites/attackAnimChainsawLeft.gif"/></div>
+                <div class="span1"><img src="assets/textures/sprites/attackAnimChainsawRight.gif"/></div>
+                <div class="span1"><img src="assets/textures/sprites/attackAnimChainsawLeft.gif"/></div>
+                <div class="span2">wins the tile !</div>
             </div>
-            <p>{{fightRecapText.tileIndex}}<p>
             <div id="playersHealthRow" class="row">
-                <div class="span2">{{fightRecapText.attackerHealth}}</div>
-                <div class="span2">{{fightRecapText.defenderHealth}}</div>
+                <div class="span1"><img src="assets/textures/ui/heart.png"/> : {{fightRecapText.attackerHealth}}</div>
+                <div class="span1"><img src="assets/textures/ui/heart.png"/> : {{fightRecapText.defenderHealth}}</div>
+                <div class="span1"><img src="assets/textures/ui/tile.png"/> : {{fightRecapText.tileIndex}}</div>
             </div>
             <div id="playersWeaponRow" class="row">
-                <div class="span2">{{fightRecapText.attackerWeapon}}</div>
-                <div class="span2">{{fightRecapText.defenderWeapon}}</div>
+                <div class="span1"><img src="assets/textures/ui/sword.png"/> : {{fightRecapText.attackerWeapon}}</div>
+                <div class="span1"><img src="assets/textures/ui/sword.png"/> : {{fightRecapText.defenderWeapon}}</div>
             </div>
             <div id="playersHitCountRow" class="row">
-                <div class="span2">{{fightRecapText.attackerHitCount}}</div>
-                <div class="span2">{{fightRecapText.defenderHitCount}}</div>
+                <div class="span1"><img src="assets/textures/ui/hit.png"/> : {{fightRecapText.attackerHitCount}}</div>
+                <div class="span1"><img src="assets/textures/ui/hit.png"/> : {{fightRecapText.defenderHitCount}}</div>
             </div>
             <div id="playersMissCountRow" class="row">
-                <div class="span2">{{fightRecapText.attackerMissCount}}</div>
-                <div class="span2">{{fightRecapText.defenderMissCount}}</div>
+                <div class="span1"><img src="assets/textures/ui/miss.png"/> : {{fightRecapText.attackerMissCount}}</div>
+                <div class="span1"><img src="assets/textures/ui/miss.png"/> : {{fightRecapText.defenderMissCount}}</div>
             </div>
         </div>
-        <p>{{fightRecapText.winnerName}}<p>
     </div>
 </div>
 
@@ -178,7 +179,9 @@
     <div id="chatInputDiv" class="input-append">
         <form>
             <input id="chatInput"  name="chatInput" data-ng-model="chatInput" type="text">
-            <button id="chatButton" class="btn" type="submit" data-ng-click="sendChatMessage()"> Send </button>
+            <button id="chatButton" class="btn" type="submit" data-ng-click="sendChatMessage()">
+                <img src="assets/textures/ui/send.png" />
+            </button>
         </form>
     </div>
 </div>

@@ -105,7 +105,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.21.17.17:2000', function () {
+					ige.network.start('http://10.21.17.75:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);

@@ -24,6 +24,7 @@ var PlayerComponent = IgeClass.extend({
 
         // If the target tile is walkable, start to move there.
         if(ige.client.objectLayer.tileOccupiedBy(endTile.x, endTile.y) == "walkable") {
+            ige.client.angularScope.attackAlertShow = false;
             ige.network.send('playerMove', tilePoint);
         }
     },
