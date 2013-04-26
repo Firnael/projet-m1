@@ -29,6 +29,11 @@ var Client = IgeClass.extend({
 
         // Init scope variables
         this.angularScope = angular.element('body').scope();
+        // Tile action buttons
+        self.angularScope.plantButtonDisabled = true;
+        self.angularScope.waterButtonDisabled = true;
+        self.angularScope.fertilizeButtonDisabled = true;
+        self.angularScope.harvestButtonDisabled = true;
         // Player data
         self.angularScope.tileAmountScope = "0";
         self.angularScope.playerLevelScope = "0";
@@ -176,7 +181,6 @@ var Client = IgeClass.extend({
                             .tileHeight(40)
                             .drawBounds(false)
                             .drawBoundsData(true)
-                            .drawGrid(10)
                             .isometricMounts(true)
                             .drawMouse(true)
                             .mouseOver(function () {
@@ -378,6 +382,35 @@ var Client = IgeClass.extend({
         }
         // Set collision map
         ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
+    },
+
+    // Update the tile action buttons state
+    updateTileActionButtons: function (tileIndex) {
+        var tile = this.tileBag.getTile(tileIndex.x, tileIndex.y);
+        if(tile.getOwner() == this.username) {
+            if(tile.getCrop() != null) {
+                this.angularScope.plantButtonDisabled = true;
+                this.angularScope.harvestButtonDisabled = false;
+            }
+            else {
+                this.angularScope.plantButtonDisabled = false;
+                this.angularScope.harvestButtonDisabled = true;
+            }
+            if(tile.getHumidity() < 100) {
+                this.angularScope.waterButtonDisabled = false;
+            }
+            else {
+                this.angularScope.waterButtonDisabled = true;
+            }
+            if(tile.getFertility() < 100) {
+                this.angularScope.fertilizeButtonDisabled = false;
+            }
+            else {
+                this.angularScope.fertilizeButtonDisabled = true;
+            }
+
+            this.angularScope.$apply();
+        }
     }
 });
 

@@ -10,7 +10,6 @@ var Weapon = IgeEntityBox2d.extend({
            - Hits per second
            - Price
          */
-        var name, power, hitRatio, attackSpeed, price, image;
         self.setType(type);
     },
 

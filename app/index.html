@@ -55,12 +55,24 @@
 <div id="navbar" class="navbar navbar-inverse">
     <div class="navbar-inner">
         <a class="brand" href="#">TremendousFarm</a>
+        <button class="btn btn-inverse" data-ng-disabled="plantButtonDisabled">
+            <img src="assets/textures/ui/seed.png"/> Plant
+        </button>
+        <button class="btn btn-info" data-ng-disabled="waterButtonDisabled">
+            <img src="assets/textures/ui/waterdrop.png"/> Water
+        </button>
+        <button class="btn btn-success" data-ng-disabled="fertilizeButtonDisabled">
+            <img src="assets/textures/ui/fertilize.png"/> Fertilize
+        </button>
+        <button class="btn" data-ng-disabled="harvestButtonDisabled">
+            <img src="assets/textures/ui/harvest.png"/> Harvest
+        </button>
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>
             <a class="btn btn-primary" data-toggle="modal" href="#inventoryModalDiv">
                 <img src="assets/textures/ui/chest.png"/> Inventory
             </a>
-            <a class="btn btn-success" data-toggle="modal" href="#marketModalDiv">
+            <a class="btn btn-warning" data-toggle="modal" href="#marketModalDiv">
                 <img src="assets/textures/ui/coin.png"/> Market
             </a>
         </ul>
@@ -70,7 +82,7 @@
 <!-- Player Info -->
 <div id=playerInfoDiv class="well well-small">
     <p>
-        <img src="assets/textures/ui/tile.png" width="20" height="20"/> - {{tileAmountScope}}</br>
+        <img src="assets/textures/ui/tile.png" width="20" height="20"/> x {{tileAmountScope}}</br>
         <img src="assets/textures/ui/levelup.png" width="20" height="20"/> - {{playerLevelScope}}</br>
         <img src="assets/textures/ui/heart.png" width="20" height="20"/> - {{playerHealthScope}}</br>
     </p>
@@ -91,7 +103,9 @@
     <h4 class="alert-heading">Your field is under attack !</h4>
     <p>
         {{fightAlertText}}
-        <button id="showFightRecapBtn" class="btn btn-danger" data-toggle="modal" href="#fightRecapDiv" data-ng-click="fightAlertShow = false">Show recap</button>
+        <button id="showFightRecapBtn" class="btn btn-danger" data-toggle="modal" href="#fightRecapDiv" data-ng-click="fightAlertShow = false">
+            <img src="assets/textures/ui/fight.png"/> Show recap
+        </button>
     </p>
 </div>
 
@@ -134,14 +148,18 @@
 </div>
 
 <!-- Attack alert -->
-<div id="attackAlertDiv" class="alert alert-block alert-warning fade in" data-ng-show="attackAlertShow" >
+<div id="attackAlertDiv" class="alert alert-block alert-warning fade in" data-ng-show="attackAlertShow">
     <h4 class="alert-heading">You are entering an enemy land !</h4>
     {{attackAlertText}}
     Attack this tile ?
     </br></br>
     <div id="attackAlertButtons">
-        <button id="acceptAttackBtn" class="btn btn-danger" data-ng-click="attackTile()">Sure</button>
-        <button id="denyAttackBtn" class="btn btn-warning" data-ng-click="attackAlertShow = false">Nope</button>
+        <button id="acceptAttackBtn" class="btn btn-danger" data-ng-click="attackTile()">
+            <img src="assets/textures/ui/sure.png"/> Sure
+        </button>
+        <button id="denyAttackBtn" class="btn btn-warning" data-ng-click="attackAlertShow = false">
+            Nope <img src="assets/textures/ui/nope.png"/>
+        </button>
     </div>
 </div>
 

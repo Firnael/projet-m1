@@ -12,6 +12,7 @@ var ClientNetworkEvents = {
 
         ige.client.tileBag.modifyTileOwner(tileX, tileY, tileOwner);
         ige.client.terrainLayer.paintTile(tileX, tileY, 0, tileType);
+        ige.client.updateTileActionButtons(new IgePoint(tileX, tileY));
     },
 
     _onPlayerMove: function (data) {
@@ -33,6 +34,9 @@ var ClientNetworkEvents = {
                 ige.client.angularScope.attackAlertData = data;
                 ige.client.angularScope.$apply();
             }
+
+            // Update the buttons state
+            ige.client.updateTileActionButtons(data["tileIndex"]);
         }
     },
 

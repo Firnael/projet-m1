@@ -16,6 +16,7 @@ var Tile = IgeClass.extend({
         self.isFence= false;
         self.fertility = 100;
         self.humidity = 100;
+        self.crop = null;
     },
 
     // Return the x position as pixels
@@ -52,6 +53,10 @@ var Tile = IgeClass.extend({
 
     getIsFence: function () {
         return this.isFence;
+    },
+
+    getCrop: function () {
+        return this.crop;
     },
 
     // ===
