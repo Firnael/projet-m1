@@ -110,8 +110,8 @@
 </div>
 
 <!-- Fight Recap Modal -->
-<div id="fightRecapDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fightRecap" aria-hidden="true" style="position:absolute; z-index: 1050; left:55%;width:32%">
-    <div class="modal-header">
+<div id="fightRecapDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fightRecap" aria-hidden="true">
+    <div class="modal-header text-center">
         <h3>Fight Recap</h3>
     </div>
     <div class="modal-body">
@@ -164,22 +164,69 @@
 </div>
 
 <!-- Inventory Modal -->
-<div id="inventoryModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="inventoryModal" aria-hidden="true" style="z-index: 1050;">
-    <div class="modal-header">
+<div id="inventoryModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="inventoryModal" aria-hidden="true">
+    <div class="modal-header text-center">
         <h3>Inventory</h3>
     </div>
     <div class="modal-body">
-        <ul>
-            <li data-ng-repeat="item in inventoryScope">
-                [{{$index + 1}}] {{item.name}}
-            </li>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#utilities" data-toggle="tab">Utilities</a></li>
+            <li><a href="#crops" data-toggle="tab">Crops</a></li>
+            <li><a href="#seeds" data-toggle="tab">Seeds</a></li>
         </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="utilities">
+                <div class="row">
+                    <div class="span2"><p>Weapon</p></div>
+                    <div class="span1"><p>{{inventoryScope.weapon.name}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="span2"><p>Fertilizer</p></div>
+                    <div class="span1"><p>x {{inventoryScope.fertilizerUnits}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="span2"><p>Water</p></div>
+                    <div class="span1"><p>x {{inventoryScope.waterUnits}}</p></div>
+                </div>
+            </div>
+            <div class="tab-pane" id="crops">
+                <div class="row">
+                    <div class="span2"><p>Wheat crop</p></div>
+                    <div class="span1"><p>x {{inventoryScope.crops["wheat"]}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="span2"><p>Tomato crop</p></div>
+                    <div class="span1"><p>x {{inventoryScope.crops["tomato"]}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="span2"><p>Corn crop</p></div>
+                    <div class="span1"><p>x {{inventoryScope.crops["corn"]}}</p></div>
+                </div>
+            </div>
+            <div class="tab-pane" id="seeds">
+                <div class="row">
+                    <div class="span2"><p>Wheat seed</p></div>
+                    <div class="span1"><p>x {{inventoryScope.seeds["wheat"]}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="span2"><p>Tomato seed</p></div>
+                    <div class="span1"><p>x {{inventoryScope.seeds["tomato"]}}</p></div>
+                </div>
+                <div class="row">
+                    <div class="span2"><p>Corn seed</p></div>
+                    <div class="span1"><p>x {{inventoryScope.seeds["corn"]}}</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        {{inventoryScope.money}} x <img src="assets/textures/ui/coin.png"/>
     </div>
 </div>
 
 <!-- Market modal -->
 <div id="marketModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marketModal" aria-hidden="true" style="z-index: 1050;">
-    <div class="modal-header">
+    <div class="modal-header text-center">
         <h3>Market Place</h3>
     </div>
     <div class="modal-body">

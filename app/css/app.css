@@ -50,7 +50,7 @@
 #tileInfoDiv {
     z-index: 1;
     position: absolute;
-    left: 85%;
+    right: 1%;
     top: 8%;
 }
 
@@ -80,7 +80,7 @@
     position: absolute;
     bottom: 1%;
     left: 1%;
-    width: 30%;
+    width: 25%;
     height: 30%;
 }
 
@@ -97,8 +97,6 @@
 #chatInputDiv {
     position: relative;
     width: 100%;
-    bottom: 2%;
-    height: 25%;
     opacity: 0.7;
 }
 
@@ -109,5 +107,19 @@
 
 #chatButton {
     position: relative;
-    width: 17%;
+    width: 16%;
+}
+
+#fightRecapDiv {
+    position: absolute;
+    z-index: 1050;
+    left: 55%;
+    width: 32%;
+}
+
+#inventoryModalDiv {
+    z-index: 1050;
+    position: absolute;
+    left: 55%;
+    width: 20%;
 }
