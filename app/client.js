@@ -66,23 +66,11 @@ var Client = IgeClass.extend({
             self.angularScope.$apply();
         }
         // Market
-        //== Utilities prices
-        self.angularScope.marketWaterValue = 5;
-        self.angularScope.marketFertilizerValue = 10;
-        //== Seeds prices
-        self.angularScope.marketWheatSeedValue = 15;
-        self.angularScope.marketTomatoSeedValue = 20;
-        self.angularScope.marketCornSeedValue = 30;
         //== Weapons prices
         self.angularScope.marketBaseballBatValue = 2000;
         self.angularScope.marketChainsawValue = 3000;
         self.angularScope.marketAK47Value = 4000;
-        self.angularScope.marketBag = {};
-        self.angularScope.marketBag.waterBuyScope = 0;
-        self.angularScope.marketBag.fertilizerBuyScope = 0;
-        self.angularScope.marketBag.wheatSeedBuyScope = 0;
-        self.angularScope.marketBag.tomatoSeedBuyScope = 0;
-        self.angularScope.marketBag.cornSeedBuyScope = 0;
+
 
         self.angularScope.marketItems = {};
         var utilities = {};
