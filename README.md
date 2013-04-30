@@ -5,4 +5,8 @@ Pour lancer le serveur node :
 2.  Executer la commande :
 > node ./ige/server/ige.js -g ./projet-m1/app
 
+TODO List
+=========
+https://github.com/Firnael/projet-m1/wiki/TODO-List
+
 
