@@ -205,54 +205,22 @@
                 </div>
             </div>
             <div class="tab-pane" id="crops">
-                <div class="row-fluid">
+                <div class="row-fluid" data-ng-repeat="crop in inventoryScope.crops">
                     <div class="span4 offset2">
-                        <p>Wheat crop</p>
+                        <p>{{crop.name}}</p>
                     </div>
                     <div class="span5 offset1">
-                        <p>{{inventoryScope.crops["wheat"]}} x <img src="assets/textures/ui/plant.png"/></p>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span4 offset2">
-                        <p>Tomato crop</p>
-                    </div>
-                    <div class="span5 offset1">
-                        <p>{{inventoryScope.crops["tomato"]}} x <img src="assets/textures/ui/plant.png"/></p>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span4 offset2">
-                        <p>Corn crop</p>
-                    </div>
-                    <div class="span5 offset1">
-                        <p>{{inventoryScope.crops["corn"]}} x <img src="assets/textures/ui/plant.png"/></p>
+                        <p>{{crop.number}} x <img src={{crop.image}} /></p>
                     </div>
                 </div>
             </div>
             <div class="tab-pane" id="seeds">
-                <div class="row-fluid">
+                <div class="row-fluid" data-ng-repeat="seed in inventoryScope.seeds">
                     <div class="span4 offset2">
-                        <p>Wheat seed</p>
+                        <p>{{seed.name}}</p>
                     </div>
                     <div class="span5 offset1">
-                        <p>{{inventoryScope.seeds["wheat"]}} x <img src="assets/textures/ui/seed.png"/></p>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span4 offset2">
-                        <p>Tomato seed</p>
-                    </div>
-                    <div class="span5 offset1">
-                        <p>{{inventoryScope.seeds["tomato"]}} x <img src="assets/textures/ui/seed.png"/></p>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span4 offset2">
-                        <p>Corn seed</p>
-                    </div>
-                    <div class="span5 offset1">
-                        <p>{{inventoryScope.seeds["corn"]}} x <img src="assets/textures/ui/seed.png"/></p>
+                        <p>{{seed.number}} x <img src={{seed.image}} /></p>
                     </div>
                 </div>
             </div>
@@ -276,93 +244,31 @@
         <div class="tab-content">
             <div class="tab-pane active" id="buy">
                 <div class="accordion" id="marketSellCollapse">
-                    <div class="accordion-group">
+                    <div class="accordion-group" data-ng-repeat="category in marketItems">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#utilitiesCollapse">
-                                Utilities
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#{{category.name}}Collapse">
+                                {{category.name}}
                             </a>
                         </div>
-                        <div id="utilitiesCollapse" class="accordion-body collapse in">
+                        <div id="{{category.name}}Collapse" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/waterdrop.png"/> Water</div>
-                                    <div class="span2">{{marketWaterValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                <div class="row-fluid" data-ng-repeat="item in category.items">
+                                    <div class="span3"><img src="{{item.image}}"/> {{item.name}}</div>
+                                    <div class="span2">{{item.value}} x <img src="assets/textures/ui/coin.png"/></div>
                                     <div class="span7">
                                         <div class="input-prepend input-append">
                                             <button class="btn btn-warning" type="button">min</button>
                                             <button class="btn" type="button"> - </button>
-                                            <input type="text" class="span3 text-center" name="marketBag.waterBuyScope" ng-model="marketBag.waterBuyScope" placeholder="0">
+                                            <input type="text" class="span3 text-center" name="category.items[$index].number" ng-model="category.items[$index].number" placeholder="0">
                                             <button class="btn" type="button" data-ng-click=""> + </button>
                                             <button class="btn btn-warning" type="button">max</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/fertilize.png"/> Fertilizer</div>
-                                    <div class="span2">{{marketFertilizerValue}} x <img src="assets/textures/ui/coin.png"/></div>
-                                    <div class="span7">
-                                        <div class="input-prepend input-append">
-                                            <button class="btn btn-warning" type="button">min</button>
-                                            <button class="btn" type="button"> - </button>
-                                            <input type="text" class="span3 text-center" name="marketBag.fertilizerBuyScope" ng-model="marketBag.fertilizerBuyScope" placeholder="0">
-                                            <button class="btn" type="button"> + </button>
-                                            <button class="btn btn-warning" type="button">max</button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#seedsCollapse">
-                                Seeds
-                            </a>
-                        </div>
-                        <div id="seedsCollapse" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/seed.png"/> Wheat seed</div>
-                                    <div class="span2">{{marketWheatSeedValue}} x <img src="assets/textures/ui/coin.png"/></div>
-                                    <div class="span7">
-                                        <div class="input-prepend input-append">
-                                            <button class="btn btn-warning" type="button">min</button>
-                                            <button class="btn" type="button"> - </button>
-                                            <input type="text" class="span3 text-center" name="marketBag.wheatSeedBuyScope" ng-model="marketBag.wheatSeedBuyScope" placeholder="0">
-                                            <button class="btn" type="button"> + </button>
-                                            <button class="btn btn-warning" type="button">max</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/seed.png"/> Tomato seed</div>
-                                    <div class="span2">{{marketTomatoSeedValue}} x <img src="assets/textures/ui/coin.png"/></div>
-                                    <div class="span7">
-                                        <div class="input-prepend input-append">
-                                            <button class="btn btn-warning" type="button">min</button>
-                                            <button class="btn" type="button"> - </button>
-                                            <input type="text" class="span3 text-center" name="marketBag.tomatoSeedBuyScope" ng-model="marketBag.tomatoSeedBuyScope" placeholder="0">
-                                            <button class="btn" type="button"> + </button>
-                                            <button class="btn btn-warning" type="button">max</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/seed.png"/> Corn seed</div>
-                                    <div class="span2">{{marketCornSeedValue}} x <img src="assets/textures/ui/coin.png"/></div>
-                                    <div class="span7">
-                                        <div class="input-prepend input-append">
-                                            <button class="btn btn-warning" type="button">min</button>
-                                            <button class="btn" type="button"> - </button>
-                                            <input type="text" class="span3 text-center" name="marketBag.cornSeedBuyScope" ng-model="marketBag.cornSeedBuyScope" placeholder="0">
-                                            <button class="btn" type="button"> + </button>
-                                            <button class="btn btn-warning" type="button">max</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#weaponsCollapse">

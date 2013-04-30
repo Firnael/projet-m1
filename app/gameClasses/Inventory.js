@@ -4,18 +4,58 @@ var Inventory = IgeEntityBox2d.extend({
     init: function () {
         var self = this;
         self.weapon = new Weapon(1);
-        self.crops = {};
-        self.seeds = {};
+        self.crops = [];
+        self.seeds = [];
         self.money = 100;
         self.fertilizerUnits = 0;
         self.waterUnits = 0;
 
-        self.crops["wheat"] = 0;
-        self.crops["tomato"] = 0;
-        self.crops["corn"] = 0;
-        self.seeds["wheat"] = 0;
-        self.seeds["tomato"] = 0;
-        self.seeds["corn"] = 0;
+        var wheatCrop = {
+            "name":"wheat",
+            "image":"assets/textures/ui/plant.png",
+            "number":0
+        };
+
+        var tomatoCrop = {
+            "name":"tomato",
+            "image":"assets/textures/ui/plant.png",
+            "number":0
+        };
+
+        var cornCrop = {
+            "name":"corn",
+            "image":"assets/textures/ui/plant.png",
+            "number":0
+        };
+
+        var wheatSeed = {
+            "name":"wheat",
+            "image":"assets/textures/ui/seed.png",
+            "number":0
+        };
+
+        var tomatoSeed = {
+            "name":"tomato",
+            "image":"assets/textures/ui/seed.png",
+            "number":0
+        };
+
+        var cornSeed = {
+            "name":"corn",
+            "image":"assets/textures/ui/seed.png",
+            "number":0
+        };
+
+
+        self.crops.push(wheatCrop);
+        self.crops.push(tomatoCrop);
+        self.crops.push(cornCrop);
+
+        self.seeds.push(wheatSeed);
+        self.seeds.push(tomatoSeed);
+        self.seeds.push(cornSeed);
+
+
     },
 
     setWeapon: function (type) {

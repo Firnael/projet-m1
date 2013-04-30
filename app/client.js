@@ -83,10 +83,61 @@ var Client = IgeClass.extend({
         self.angularScope.marketBag.wheatSeedBuyScope = 0;
         self.angularScope.marketBag.tomatoSeedBuyScope = 0;
         self.angularScope.marketBag.cornSeedBuyScope = 0;
+
+        self.angularScope.marketItems = {};
+        var utilities = {};
+
+        utilities.name = "Utilities";
+        utilities.items = [];
+        var marketWater = {
+            "name":"Water",
+            "value":5,
+            "number":0,
+            "image":"assets/textures/ui/waterdrop.png"
+        };
+        var marketFertilizer = {
+            "name":"Fertilizer",
+            "value":10,
+            "number":0,
+            "image":"assets/textures/ui/fertilize.png"
+        };
+        utilities.items.push(marketWater);
+        utilities.items.push(marketFertilizer);
+        self.angularScope.marketItems.utilities = utilities;
+
+        var seeds = {};
+        seeds.name = "Seeds";
+        seeds.items = [];
+        var wheatSeed = {
+            "name":"Wheat Seed",
+            "value":15,
+            "number":0,
+            "image":"assets/textures/ui/seed.png"
+        };
+        var tomatoSeed = {
+            "name":"Tomato Seed",
+            "value":20,
+            "number":0,
+            "image":"assets/textures/ui/seed.png"
+        };
+        var cornSeed = {
+            "name":"Corn Seed",
+            "value":30,
+            "number":0,
+            "image":"assets/textures/ui/seed.png"
+        };
+        seeds.items.push(wheatSeed);
+        seeds.items.push(tomatoSeed);
+        seeds.items.push(cornSeed);
+
+        self.angularScope.marketItems.seeds = seeds;
+
+
+
         self.angularScope.marketBuyEvent = function () {
             ige.client.log("marketBag = \n");
-            for(var key in self.angularScope.marketBag){
-                ige.client.log("Key:" + key + ", Value:" + self.angularScope.marketBag[key]);
+            for(var key in self.angularScope.marketItems.utilities.items){
+                ige.client.log("Key:" + self.angularScope.marketItems.utilities.items[key].name + ", Value:" + self.angularScope.marketItems.utilities.items[key].number);
             }
 
         }
@@ -136,7 +187,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.37.2.75:2000', function () {
+					ige.network.start('http://localhost:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);
