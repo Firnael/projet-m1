@@ -12,8 +12,8 @@
 
     <!-- STYLES -->
     <link href="css/ige.css" rel="stylesheet" type="text/css"/>
-    <link href="css/app.css" rel="stylesheet" type="text/css"/>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/app.css" rel="stylesheet" type="text/css"/>
 
     <!-- Isogenic Loader -->
     <script type="text/javascript">var igeRoot = '../../ige/engine/';</script>
@@ -109,50 +109,15 @@
     </p>
 </div>
 
-<!-- Fight Recap Modal -->
-<div id="fightRecapDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fightRecap" aria-hidden="true">
-    <div class="modal-header text-center">
-        <h3>Fight Recap</h3>
-    </div>
-    <div class="modal-body">
-        <div class="bs-docs-grid">
-            <div id="playersNameRow" class="row">
-                <div class="span1">{{fightRecapText.attackerName}}</div>
-                <div class="span1">{{fightRecapText.defenderName}}</div>
-                <div class="span2">{{fightRecapText.winnerName}}</div>
-            </div>
-            <div id="playersAnimRow" class="row">
-                <div class="span1"><img src="assets/textures/sprites/attackAnimChainsawRight.gif"/></div>
-                <div class="span1"><img src="assets/textures/sprites/attackAnimChainsawLeft.gif"/></div>
-                <div class="span2">wins the tile !</div>
-            </div>
-            <div id="playersHealthRow" class="row">
-                <div class="span1"><img src="assets/textures/ui/heart.png"/> : {{fightRecapText.attackerHealth}}</div>
-                <div class="span1"><img src="assets/textures/ui/heart.png"/> : {{fightRecapText.defenderHealth}}</div>
-                <div class="span1"><img src="assets/textures/ui/tile.png"/> : {{fightRecapText.tileIndex}}</div>
-            </div>
-            <div id="playersWeaponRow" class="row">
-                <div class="span1"><img src="assets/textures/ui/sword.png"/> : {{fightRecapText.attackerWeapon}}</div>
-                <div class="span1"><img src="assets/textures/ui/sword.png"/> : {{fightRecapText.defenderWeapon}}</div>
-            </div>
-            <div id="playersHitCountRow" class="row">
-                <div class="span1"><img src="assets/textures/ui/hit.png"/> : {{fightRecapText.attackerHitCount}}</div>
-                <div class="span1"><img src="assets/textures/ui/hit.png"/> : {{fightRecapText.defenderHitCount}}</div>
-            </div>
-            <div id="playersMissCountRow" class="row">
-                <div class="span1"><img src="assets/textures/ui/miss.png"/> : {{fightRecapText.attackerMissCount}}</div>
-                <div class="span1"><img src="assets/textures/ui/miss.png"/> : {{fightRecapText.defenderMissCount}}</div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Attack alert -->
 <div id="attackAlertDiv" class="alert alert-block alert-warning fade in" data-ng-show="attackAlertShow">
-    <h4 class="alert-heading">You are entering an enemy land !</h4>
-    {{attackAlertText}}
-    Attack this tile ?
-    </br></br>
+    <h4 class="alert-heading text-center">You are entering an enemy land !</h4>
+    <p class="text-center">
+        {{attackAlertText}}</br>
+        Attack this tile ?
+    </p>
+    </br>
+    </br>
     <div id="attackAlertButtons">
         <button id="acceptAttackBtn" class="btn btn-danger" data-ng-click="attackTile()">
             <img src="assets/textures/ui/sure.png"/> Sure
@@ -163,10 +128,48 @@
     </div>
 </div>
 
+<!-- Fight Recap Modal -->
+<div id="fightRecapDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fightRecap" aria-hidden="true">
+    <div class="modal-header text-center">
+        <h3><img src="assets/textures/ui/fight.png"/> Fight Recap <img src="assets/textures/ui/fight.png"/></h3>
+    </div>
+    <div class="modal-body">
+        <div class="bs-docs-grid">
+            <div id="playersNameRow" class="row-fluid">
+                <div class="span2">{{fightRecapText.attackerName}}</div>
+                <div class="span2">{{fightRecapText.defenderName}}</div>
+                <div class="span8 text-center">{{fightRecapText.winnerName}}</div>
+            </div>
+            <div id="playersAnimRow" class="row-fluid">
+                <div class="span2"><img src="assets/textures/sprites/attackAnimChainsawRight.gif"/></div>
+                <div class="span2"><img src="assets/textures/sprites/attackAnimChainsawLeft.gif"/></div>
+                <div class="span8 text-center">wins the tile !</div>
+            </div>
+            <div id="playersHealthRow" class="row-fluid">
+                <div class="span2"><img src="assets/textures/ui/heart.png"/> : {{fightRecapText.attackerHealth}}</div>
+                <div class="span2"><img src="assets/textures/ui/heart.png"/> : {{fightRecapText.defenderHealth}}</div>
+                <div class="span8 text-center"><img src="assets/textures/ui/tile.png"/> : {{fightRecapText.tileIndex}}</div>
+            </div>
+            <div id="playersWeaponRow" class="row-fluid">
+                <div class="span2"><img src="assets/textures/ui/sword.png"/> : {{fightRecapText.attackerWeapon}}</div>
+                <div class="span2"><img src="assets/textures/ui/sword.png"/> : {{fightRecapText.defenderWeapon}}</div>
+            </div>
+            <div id="playersHitCountRow" class="row-fluid">
+                <div class="span2"><img src="assets/textures/ui/hit.png"/> : {{fightRecapText.attackerHitCount}}</div>
+                <div class="span2"><img src="assets/textures/ui/hit.png"/> : {{fightRecapText.defenderHitCount}}</div>
+            </div>
+            <div id="playersMissCountRow" class="row-fluid">
+                <div class="span2"><img src="assets/textures/ui/miss.png"/> : {{fightRecapText.attackerMissCount}}</div>
+                <div class="span2"><img src="assets/textures/ui/miss.png"/> : {{fightRecapText.defenderMissCount}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Inventory Modal -->
 <div id="inventoryModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="inventoryModal" aria-hidden="true">
     <div class="modal-header text-center">
-        <h3>Inventory</h3>
+        <h3><img src="assets/textures/ui/chest.png"/> Inventory <img src="assets/textures/ui/chest.png"/></h3>
     </div>
     <div class="modal-body">
         <ul class="nav nav-tabs">
@@ -176,45 +179,81 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="utilities">
-                <div class="row">
-                    <div class="span2"><p>Weapon</p></div>
-                    <div class="span1"><p>{{inventoryScope.weapon.name}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Weapon</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.weapon.name}} <img src="assets/textures/ui/sword.png"/></p>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="span2"><p>Fertilizer</p></div>
-                    <div class="span1"><p>x {{inventoryScope.fertilizerUnits}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Fertilizer</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.fertilizerUnits}} x <img src="assets/textures/ui/fertilize.png"/></p>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="span2"><p>Water</p></div>
-                    <div class="span1"><p>x {{inventoryScope.waterUnits}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Water</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.waterUnits}} x <img src="assets/textures/ui/waterdrop.png"/></p>
+                    </div>
                 </div>
             </div>
             <div class="tab-pane" id="crops">
-                <div class="row">
-                    <div class="span2"><p>Wheat crop</p></div>
-                    <div class="span1"><p>x {{inventoryScope.crops["wheat"]}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Wheat crop</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.crops["wheat"]}} x <img src="assets/textures/ui/plant.png"/></p>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="span2"><p>Tomato crop</p></div>
-                    <div class="span1"><p>x {{inventoryScope.crops["tomato"]}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Tomato crop</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.crops["tomato"]}} x <img src="assets/textures/ui/plant.png"/></p>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="span2"><p>Corn crop</p></div>
-                    <div class="span1"><p>x {{inventoryScope.crops["corn"]}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Corn crop</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.crops["corn"]}} x <img src="assets/textures/ui/plant.png"/></p>
+                    </div>
                 </div>
             </div>
             <div class="tab-pane" id="seeds">
-                <div class="row">
-                    <div class="span2"><p>Wheat seed</p></div>
-                    <div class="span1"><p>x {{inventoryScope.seeds["wheat"]}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Wheat seed</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.seeds["wheat"]}} x <img src="assets/textures/ui/seed.png"/></p>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="span2"><p>Tomato seed</p></div>
-                    <div class="span1"><p>x {{inventoryScope.seeds["tomato"]}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Tomato seed</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.seeds["tomato"]}} x <img src="assets/textures/ui/seed.png"/></p>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="span2"><p>Corn seed</p></div>
-                    <div class="span1"><p>x {{inventoryScope.seeds["corn"]}}</p></div>
+                <div class="row-fluid">
+                    <div class="span4 offset2">
+                        <p>Corn seed</p>
+                    </div>
+                    <div class="span5 offset1">
+                        <p>{{inventoryScope.seeds["corn"]}} x <img src="assets/textures/ui/seed.png"/></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -225,12 +264,156 @@
 </div>
 
 <!-- Market modal -->
-<div id="marketModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marketModal" aria-hidden="true" style="z-index: 1050;">
+<div id="marketModalDiv" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="marketModal" aria-hidden="true">
     <div class="modal-header text-center">
-        <h3>Market Place</h3>
+        <h3><img src="assets/textures/ui/coin.png"/> Market Place <img src="assets/textures/ui/coin.png"/></h3>
     </div>
     <div class="modal-body">
-        <p>== Insert here Market Place ==</p>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#buy" data-toggle="tab">BUY</a></li>
+            <li><a href="#sell" data-toggle="tab">SELL</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="buy">
+                <div class="accordion" id="marketSellCollapse">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#utilitiesCollapse">
+                                Utilities
+                            </a>
+                        </div>
+                        <div id="utilitiesCollapse" class="accordion-body collapse in">
+                            <div class="accordion-inner">
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/waterdrop.png"/> Water</div>
+                                    <div class="span2">{{marketWaterValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <div class="input-prepend input-append">
+                                            <button class="btn btn-warning" type="button">min</button>
+                                            <button class="btn" type="button"> - </button>
+                                            <input type="text" class="span3 text-center" name="marketBag.waterBuyScope" ng-model="marketBag.waterBuyScope" placeholder="0">
+                                            <button class="btn" type="button" data-ng-click=""> + </button>
+                                            <button class="btn btn-warning" type="button">max</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/fertilize.png"/> Fertilizer</div>
+                                    <div class="span2">{{marketFertilizerValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <div class="input-prepend input-append">
+                                            <button class="btn btn-warning" type="button">min</button>
+                                            <button class="btn" type="button"> - </button>
+                                            <input type="text" class="span3 text-center" name="marketBag.fertilizerBuyScope" ng-model="marketBag.fertilizerBuyScope" placeholder="0">
+                                            <button class="btn" type="button"> + </button>
+                                            <button class="btn btn-warning" type="button">max</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#seedsCollapse">
+                                Seeds
+                            </a>
+                        </div>
+                        <div id="seedsCollapse" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/seed.png"/> Wheat seed</div>
+                                    <div class="span2">{{marketWheatSeedValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <div class="input-prepend input-append">
+                                            <button class="btn btn-warning" type="button">min</button>
+                                            <button class="btn" type="button"> - </button>
+                                            <input type="text" class="span3 text-center" name="marketBag.wheatSeedBuyScope" ng-model="marketBag.wheatSeedBuyScope" placeholder="0">
+                                            <button class="btn" type="button"> + </button>
+                                            <button class="btn btn-warning" type="button">max</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/seed.png"/> Tomato seed</div>
+                                    <div class="span2">{{marketTomatoSeedValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <div class="input-prepend input-append">
+                                            <button class="btn btn-warning" type="button">min</button>
+                                            <button class="btn" type="button"> - </button>
+                                            <input type="text" class="span3 text-center" name="marketBag.tomatoSeedBuyScope" ng-model="marketBag.tomatoSeedBuyScope" placeholder="0">
+                                            <button class="btn" type="button"> + </button>
+                                            <button class="btn btn-warning" type="button">max</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/seed.png"/> Corn seed</div>
+                                    <div class="span2">{{marketCornSeedValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <div class="input-prepend input-append">
+                                            <button class="btn btn-warning" type="button">min</button>
+                                            <button class="btn" type="button"> - </button>
+                                            <input type="text" class="span3 text-center" name="marketBag.cornSeedBuyScope" ng-model="marketBag.cornSeedBuyScope" placeholder="0">
+                                            <button class="btn" type="button"> + </button>
+                                            <button class="btn btn-warning" type="button">max</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#weaponsCollapse">
+                                Weapons
+                            </a>
+                        </div>
+                        <div id="weaponsCollapse" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> Fork</div>
+                                    <div class="span2">FREE</div>
+                                    <div class="span7">
+                                        <span class="label label-info">OWNED</span>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> Baseball bat</div>
+                                    <div class="span2">{{marketBaseballBatValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <span class="label label-success">AVAILABLE</span>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> Chainsaw</div>
+                                    <div class="span2">{{marketChainsawValue}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <span class="label label-important">TOO EXPENSIVE</span>
+                                    </div>
+                                </div>
+                                <div class="row-fluid">
+                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> AK-47</div>
+                                    <div class="span2">{{marketAK47Value}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span7">
+                                        <span class="label label-important">TOO EXPENSIVE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="sell">
+                <p>Wheat</p>
+                <p>Tomato</p>
+                <p>Corn</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left"><button class="btn" data-ng-click="marketBuyEvent()">Buy</button></div>
+        {{inventoryScope.money}} x <img src="assets/textures/ui/coin.png"/>
     </div>
 </div>
 

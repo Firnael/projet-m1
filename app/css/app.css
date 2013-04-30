@@ -113,8 +113,10 @@
 #fightRecapDiv {
     position: absolute;
     z-index: 1050;
-    left: 55%;
-    width: 32%;
+    left: 35%;
+    right:35%;
+    width: 30%;
+    margin-left:0px;
 }
 
 #inventoryModalDiv {
@@ -122,4 +124,27 @@
     position: absolute;
     left: 55%;
     width: 20%;
+}
+
+#marketModalDiv {
+    z-index: 1050;
+}
+
+
+/* === Override Bootstrap === */
+
+/* Change links color (from blue to green) */
+a{color:#00cc44;text-decoration:none;}
+a:hover,a:focus{color:#00802b;text-decoration:underline;}
+
+/* Change tabs position (from left to center) */
+.nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+    zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs, .nav-pills {
+    text-align:center;
 }
