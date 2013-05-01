@@ -27,142 +27,9 @@ var Client = IgeClass.extend({
         this.gameTexture.fenceSheet = new IgeCellSheet('assets/textures/tiles/fenceSheet.png', 6, 1);
         this.gameTexture.background = new IgeTexture('assets/textures/backgrounds/grassTile.png');
 
-        // Init scope variables
+        // Init UI variables
         this.angularScope = angular.element('body').scope();
-        // Tile action buttons
-        self.angularScope.plantButtonDisabled = true;
-        self.angularScope.waterButtonDisabled = true;
-        self.angularScope.fertilizeButtonDisabled = true;
-        self.angularScope.harvestButtonDisabled = true;
-        // Player data
-        self.angularScope.tileAmountScope = "0";
-        self.angularScope.playerLevelScope = "0";
-        self.angularScope.playerHealthScope = "0";
-        // Inventory data
-        self.angularScope.inventoryScope = {};
-        // Tile data
-        self.angularScope.tileOwnerScope = "???";
-        self.angularScope.tileHumidityScope = "???";
-        self.angularScope.tileFertilityScope = "???";
-        // Attack alert
-        self.angularScope.attackAlertShow = false;
-        self.angularScope.attackAlertText = "...";
-        self.angularScope.attackAlertData = null;
-        self.angularScope.attackTile = function () {
-            ige.network.send("playerAttackTile", self.angularScope.attackAlertData);
-            self.angularScope.attackAlertShow = false;
-            self.angularScope.$apply();
-        }
-        // Fight alert
-        self.angularScope.fightAlertShow = false;
-        self.angularScope.fightAlertText = "...";
-        // Fight recap
-        self.angularScope.fightRecapText = "...";
-        // Chat data
-        self.angularScope.chatTextArrayScope = [];
-        self.angularScope.sendChatMessage = function () {
-            ige.chat.sendToRoom('lobby', self.angularScope.chatInput);
-            self.angularScope.chatInput = "";
-            self.angularScope.$apply();
-        }
-        // Market
-        //== Weapons prices
-        self.angularScope.marketBaseballBatValue = 2000;
-        self.angularScope.marketChainsawValue = 3000;
-        self.angularScope.marketAK47Value = 4000;
-
-
-        self.angularScope.marketItems = {};
-        var utilities = {};
-
-        utilities.name = "Utilities";
-        utilities.items = [];
-        var marketWater = {
-            "name":"Water",
-            "value":5,
-            "number":0,
-            "image":"assets/textures/ui/waterdrop.png"
-        };
-        var marketFertilizer = {
-            "name":"Fertilizer",
-            "value":10,
-            "number":0,
-            "image":"assets/textures/ui/fertilize.png"
-        };
-        utilities.items.push(marketWater);
-        utilities.items.push(marketFertilizer);
-        self.angularScope.marketItems.utilities = utilities;
-
-        var seeds = {};
-        seeds.name = "Seeds";
-        seeds.items = [];
-        var wheatSeed = {
-            "name":"Wheat Seed",
-            "value":15,
-            "number":0,
-            "image":"assets/textures/ui/seed.png"
-        };
-        var tomatoSeed = {
-            "name":"Tomato Seed",
-            "value":20,
-            "number":0,
-            "image":"assets/textures/ui/seed.png"
-        };
-        var cornSeed = {
-            "name":"Corn Seed",
-            "value":30,
-            "number":0,
-            "image":"assets/textures/ui/seed.png"
-        };
-        seeds.items.push(wheatSeed);
-        seeds.items.push(tomatoSeed);
-        seeds.items.push(cornSeed);
-
-        self.angularScope.marketItems.seeds = seeds;
-
-
-
-        self.angularScope.marketBuyEvent = function () {
-            ige.client.log("marketBag = \n");
-            for(var key in self.angularScope.marketItems.utilities.items){
-                ige.client.log("Key:" + self.angularScope.marketItems.utilities.items[key].name + ", Value:" + self.angularScope.marketItems.utilities.items[key].number);
-            }
-
-        }
-
-        // Rain event
-        self.angularScope.rainEvent = function(){
-            // number of drops created.
-            var nbDrop = 50;
-            // function to generate a random number range.
-            function randRange( minNum, maxNum) {
-                return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
-            }
-            // function to generate drops
-            function createRain() {
-                var i;
-                for(i=1;i<nbDrop;i++) {
-                    var dropLeft = randRange(0,1600);
-                    var dropTop = randRange(-1000,1400);
-
-                    $('.rain').append('<div class="drop" id="drop'+i+'"></div>');
-                    $('#drop'+i).css('left',dropLeft);
-                    $('#drop'+i).css('top',dropTop);
-                    $('.rain').css('background-color','black');
-                    $('.rain').css('opacity','0.2');
-                }
-            }
-            createRain();
-
-            function killDrops(){
-                $('.rain').empty();
-                $('.rain').css('background-color','');
-                $('.rain').css('opacity','');
-            }
-            setTimeout(killDrops, 6000);
-        }
-
-        self.angularScope.$apply();
+        this.setupUi();
 
 		// Wait for our textures to load before continuing
 		ige.on('texturesLoaded', function () {
@@ -330,7 +197,147 @@ var Client = IgeClass.extend({
 
     // Creates the UI entities
     setupUi: function () {
-        ige.client.log("UI loaded !");
+        // Tile action buttons
+        this.angularScope.plantButtonDisabled = true;
+        this.angularScope.waterButtonDisabled = true;
+        this.angularScope.fertilizeButtonDisabled = true;
+        this.angularScope.harvestButtonDisabled = true;
+
+        // Player data
+        this.angularScope.tileAmountScope = "0";
+        this.angularScope.playerLevelScope = "0";
+        this.angularScope.playerHealthScope = "0";
+
+        // Inventory data
+        this.angularScope.inventoryScope = {};
+
+        // Tile data
+        this.angularScope.tileOwnerScope = "???";
+        this.angularScope.tileHumidityScope = "???";
+        this.angularScope.tileFertilityScope = "???";
+
+        // Attack alert
+        this.angularScope.attackAlertShow = false;
+        this.angularScope.attackAlertText = "...";
+        this.angularScope.attackAlertData = null;
+        this.angularScope.attackTile = function () {
+            ige.network.send("playerAttackTile", this.angularScope.attackAlertData);
+            this.angularScope.attackAlertShow = false;
+            this.angularScope.$apply();
+        }
+
+        // Fight alert
+        this.angularScope.fightAlertShow = false;
+        this.angularScope.fightAlertText = "...";
+
+        // Fight recap
+        this.angularScope.fightRecapText = "...";
+
+        // Chat data
+        this.angularScope.chatTextArrayScope = [];
+        this.angularScope.sendChatMessage = function () {
+            ige.chat.sendToRoom('lobby', this.angularScope.chatInput);
+            this.angularScope.chatInput = "";
+            this.angularScope.$apply();
+        }
+
+        // Market
+        this.angularScope.marketItems = {};
+
+        // == BUY
+        // ==== Utilities
+        var utilities = {};
+        utilities.name = "Utilities";
+        utilities.items = [];
+        var marketWater = {
+            "name":"Water",
+            "value":5,
+            "number":0,
+            "image":"assets/textures/ui/waterdrop.png"
+        };
+        var marketFertilizer = {
+            "name":"Fertilizer",
+            "value":10,
+            "number":0,
+            "image":"assets/textures/ui/fertilize.png"
+        };
+        utilities.items.push(marketWater);
+        utilities.items.push(marketFertilizer);
+        this.angularScope.marketItems.utilities = utilities;
+
+        // ==== Seeds
+        var seeds = {};
+        seeds.name = "Seeds";
+        seeds.items = [];
+        var wheatSeed = {
+            "name":"Wheat Seed",
+            "value":15,
+            "number":0,
+            "image":"assets/textures/ui/seed.png"
+        };
+        var tomatoSeed = {
+            "name":"Tomato Seed",
+            "value":20,
+            "number":0,
+            "image":"assets/textures/ui/seed.png"
+        };
+        var cornSeed = {
+            "name":"Corn Seed",
+            "value":30,
+            "number":0,
+            "image":"assets/textures/ui/seed.png"
+        };
+        seeds.items.push(wheatSeed);
+        seeds.items.push(tomatoSeed);
+        seeds.items.push(cornSeed);
+
+        this.angularScope.marketItems.seeds = seeds;
+
+        // ==== Buy Event
+        this.angularScope.marketBuyEvent = function () {
+            ige.client.log("marketBag = \n");
+            for(var key in this.angularScope.marketItems.utilities.items){
+                ige.client.log("Key:" + this.angularScope.marketItems.utilities.items[key].name
+                    + ", Value:" + this.angularScope.marketItems.utilities.items[key].number);
+            }
+
+        }
+
+
+        // Rain event
+        this.angularScope.rainEvent = function(){
+            // number of drops created.
+            var nbDrop = 50;
+            // function to generate a random number range.
+            function randRange( minNum, maxNum) {
+                return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+            }
+            // function to generate drops
+            function createRain() {
+                var i;
+                for(i=1;i<nbDrop;i++) {
+                    var dropLeft = randRange(0,1600);
+                    var dropTop = randRange(-1000,1400);
+
+                    $('.rain').append('<div class="drop" id="drop'+i+'"></div>');
+                    $('#drop'+i).css('left',dropLeft);
+                    $('#drop'+i).css('top',dropTop);
+                    $('.rain').css('background-color','black');
+                    $('.rain').css('opacity','0.2');
+                }
+            }
+            createRain();
+
+            function killDrops(){
+                $('.rain').empty();
+                $('.rain').css('background-color','');
+                $('.rain').css('opacity','');
+            }
+            setTimeout(killDrops, 6000);
+        }
+
+        this.angularScope.$apply();
+        this.log("UI loaded !");
     },
 
     // Creates the player's character
