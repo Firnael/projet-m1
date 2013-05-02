@@ -221,9 +221,9 @@ var Client = IgeClass.extend({
         this.angularScope.attackAlertText = "...";
         this.angularScope.attackAlertData = null;
         this.angularScope.attackTile = function () {
-            ige.network.send("playerAttackTile", this.angularScope.attackAlertData);
-            this.angularScope.attackAlertShow = false;
-            this.angularScope.$apply();
+            ige.network.send("playerAttackTile", ige.client.angularScope.attackAlertData);
+            ige.client.angularScope.attackAlertShow = false;
+            ige.client.angularScope.$apply();
         }
 
         // Fight alert
@@ -232,13 +232,16 @@ var Client = IgeClass.extend({
 
         // Fight recap
         this.angularScope.fightRecapText = "...";
+        this.angularScope.fightRecapData = [];
+        this.angularScope.fightRecapData.attackerAnim = null;
+        this.angularScope.fightRecapData.defenderAnim = null;
 
         // Chat data
         this.angularScope.chatTextArrayScope = [];
         this.angularScope.sendChatMessage = function () {
-            ige.chat.sendToRoom('lobby', this.angularScope.chatInput);
-            this.angularScope.chatInput = "";
-            this.angularScope.$apply();
+            ige.chat.sendToRoom('lobby', ige.client.angularScope.chatInput);
+            ige.client.angularScope.chatInput = "";
+            ige.client.angularScope.$apply();
         }
 
         // Market
@@ -296,13 +299,11 @@ var Client = IgeClass.extend({
         // ==== Buy Event
         this.angularScope.marketBuyEvent = function () {
             ige.client.log("marketBag = \n");
-            for(var key in this.angularScope.marketItems.utilities.items){
-                ige.client.log("Key:" + this.angularScope.marketItems.utilities.items[key].name
-                    + ", Value:" + this.angularScope.marketItems.utilities.items[key].number);
+            for(var key in ige.client.angularScope.marketItems.utilities.items){
+                ige.client.log("Key:" + ige.client.angularScope.marketItems.utilities.items[key].name
+                    + ", Value:" + ige.client.angularScope.marketItems.utilities.items[key].number);
             }
-
-        }
-
+       }
 
         // Rain event
         this.angularScope.rainEvent = function(){

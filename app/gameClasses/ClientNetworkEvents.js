@@ -59,12 +59,71 @@ var ClientNetworkEvents = {
     },
 
     _onPlayerAttack: function (data, cliendId) {
-        if(data["attackerName"]) {
-            ige.client.angularScope.fightAlertShow = true;
-            ige.client.angularScope.fightAlertText = "You are attacked by " + data["attackerName"] + " !";
-            ige.client.angularScope.fightRecapText = data["output"];
-            ige.client.angularScope.$apply();
+
+        // Fight result message
+        // == We win
+        if(data["output"].winnerName == ige.client.username) {
+            if(data["attacking"]) {
+                data["output"].fightResult = "You win the tile.";
+            } else {
+                data["output"].fightResult = "You keep the tile.";
+            }
         }
+        // == We lose
+        else {
+            if(data["attacking"]) {
+                data["output"].fightResult = data["output"].defenderName + " keeps the tile.";
+            } else { // we were attacked
+                data["output"].fightResult = data["output"].attackerName + " wins the tile.";
+            }
+        }
+
+        // Fight animation
+        var attackerAnim = null;
+        var defenderAnim = null;
+
+        // == Attacker
+        switch(data["output"].attackerWeapon) {
+            case "Fork" :
+                attackerAnim = "assets/textures/sprites/animations/attackAnim_Fork_Right.gif"; break;
+            case "Baseball Bat" :
+                attackerAnim = "assets/textures/sprites/animations/attackAnim_BaseballBat_Right.gif"; break;
+            case "Chainsaw" :
+                attackerAnim = "assets/textures/sprites/animations/attackAnim_Chainsaw_Right.gif"; break;
+            case "AK-47" :
+                attackerAnim = "assets/textures/sprites/animations/attackAnim_AK47_Right.gif"; break;
+        }
+        // == Defender
+        switch(data["output"].defenderWeapon) {
+            case "Fork" :
+                defenderAnim = "assets/textures/sprites/animations/attackAnim_Fork_Left.gif"; break;
+            case "Baseball Bat" :
+                defenderAnim = "assets/textures/sprites/animations/attackAnim_BaseballBat_Left.gif"; break;
+            case "Chainsaw" :
+                defenderAnim = "assets/textures/sprites/animations/attackAnim_Chainsaw_Left.gif"; break;
+            case "AK-47" :
+                defenderAnim = "assets/textures/sprites/animations/attackAnim_AK47_Left.gif"; break;
+        }
+
+        ige.client.log("attackerWeapon = " + attackerAnim + ", defenderWeapon = " + defenderAnim);
+
+        ige.client.angularScope.fightRecapData.attackerAnim = attackerAnim;
+        ige.client.angularScope.fightRecapData.defenderAnim = defenderAnim;
+
+        // Set the data
+        ige.client.angularScope.fightRecapText = data["output"];
+
+        // We are the defender, pop up the fight alert
+        if(data["attacking"] == false) {
+            ige.client.angularScope.fightAlertShow = true;
+            ige.client.angularScope.fightAlertText = "You are attacked by " + data["output"].attackerName + " !";
+        }
+        // We are the attaker, display the fight recap instant
+        else {
+            $('#fightRecapDiv').modal();
+        }
+
+        ige.client.angularScope.$apply();
     },
 
     _onToggleCharacterHide: function (data, clientId) {
