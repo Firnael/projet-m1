@@ -257,11 +257,16 @@
                                     <div class="span2">{{item.value}} x <img src="assets/textures/ui/coin.png"/></div>
                                     <div class="span7">
                                         <div class="input-prepend input-append">
-                                            <button class="btn btn-warning" type="button">min</button>
-                                            <button class="btn" type="button"> - </button>
-                                            <input type="text" class="span3 text-center" name="category.items[$index].number" ng-model="category.items[$index].number" placeholder="0">
-                                            <button class="btn" type="button" data-ng-click=""> + </button>
-                                            <button class="btn btn-warning" type="button">max</button>
+                                            <button class="btn btn-warning" type="button"
+                                                    data-ng-click="category.items[$index].number = marketBuyMinEvent(category.items[$index].number, item.value)">min</button>
+                                            <button class="btn" type="button"
+                                                    data-ng-click="category.items[$index].number = marketBuyMinusEvent(category.items[$index].number, item.value)"> - </button>
+                                            <input type="text" class="span3 text-center" name="category.items[$index].number"
+                                                   ng-model="category.items[$index].number" placeholder="0">
+                                            <button class="btn" type="button"
+                                                    data-ng-click="category.items[$index].number = marketBuyPlusEvent(category.items[$index].number, item.value, inventoryScope.money)"> + </button>
+                                            <button class="btn btn-warning" type="button"
+                                                    data-ng-click="category.items[$index].number = marketBuyMaxEvent(item.value, inventoryScope.money)">max</button>
                                         </div>
                                     </div>
                                 </div>
@@ -310,7 +315,7 @@
                     </div>
                     <hr/>
                     <div id="buyTotal" class="pull-right">
-                        <b>- TOTAL : ? x </b>
+                        <b>- TOTAL : {{marketBuyTotal}} x </b>
                         <img src="assets/textures/ui/coin.png">
                         <img src="assets/textures/ui/separator.png">
                         <button class="btn btn-danger" data-ng-click="marketBuyEvent()">Buy</button>

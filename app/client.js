@@ -248,6 +248,8 @@ var Client = IgeClass.extend({
         this.angularScope.marketItems = {};
 
         // == BUY
+        this.angularScope.marketBuyTotal = 0;
+        this.angularScope.marketSellTotal = 0;
         // ==== Utilities
         var utilities = {};
         utilities.name = "Utilities";
@@ -298,12 +300,51 @@ var Client = IgeClass.extend({
 
         // ==== Buy Event
         this.angularScope.marketBuyEvent = function () {
+            this.angularScope.marketBuyTotal = 0;
+
             ige.client.log("marketBag = \n");
             for(var key in ige.client.angularScope.marketItems.utilities.items){
                 ige.client.log("Key:" + ige.client.angularScope.marketItems.utilities.items[key].name
                     + ", Value:" + ige.client.angularScope.marketItems.utilities.items[key].number);
             }
-       }
+        }
+
+        // ==== Min Event
+        this.angularScope.marketBuyMinEvent = function (itemAmount, itemPrice) {
+            ige.client.angularScope.marketBuyTotal -= itemAmount * itemPrice;
+            return 0;
+        }
+
+        // ==== Minus Event
+        this.angularScope.marketBuyMinusEvent = function (itemAmount, itemPrice) {
+            if(itemAmount > 0) {
+                ige.client.angularScope.marketBuyTotal -= itemPrice;
+                return itemAmount - 1;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        // ==== Plus Event
+        this.angularScope.marketBuyPlusEvent = function (itemAmount, itemPrice, playerMoney) {
+            if(itemPrice + ige.client.angularScope.marketBuyTotal <= playerMoney) {
+                ige.client.angularScope.marketBuyTotal += itemPrice;
+                return itemAmount +1;
+            }
+            else {
+                return itemAmount;
+            }
+        }
+
+        // ==== Max Event
+        this.angularScope.marketBuyMaxEvent = function (itemPrice, playerMoney) {
+            var moneyLeft = playerMoney - ige.client.angularScope.marketBuyTotal;
+            var newValue = Math.floor(moneyLeft / itemPrice);
+            ige.client.angularScope.marketBuyTotal += itemPrice * newValue;
+            return newValue;
+        }
+
 
         // Rain event
         this.angularScope.rainEvent = function(){
