@@ -136,15 +136,15 @@ var TileBag = IgeClass.extend({
     fight: function (attackerName, defenderName, tileIndex) {
         var playerAttacker = ige.$("character_" + attackerName);
         var playerDefender = ige.$("character_" + defenderName);
-        var paHP = playerAttacker.getHP();
-        var pdHP = playerDefender.getHP();
+        var paHp = playerAttacker.getCurrentHp();
+        var pdHp = playerDefender.getCurrentHp();
 
         var data = {};
         data["attackerName"] = playerAttacker.getPlayerName(); // (1)
         data["defenderName"] = playerDefender.getPlayerName(); // (2)
         data["tileIndex"] = "(" + tileIndex.x + ", " + tileIndex.y + ")"; // (3)
-        data["attackerHealth"] = paHP; // (4)
-        data["defenderHealth"] = pdHP; // (5)
+        data["attackerHealth"] = paHp; // (4)
+        data["defenderHealth"] = pdHp; // (5)
         data["attackerWeapon"] = playerAttacker.inventory.weapon.name; // (6)
         data["defenderWeapon"] = playerDefender.inventory.weapon.name; // (7)
         data["attackerHitCount"] = 0; // (8)
@@ -152,10 +152,12 @@ var TileBag = IgeClass.extend({
         data["attackerMissCount"] = 0; // (10)
         data["defenderMissCount"] = 0; // (11)
         data["winnerName"] = null; // (12)
+        data["attackerHealthAfter"] = null; // (13)
+        data["defenderHealthAfter"] = null; // (14)
 
-        while(paHP > 0 && pdHP > 0) {
+        while(paHp > 0 && pdHp > 0) {
             var damages = playerAttacker.inventory.weapon.getDamages();
-            pdHP -= damages;
+            pdHp -= damages;
             if(damages == 0) {
                 data["attackerMissCount"] =  data["attackerMissCount"] + 1;
             }
@@ -163,12 +165,12 @@ var TileBag = IgeClass.extend({
                 data["attackerHitCount"] = data["attackerHitCount"] + 1;
             }
 
-            if(pdHP <= 0) {
+            if(pdHp <= 0) {
                 break;
             }
 
             var damages = playerDefender.inventory.weapon.getDamages();
-            paHP -= damages;
+            paHp -= damages;
             if(damages == 0) {
                 data["defenderMissCount"] = data["defenderMissCount"] + 1;
             }
@@ -178,12 +180,19 @@ var TileBag = IgeClass.extend({
         }
 
         var winnerName;
-        if(paHP <= 0) {
+        if(paHp <= 0) {
             winnerName = defenderName;
         }
         else {
             winnerName = attackerName;
         }
+
+        // Set the players new currentHp
+        playerAttacker.setCurrentHp(paHp);
+        playerDefender.setCurrentHp(pdHp);
+
+        data["attackerHealthAfter"] = paHp;
+        data["defenderHealthAfter"] = pdHp;
 
         data["winnerName"] = winnerName;
 

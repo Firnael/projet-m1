@@ -49,6 +49,7 @@ var Server = IgeClass.extend({
                         ige.network.define('playerAttack');
                         ige.network.define('toggleCharacterHide');
                         ige.network.define('onRainingEvent');
+                        ige.network.define('onPlayerHpUpdateEvent');
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);

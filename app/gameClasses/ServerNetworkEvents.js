@@ -89,7 +89,8 @@ var ServerNetworkEvents = {
         var stuff = {};
         stuff["tileAmount"] = tileAmount;
         stuff["characterLevel"] = character.getLevel();
-        stuff["characterHP"] = character.getHP();
+        stuff["characterMaxHp"] = character.getMaxHp();
+        stuff["characterCurrentHp"] = character.getCurrentHp();
         ige.network.response(requestId, stuff);
     },
 
@@ -173,14 +174,15 @@ var ServerNetworkEvents = {
             // Set the character level according to the amount of tile he possesses.
             player.setLevel(data);
 
-            // Set the character hp according to his lvl
-            player.setHP(data);
+            // Set the character maxHp according to his lvl
+            player.setMaxHp(data);
 
             // Notify the client that his tile amount changed
             var stuff = {};
             stuff["tileAmount"] = data;
             stuff["characterLevel"] = player.getLevel();
-            stuff["characterHP"] = player.getHP();
+            stuff["characterMaxHp"] = player.getMaxHp();
+            stuff["characterCurrentHp"] = player.getCurrentHp();
             ige.network.send('parcelleAmountChange', stuff, clientId);
         }
     }

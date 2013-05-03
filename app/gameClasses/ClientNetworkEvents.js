@@ -49,17 +49,18 @@ var ClientNetworkEvents = {
         // Update the UI
         ige.client.angularScope.tileAmountScope = data["tileAmount"];
         ige.client.angularScope.playerLevelScope = data["characterLevel"];
-        ige.client.angularScope.playerHealthScope = data["characterHP"];
+        ige.client.angularScope.playerMaxHealthScope = data["characterMaxHp"];
+        ige.client.angularScope.playerCurrentHealthScope = data["characterCurrentHp"];
         ige.client.angularScope.$apply();
 
         // Update the player
         var player = ige.$("character_" + ige.client.username);
-        player.level = data[1];
-        player.hp = data[2];
+        player.level = data["characterLevel"];
+        player.maxHp = data["characterMaxHp"];
+        player.currentHp = data["characterCurrentHp"];
     },
 
     _onPlayerAttack: function (data, cliendId) {
-
         // Fight result message
         // == We win
         if(data["output"].winnerName == ige.client.username) {
@@ -115,15 +116,21 @@ var ClientNetworkEvents = {
 
         // We are the defender, pop up the fight alert
         if(data["attacking"] == false) {
+            // First, update the GUI with the new currentHp
+            ige.client.angularScope.playerCurrentHealthScope = data["output"].attackerHealthAfter;
+
             ige.client.angularScope.fightAlertShow = true;
             ige.client.angularScope.fightAlertText = "You are attacked by " + data["output"].attackerName + " !";
         }
         // We are the attaker, display the fight recap instant
         else {
+            ige.client.angularScope.playerCurrentHealthScope = data["output"].defenderHealthAfter;
             $('#fightRecapDiv').modal();
         }
 
         ige.client.angularScope.$apply();
+
+
     },
 
     _onToggleCharacterHide: function (data, clientId) {
@@ -136,6 +143,12 @@ var ClientNetworkEvents = {
 
     _onRainingEvent: function(data){
         ige.client.angularScope.rainEvent();
+    },
+
+    _onPlayerHpUpdateEvent: function (data) {
+        ige.$("character_" + ige.client.username).setCurrentHp(data);
+        ige.client.angularScope.playerCurrentHealthScope = data;
+        ige.client.angularScope.$apply();
     }
 };
 

@@ -12,7 +12,14 @@ var Character = IgeEntityBox2d.extend({
 			.isometric(true);
 
         self.level = 0;
-        self.hp = 0;
+        self.startHp = 100;
+        self.currentHp = self.startHp;
+        self.maxHp = self.startHp;
+
+        self.currentTime = ige._currentTime;
+        self.lastServerUpdateTime = self.currentTime;
+        self.lastClientUpdateTime = self.currentTime;
+
         self.playerName = playerName;
         self.inventory = new Inventory();
 
@@ -88,15 +95,26 @@ var Character = IgeEntityBox2d.extend({
         return this.level;
     },
 
-    setHP: function (tilesAmount) {
+    setMaxHp: function (tilesAmount) {
         if(ige.isServer) {
-            // We set 10 hp for every level the player owns.
-            this.hp = tilesAmount * 10;
+            // We add +10 maxHp for every level the player owns.
+            this.maxHp = this.startHp + tilesAmount * 10;
         }
     },
 
-    getHP: function () {
-        return this.hp;
+    getMaxHp: function () {
+        return this.maxHp;
+    },
+
+    setCurrentHp: function (value) {
+        if(value < 0) {
+            value = 0;
+        }
+        this.currentHp = value;
+    },
+
+    getCurrentHp: function () {
+        return this.currentHp;
     },
 
     walkTo: function (x, y, username) {
@@ -171,6 +189,31 @@ var Character = IgeEntityBox2d.extend({
     },
 
     tick: function (ctx) {
+        // Regen HP both sides
+        this.currentTime = ige._currentTime;
+        // Test each second
+        if(this.currentTime - this.lastClientUpdateTime >= 1000) {
+            this.lastClientUpdateTime = this.currentTime;
+            // Some health is missing
+            if(this.currentHp < this.maxHp) {
+                // Regen 1% hp
+                this.currentHp += Math.floor(this.maxHp / 100);
+                if(!ige.isServer) {
+                    ige.client.angularScope.playerCurrentHealthScope = this.currentHp;
+                    ige.client.angularScope.$apply();
+                }
+            }
+        }
+
+        if(ige.isServer) {
+            if(this.currentTime - this.lastServerUpdateTime >= 10000) {
+                this.lastServerUpdateTime = this.currentTime;
+                var clientId = ige.server.playerBag.getPlayerClientIdByUsername(this.playerName);
+                ige.network.send("onPlayerHpUpdateEvent", this.currentHp, clientId);
+            }
+        }
+
+
         IgeEntityBox2d.prototype.tick.call(this, ctx);
     },
 

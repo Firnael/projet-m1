@@ -10,10 +10,11 @@ var Timer = IgeObject.extend({
         this.currentTime = ige._currentTime;
         var differenceTime = this.currentTime - this.oldTime;
 
-        // rainingEvent
+        // Time related events
         if(differenceTime >= 10000) {
             this.oldTime = this.currentTime;
-            console.log("It's raining :)");
+
+            // Raining event
             ige.network.send("onRainingEvent");
         }
     }

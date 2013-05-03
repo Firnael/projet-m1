@@ -54,8 +54,6 @@ var Inventory = IgeEntityBox2d.extend({
         self.seeds.push(wheatSeed);
         self.seeds.push(tomatoSeed);
         self.seeds.push(cornSeed);
-
-
     },
 
     setWeapon: function (type) {

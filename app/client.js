@@ -51,6 +51,7 @@ var Client = IgeClass.extend({
                         ige.network.define('playerAttack', self._onPlayerAttack);
                         ige.network.define('toggleCharacterHide', self._onToggleCharacterHide);
                         ige.network.define('onRainingEvent', self._onRainingEvent);
+                        ige.network.define('onPlayerHpUpdateEvent', self._onPlayerHpUpdateEvent);
 
                         ige.addComponent(ChatComponent);
 
@@ -175,7 +176,8 @@ var Client = IgeClass.extend({
                                 ige.network.request('getCharacterData', self.username, function (commandName, data) {
                                     self.angularScope.tileAmountScope = data["tileAmount"];
                                     self.angularScope.playerLevelScope = data["characterLevel"];
-                                    self.angularScope.playerHealthScope = data["characterHP"];
+                                    self.angularScope.playerMaxHealthScope = data["characterMaxHp"];
+                                    self.angularScope.playerCurrentHealthScope = data["characterCurrentHp"];
                                     self.angularScope.$apply();
                                     ige.client.log("Character data loaded !");
                                 });
@@ -206,7 +208,8 @@ var Client = IgeClass.extend({
         // Player data
         this.angularScope.tileAmountScope = "0";
         this.angularScope.playerLevelScope = "0";
-        this.angularScope.playerHealthScope = "0";
+        this.angularScope.playerMaxHealthScope = "0";
+        this.angularScope.playerCurrentHealthScope = "0";
 
         // Inventory data
         this.angularScope.inventoryScope = {};
