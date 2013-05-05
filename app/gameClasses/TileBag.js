@@ -179,12 +179,15 @@ var TileBag = IgeClass.extend({
             }
         }
 
+        // Set resting status for the loser
         var winnerName;
         if(paHp <= 0) {
             winnerName = defenderName;
+            playerAttacker.setStatus(1);
         }
         else {
             winnerName = attackerName;
+            playerDefender.setStatus(1);
         }
 
         // Set the players new currentHp
@@ -193,7 +196,6 @@ var TileBag = IgeClass.extend({
 
         data["attackerHealthAfter"] = paHp;
         data["defenderHealthAfter"] = pdHp;
-
         data["winnerName"] = winnerName;
 
         var attackerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);

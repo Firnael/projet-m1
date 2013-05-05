@@ -91,6 +91,7 @@ var ServerNetworkEvents = {
         stuff["characterLevel"] = character.getLevel();
         stuff["characterMaxHp"] = character.getMaxHp();
         stuff["characterCurrentHp"] = character.getCurrentHp();
+        stuff["characterStatus"] = character.getStatus();
         ige.network.response(requestId, stuff);
     },
 

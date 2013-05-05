@@ -178,6 +178,14 @@ var Client = IgeClass.extend({
                                     self.angularScope.playerLevelScope = data["characterLevel"];
                                     self.angularScope.playerMaxHealthScope = data["characterMaxHp"];
                                     self.angularScope.playerCurrentHealthScope = data["characterCurrentHp"];
+                                    if(data["characterStatus"] == 0) {
+                                        self.angularScope.playerStatusIcon = "assets/textures/ui/normal.png";
+                                        self.angularScope.playerStatusScope = "Normal";
+                                    }
+                                    else if (data["characterStatus"] == 1) {
+                                        self.angularScope.playerStatusIcon = "assets/textures/ui/resting.png";
+                                        self.angularScope.playerStatusScope = "Resting";
+                                    }
                                     self.angularScope.$apply();
                                     ige.client.log("Character data loaded !");
                                 });
@@ -210,6 +218,8 @@ var Client = IgeClass.extend({
         this.angularScope.playerLevelScope = "0";
         this.angularScope.playerMaxHealthScope = "0";
         this.angularScope.playerCurrentHealthScope = "0";
+        this.angularScope.playerStatusIcon = null;
+        this.angularScope.playerStatusScope = "...";
 
         // Inventory data
         this.angularScope.inventoryScope = {};

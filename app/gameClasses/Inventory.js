@@ -11,41 +11,40 @@ var Inventory = IgeEntityBox2d.extend({
         self.waterUnits = 0;
 
         var wheatCrop = {
-            "name":"wheat",
-            "image":"assets/textures/ui/plant.png",
+            "name":"Wheat crop",
+            "image":"assets/textures/ui/wheat.png",
             "number":0
         };
 
         var tomatoCrop = {
-            "name":"tomato",
-            "image":"assets/textures/ui/plant.png",
+            "name":"Tomato crop",
+            "image":"assets/textures/ui/tomato.png",
             "number":0
         };
 
         var cornCrop = {
-            "name":"corn",
-            "image":"assets/textures/ui/plant.png",
+            "name":"Corn crop",
+            "image":"assets/textures/ui/corn.png",
             "number":0
         };
 
         var wheatSeed = {
-            "name":"wheat",
+            "name":"Wheat seed",
             "image":"assets/textures/ui/seed.png",
             "number":0
         };
 
         var tomatoSeed = {
-            "name":"tomato",
+            "name":"Tomato seed",
             "image":"assets/textures/ui/seed.png",
             "number":0
         };
 
         var cornSeed = {
-            "name":"corn",
+            "name":"Corn crop",
             "image":"assets/textures/ui/seed.png",
             "number":0
         };
-
 
         self.crops.push(wheatCrop);
         self.crops.push(tomatoCrop);

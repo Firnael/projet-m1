@@ -16,6 +16,9 @@ var Character = IgeEntityBox2d.extend({
         self.currentHp = self.startHp;
         self.maxHp = self.startHp;
 
+        // Status, 0=Normal, 1=Resting
+        self.status = 0;
+
         self.currentTime = ige._currentTime;
         self.lastServerUpdateTime = self.currentTime;
         self.lastClientUpdateTime = self.currentTime;
@@ -117,6 +120,17 @@ var Character = IgeEntityBox2d.extend({
         return this.currentHp;
     },
 
+    setStatus: function (value) {
+        if(value != 0 && value != 1) {
+            this.status = 0;
+        }
+        this.status = value;
+    },
+
+    getStatus: function () {
+        return this.status;
+    },
+
     walkTo: function (x, y, username) {
         var character = ige.$("character_" + username),
             distance = Math.distance(this.translate().x(), this.translate().y(), x, y),
@@ -203,13 +217,33 @@ var Character = IgeEntityBox2d.extend({
                     ige.client.angularScope.$apply();
                 }
             }
+            // Check status change
+            if(this.status == 1) {
+                if(this.currentHp >= this.maxHp /2) {
+
+                    console.log("currentHp = " + this.currentHp + ", maxHp / 2 = " + this.maxHp / 2);
+
+                    // set status to "Normal"
+                    this.status = 0;
+                    if(!ige.isServer) {
+                        ige.client.angularScope.playerStatusIcon = "assets/textures/ui/normal.png";
+                        ige.client.angularScope.playerStatusScope = "Normal";
+                    }
+                }
+            }
         }
 
+        // We sync the hp with the server, also we sync the player status
+        // Prevent UI problems for too long
         if(ige.isServer) {
             if(this.currentTime - this.lastServerUpdateTime >= 10000) {
                 this.lastServerUpdateTime = this.currentTime;
                 var clientId = ige.server.playerBag.getPlayerClientIdByUsername(this.playerName);
-                ige.network.send("onPlayerHpUpdateEvent", this.currentHp, clientId);
+
+                var stuff = {};
+                stuff["currentHp"] = this.currentHp;
+                stuff["status"] = this.status;
+                ige.network.send("onPlayerHpUpdateEvent", stuff, clientId);
             }
         }
 

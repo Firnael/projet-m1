@@ -72,6 +72,10 @@ var ClientNetworkEvents = {
         }
         // == We lose
         else {
+            // Update status
+            ige.client.angularScope.playerStatusIcon = "assets/textures/ui/resting.png";
+            ige.client.angularScope.playerStatusScope = "Resting";
+
             if(data["attacking"]) {
                 data["output"].fightResult = data["output"].defenderName + " keeps the tile.";
             } else { // we were attacked
@@ -129,8 +133,6 @@ var ClientNetworkEvents = {
         }
 
         ige.client.angularScope.$apply();
-
-
     },
 
     _onToggleCharacterHide: function (data, clientId) {
@@ -146,8 +148,20 @@ var ClientNetworkEvents = {
     },
 
     _onPlayerHpUpdateEvent: function (data) {
-        ige.$("character_" + ige.client.username).setCurrentHp(data);
-        ige.client.angularScope.playerCurrentHealthScope = data;
+        var character = ige.$("character_" + ige.client.username);
+        character.setCurrentHp(data["currentHp"]);
+        character.setStatus(data["status"]);
+
+        ige.client.angularScope.playerCurrentHealthScope = data["currentHp"];
+        if(data["status"] == 0) {
+            ige.client.angularScope.playerStatusIcon = "assets/textures/ui/normal.png";
+            ige.client.angularScope.playerStatusScope = "Normal";
+        }
+        else if(data["status"] == 1) {
+            ige.client.angularScope.playerStatusIcon = "assets/textures/ui/resting.png";
+            ige.client.angularScope.playerStatusScope = "Resting";
+        }
+
         ige.client.angularScope.$apply();
     }
 };
