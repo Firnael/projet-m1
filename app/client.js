@@ -435,30 +435,29 @@ var Client = IgeClass.extend({
         var height = data["height"];
         ige.client.tileBag = new TileBag();
 
-        var i;
-        for(i=0; i<tiles.length; i++) {
-            var tileData = new Tile(tiles[i].x, tiles[i].y, tiles[i].owner);
+        for(var key in tiles) {
+            var tileData = new Tile(tiles[key].x, tiles[key].y, tiles[key].owner);
 
-            tileData.isFence = tiles[i].isFence;
-            tileData.fertility = tiles[i].fertility;
-            tileData.humidity = tiles[i].humidity;
-            ige.client.tileBag.addTile(tileData);
+            tileData.isFence = tiles[key].isFence;
+            tileData.fertility = tiles[key].fertility;
+            tileData.humidity = tiles[key].humidity;
+            ige.client.tileBag.addTile(tiles[key].x, tiles[key].y, tileData);
 
             var tileType;
-            if(tiles[i].owner == ige.client.username) { // A nous
+            if(tiles[key].owner == ige.client.username) { // A nous
                 tileType = 1;
             }
-            else if(tiles[i].owner == null) { // Neutre
+            else if(tiles[key].owner == null) { // Neutre
                 tileType = 2;
             }
             else {
                 tileType = 3; // A eux
             }
 
-            var x = tiles[i].x;
-            var y = tiles[i].y;
+            var x = tiles[key].x;
+            var y = tiles[key].y;
 
-            if(tiles[i].isFence) {
+            if(tiles[key].isFence) {
                 if(x == 0) {
                     if(y == 0) {
                         ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 1);
@@ -505,8 +504,9 @@ var Client = IgeClass.extend({
                 }
             } else {
                 ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 0, tileType);
-            }
+            }    
         }
+        
         // Set collision map
         ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
     },

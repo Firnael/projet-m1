@@ -3,7 +3,7 @@ var TileBag = IgeClass.extend({
 
     init: function () {
         var self = this;
-        self.tiles = new Array();
+        self.tiles = {};
         self.width = 10;
         self.height = 10;
     },
@@ -36,7 +36,7 @@ var TileBag = IgeClass.extend({
                     }
 
                     // Add the tile to the list
-                    this.addTile(tile);
+                    this.addTile(i, j, tile);
                 }
             }
         }
@@ -45,27 +45,20 @@ var TileBag = IgeClass.extend({
         }
     },
 
-    addTile: function(tile) {
-        this.tiles.push(tile);
+    addTile: function(x, y, tile) {
+        var key = x + "-" + y;
+        this.tiles[key] = tile;
     },
 
     modifyTileOwner: function (x, y, owner) {
-        var i;
-        for(i=0; i<this.tiles.length; i++) {
-            var currentTile = this.tiles[i];
-            if(currentTile.getTileX() == x) {
-                if(currentTile.getTileY() == y) {
-                    currentTile.owner = owner;
-                }
-            }
-        }
+        var key = x + "-" + y;
+        this.tiles[key].owner = owner;
     },
 
     getTileAmountByOwner: function (owner) {
         var amount = 0;
-        var i;
-        for(i=0; i<this.tiles.length; i++) {
-            if(this.tiles[i].getOwner() == owner) {
+        for(var key in this.tiles) {
+            if(this.tiles[key].getOwner() == owner) {
                 amount++;
             }
         }
@@ -74,61 +67,49 @@ var TileBag = IgeClass.extend({
     },
 
     getTile: function (x, y) {
-        var i;
-        for(i=0; i<this.tiles.length; i++) {
-            var currentTile = this.tiles[i];
-            if(currentTile.getTileX() == x  && currentTile.getTileY() == y) {
-                return currentTile;
-            }
-        }
+        var key = x + "-" + y;
+        return this.tiles[key];
     },
 
     getOwnerByTile: function (x,y) {
-        var tile = this.getTile(x,y);
-        if(tile){
-            return tile.getOwner();
+        var key = x + "-" + y;
+        if(this.tiles[key]) {
+            return this.tiles[key].getOwner();
         }
     },
 
-    getFertilityByTile: function (x,y){
-        var tile = this.getTile(x,y);
-        if(tile){
-            return tile.getFertility();
+    getFertilityByTile: function (x,y) {
+        var key = x + "-" + y;
+        if(this.tiles[key]) {
+            return this.tiles[key].getFertility();
         }
     },
 
-    getHumidityByTile: function (x,y){
-        var tile = this.getTile(x,y);
-        if(tile){
-            return tile.getHumidity();
+    getHumidityByTile: function (x,y) {
+        var key = x + "-" + y;
+        if(this.tiles[key]) {
+            return this.tiles[key].getHumidity();
         }
     },
 
     setCollisionMap: function (tileMap){
-        var i;
-        for(i=0; i<this.tiles.length; i++) {
-            var currentTile = this.tiles[i];
-            if(!this.tiles[i].getIsFence()){
-                tileMap.occupyTile(currentTile.getTileX(),currentTile.getTileY(), 1, 1,"walkable");
+        for(var key in this.tiles) {
+            if(!this.tiles[key].getIsFence()) {
+                tileMap.occupyTile(this.tiles[key].getTileX(),this.tiles[key].getTileY(), 1, 1,"walkable");
             }
         }
     },
 
     canAttack: function(x, y, owner) {
-        var i;
-        for(i=0; i<this.tiles.length; i++) {
-            var currentTile = this.tiles[i];
-            if(currentTile.getTileX() == x) {
-                if(currentTile.getTileY() == y) {
-                    if(currentTile.getOwner() != owner && currentTile.getOwner() != null) {
-                        // The tile belongs to someone else
-                        return true;
-                    }
-                    else {
-                        // The tile is either ours, or neutral
-                        return false;
-                    }
-                }
+        var key = x + "-" + y;
+        if(this.tiles[key]) {
+            if(this.tiles[key].getOwner() != owner && this.tiles[key].getOwner() != null) {
+                // The tile belongs to someone else
+                return true;
+            }
+            else {
+                // The tile is either ours, or neutral
+                return false;
             }
         }
     },
@@ -211,9 +192,8 @@ var TileBag = IgeClass.extend({
     },
 
     destroy: function () {
-        var i;
-        for(i=0; i<this.tiles.length; i++) {
-            this.tiles[i].destroy();
+        for(var key in this.tiles) {
+            this.tiles[key].destroy();
         }
         IgeClass.prototype.destroy.call(this);
     }
