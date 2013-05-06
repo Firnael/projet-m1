@@ -26,23 +26,70 @@ var TileBag = IgeClass.extend({
             var i, j;
             for(i=0; i<this.width; i++) {
                 for(j=0; j<this.height; j++) {
-                    var tile = new Tile(i, j, null);
-
-                    // Define the tiles as fences
-                    if(i == 0 || j == 0 || i == this.width-1 || j == this.height-1) {
-                        tile.isFence = true;
-                        tile.fertility = 0;
-                        tile.humidity = 0;
-                    }
-
                     // Add the tile to the list
-                    this.addTile(i, j, tile);
+                    this.addTile(i, j, new Tile(i, j, null));
                 }
             }
+            // Place fences
+            this.placeFences();
         }
         if(!ige.isServer) {
             ige.client.log("You shouldn't use this method client-side.");
         }
+    },
+
+    placeFences: function() {
+        var i, j;
+        for(i=0; i<this.width; i++) {
+            for(j=0; j<this.height; j++) {
+                // Define the tiles as fences
+                if(i == 0 || j == 0 || i == this.width-1 || j == this.height-1) {
+                    var key = i +"-"+ j;
+                    console.log(key);
+                    this.tiles[key].isFence = true;
+                    this.tiles[key].fertility = 0;
+                    this.tiles[key].humidity = 0;
+                }
+            }
+        }
+    },
+
+    extendMap: function(size) {
+        // Remove previous fences
+        var i, j;
+        for(i=0; i<this.width; i++) {
+            for(j=0; j<this.height; j++) {
+                if(i == this.width-1 || j == this.height-1) {
+                    var key = i +"-"+ j;
+                    this.tiles[key].isFence = false;
+                    this.tiles[key].fertility = 100;
+                    this.tiles[key].humidity = 100;
+                }
+            }
+        }
+
+        // Add right tiles
+        for(i=this.width; i<this.width + size; i++) {
+            for(j=0; j<this.height + size; j++) {
+                console.log("i=" + i + ", j=" + j);
+                this.addTile(i, j, new Tile(i, j, null));
+            }
+        }
+
+        // Add left tiles
+        for(i=0; i<this.width + size; i++) {
+            for(j=this.height; j<this.height + size; j++) {
+                console.log("i=" + i + ", j=" + j);
+                this.addTile(i, j, new Tile(i, j, null));
+            }
+        }
+
+        // Update new size
+        this.width += size;
+        this.height += size;
+
+        // Place new fences
+        this.placeFences();
     },
 
     addTile: function(x, y, tile) {

@@ -104,7 +104,8 @@ var ServerNetworkEvents = {
     },
 
     _onPlayerKeyUp: function (data, clientId) {
-        ige.server.log("character_" + clientId + " : keyUp !")
+        ige.server.log("character_" + clientId + " : keyUp !");
+        ige.server.tileBag.extendMap(10);
     },
 
     _onPlayerMove: function (data, clientId) {
