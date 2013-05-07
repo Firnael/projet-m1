@@ -112,10 +112,11 @@ var Client = IgeClass.extend({
                             .translateTo(0, 0, 0)
                             .tileWidth(40)
                             .tileHeight(40)
-                            .drawBounds(false)
+                            .drawBounds(true)
                             .drawBoundsData(true)
                             .isometricMounts(true)
                             .drawMouse(true)
+                            .autoSection(50)
                             .mouseOver(function () {
                                 if(ige.client.tileBag) {
                                     var x = this._mouseTilePos.x;
@@ -351,11 +352,11 @@ var Client = IgeClass.extend({
         }
 
         // ==== Max Event
-        this.angularScope.marketBuyMaxEvent = function (itemPrice, playerMoney) {
+        this.angularScope.marketBuyMaxEvent = function (oldValue, itemPrice, playerMoney) {
             var moneyLeft = playerMoney - ige.client.angularScope.marketBuyTotal;
             var newValue = Math.floor(moneyLeft / itemPrice);
             ige.client.angularScope.marketBuyTotal += itemPrice * newValue;
-            return newValue;
+            return newValue + oldValue;
         }
 
 
@@ -509,6 +510,9 @@ var Client = IgeClass.extend({
         
         // Set collision map
         ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
+
+        // Force the render
+        ige.client.terrainLayer.cacheForceFrame();
     },
 
     // Update the tile action buttons state

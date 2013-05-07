@@ -12,6 +12,7 @@ var ClientNetworkEvents = {
 
         ige.client.tileBag.modifyTileOwner(tileX, tileY, tileOwner);
         ige.client.terrainLayer.paintTile(tileX, tileY, 0, tileType);
+        ige.client.terrainLayer.cacheForceFrame();
         ige.client.updateTileActionButtons(new IgePoint(tileX, tileY));
     },
 

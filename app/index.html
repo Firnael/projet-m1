@@ -72,7 +72,7 @@
             <a class="btn btn-primary" data-toggle="modal" href="#inventoryModalDiv">
                 <img src="assets/textures/ui/chest.png"/> Inventory
             </a>
-            <a class="btn btn-warning" data-toggle="modal" href="#marketModalDiv">
+            <a class="btn btn-warning underline" data-toggle="modal" href="#marketModalDiv">
                 <img src="assets/textures/ui/coin.png"/> Market
             </a>
         </ul>
@@ -81,35 +81,17 @@
 
 <!-- Player Info -->
 <div id=playerInfoDiv class="well well-small">
-    <div class="row-fluid">
-        <div class="span2"><img src={{playerStatusIcon}} /></div>
-        <div class="span1 offset1">-</div>
-        <div class="span7">{{playerStatusScope}}</div>
-    </div>
-    <div class="row-fluid">
-        <div class="span2"><img src="assets/textures/ui/tile.png"/></div>
-        <div class="span1 offset1">x</div>
-        <div class="span7">{{tileAmountScope}}</div>
-    </div>
-    <div class="row-fluid">
-        <div class="span2"><img src="assets/textures/ui/levelup.png"/></div>
-        <div class="span1 offset1">-</div>
-        <div class="span7">{{playerLevelScope}}</div>
-    </div>
-    <div class="row-fluid">
-        <div class="span2"><img src="assets/textures/ui/heart.png"/></div>
-        <div class="span1 offset1">-</div>
-        <div class="span7">{{playerCurrentHealthScope}} / {{playerMaxHealthScope}}</div>
-    </div>
+    <img src={{playerStatusIcon}} /> - {{playerStatusScope}}</br>
+    <img src="assets/textures/ui/tile.png"/> x {{tileAmountScope}}</br>
+    <img src="assets/textures/ui/levelup.png"/> - {{playerLevelScope}}</br>
+    <img src="assets/textures/ui/heart.png"/> - {{playerCurrentHealthScope}} / {{playerMaxHealthScope}}
 </div>
 
 <!--  Tile Info -->
 <div id=tileInfoDiv  class="well well-small">
-    <p>
-        <img src="assets/textures/ui/owner.png"/> - {{tileOwnerScope}}</br>
-        <img src="assets/textures/ui/water.png"/> - {{tileHumidityScope}} %</br>
-        <img src="assets/textures/ui/plant.png"/> - {{tileFertilityScope}} %</br>
-    </p>
+    <img src="assets/textures/ui/owner.png"/> - {{tileOwnerScope}}</br>
+    <img src="assets/textures/ui/water.png"/> - {{tileHumidityScope}} %</br>
+    <img src="assets/textures/ui/plant.png"/> - {{tileFertilityScope}} %
 </div>
 
 <!-- Fight alert -->
@@ -281,7 +263,7 @@
                                             <button class="btn" type="button"
                                                     data-ng-click="category.items[$index].number = marketBuyPlusEvent(category.items[$index].number, item.value, inventoryScope.money)"> + </button>
                                             <button class="btn btn-warning" type="button"
-                                                    data-ng-click="category.items[$index].number = marketBuyMaxEvent(item.value, inventoryScope.money)">max</button>
+                                                    data-ng-click="category.items[$index].number = marketBuyMaxEvent(category.items[$index].number, item.value, inventoryScope.money)">max</button>
                                         </div>
                                     </div>
                                 </div>

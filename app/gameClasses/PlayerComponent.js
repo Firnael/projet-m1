@@ -30,9 +30,20 @@ var PlayerComponent = IgeClass.extend({
     },
 
     _keyUp: function (event, keyCode) {
+        // Press Space for testing
         if (keyCode === ige.input.key.space) {
             ige.client.log("Key " + keyCode + " is up. (Event :" + event + ")");
             ige.network.send("playerKeyUp");
+        }
+        // Press I to open the Inventory
+        else if (keyCode === ige.input.key.i) {
+            // ige.client.log("Open inventory");
+            $('#inventoryModalDiv').modal();
+        }
+        // Press M to open the Market
+        else if (keyCode === ige.input.key.m) {
+            // ige.client.log("Open market");
+            $('#marketModalDiv').modal();
         }
     }
 });
