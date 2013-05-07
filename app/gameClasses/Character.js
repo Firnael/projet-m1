@@ -212,6 +212,9 @@ var Character = IgeEntityBox2d.extend({
             if(this.currentHp < this.maxHp) {
                 // Regen 1% hp
                 this.currentHp += Math.floor(this.maxHp / 100);
+                if(this.currentHp > this.maxHp){
+                    this.currentHp = this.maxHp;
+                }
                 if(!ige.isServer) {
                     ige.client.angularScope.playerCurrentHealthScope = this.currentHp;
                     ige.client.angularScope.$apply();
