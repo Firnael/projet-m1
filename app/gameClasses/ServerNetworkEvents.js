@@ -105,7 +105,10 @@ var ServerNetworkEvents = {
 
     _onPlayerKeyUp: function (data, clientId) {
         ige.server.log("character_" + clientId + " : keyUp !");
-        ige.server.tileBag.extendMap(10);
+
+        var extensionValue = 10;
+        ige.server.tileBag.extendMap(extensionValue);
+        ige.network.send("onExtendMap", extensionValue);
     },
 
     _onPlayerMove: function (data, clientId) {

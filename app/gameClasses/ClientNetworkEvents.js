@@ -164,6 +164,11 @@ var ClientNetworkEvents = {
         }
 
         ige.client.angularScope.$apply();
+    },
+
+    _onExtendMap: function (data) {
+        ige.client.log("Extension value = " + data);
+        ige.client.tileBag.extendMap(data);
     }
 };
 

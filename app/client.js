@@ -52,6 +52,7 @@ var Client = IgeClass.extend({
                         ige.network.define('toggleCharacterHide', self._onToggleCharacterHide);
                         ige.network.define('onRainingEvent', self._onRainingEvent);
                         ige.network.define('onPlayerHpUpdateEvent', self._onPlayerHpUpdateEvent);
+                        ige.network.define('onExtendMap', self._onExtendMap);
 
                         ige.addComponent(ChatComponent);
 
@@ -88,20 +89,13 @@ var Client = IgeClass.extend({
                             .ignoreCamera(true) // We want the scene to remain static
                             .mount(self.mainScene);
 
-                        // Create the UI scene. It's painted on top of others scenes
-                        self.uiScene = new IgeScene2d()
-                            .id('uiScene')
-                            .depth(3)
-                            .ignoreCamera(true)
-                            .mount(self.mainScene);
-
                         // Create the scene that the game items will
                         // be mounted to (like the tile map). This scene
                         // is then mounted to the main scene.
                         self.gameScene = new IgeScene2d()
                             .id('gameScene')
                             .depth(1)
-                            .translateTo(0, -360, 0)
+                            .translateTo(0, 0, 0)
                             .drawBounds(false)
                             .drawBoundsData(false)
                             .mount(self.mainScene);
@@ -116,7 +110,7 @@ var Client = IgeClass.extend({
                             .drawBoundsData(true)
                             .isometricMounts(true)
                             .drawMouse(true)
-                            .autoSection(50)
+                            .autoSection(10)
                             .mouseOver(function () {
                                 if(ige.client.tileBag) {
                                     var x = this._mouseTilePos.x;
@@ -504,8 +498,10 @@ var Client = IgeClass.extend({
                     }
                 }
             } else {
-                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 0, tileType);
-            }    
+                if(tileType != 2) {
+                    ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 0, tileType);
+                }
+            }
         }
         
         // Set collision map

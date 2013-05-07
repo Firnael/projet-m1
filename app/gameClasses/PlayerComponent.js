@@ -31,7 +31,7 @@ var PlayerComponent = IgeClass.extend({
 
     _keyUp: function (event, keyCode) {
         // Press Space for testing
-        if (keyCode === ige.input.key.space) {
+        if (keyCode === ige.input.key.e) {
             ige.client.log("Key " + keyCode + " is up. (Event :" + event + ")");
             ige.network.send("playerKeyUp");
         }

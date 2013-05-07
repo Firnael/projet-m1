@@ -45,10 +45,57 @@ var TileBag = IgeClass.extend({
                 // Define the tiles as fences
                 if(i == 0 || j == 0 || i == this.width-1 || j == this.height-1) {
                     var key = i +"-"+ j;
-                    console.log(key);
                     this.tiles[key].isFence = true;
                     this.tiles[key].fertility = 0;
                     this.tiles[key].humidity = 0;
+
+                    // Add the fences textures
+                    if(!ige.isServer) {
+                        if(i == 0) {
+                            if(j == 0) {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 1);
+                            }
+                            else if(j == this.height-1) {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 6);
+                            }
+                            else {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 2);
+                            }
+                        }
+                        if(j == 0) {
+                            if(i == 0) {
+                                // already done
+                            }
+                            else if(i == this.width-1) {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 4);
+                            }
+                            else {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 3);
+                            }
+                        }
+                        if(i == this.width-1) {
+                            if(j == 0) {
+                                // already done
+                            }
+                            else if(j == this.height-1) {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 5);
+                            }
+                            else {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 2);
+                            }
+                        }
+                        if(j == this.height-1) {
+                            if(i == 0) {
+                                // already done
+                            }
+                            else if(i == this.width-1) {
+                                // already done
+                            }
+                            else {
+                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 3);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -64,6 +111,11 @@ var TileBag = IgeClass.extend({
                     this.tiles[key].isFence = false;
                     this.tiles[key].fertility = 100;
                     this.tiles[key].humidity = 100;
+                    
+                    // Remove the fences textures
+                    if(!ige.isServer) {
+                        ige.client.terrainLayer.clearTile(i, j);    
+                    }
                 }
             }
         }
@@ -71,7 +123,6 @@ var TileBag = IgeClass.extend({
         // Add right tiles
         for(i=this.width; i<this.width + size; i++) {
             for(j=0; j<this.height + size; j++) {
-                console.log("i=" + i + ", j=" + j);
                 this.addTile(i, j, new Tile(i, j, null));
             }
         }
@@ -79,7 +130,6 @@ var TileBag = IgeClass.extend({
         // Add left tiles
         for(i=0; i<this.width + size; i++) {
             for(j=this.height; j<this.height + size; j++) {
-                console.log("i=" + i + ", j=" + j);
                 this.addTile(i, j, new Tile(i, j, null));
             }
         }
@@ -90,6 +140,14 @@ var TileBag = IgeClass.extend({
 
         // Place new fences
         this.placeFences();
+
+        if(!ige.isServer) {
+            // Update collisions
+            ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
+
+            // Force the render
+            ige.client.terrainLayer.cacheForceFrame();
+        }
     },
 
     addTile: function(x, y, tile) {

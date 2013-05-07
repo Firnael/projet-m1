@@ -50,6 +50,7 @@ var Server = IgeClass.extend({
                         ige.network.define('toggleCharacterHide');
                         ige.network.define('onRainingEvent');
                         ige.network.define('onPlayerHpUpdateEvent');
+                        ige.network.define('onExtendMap');
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);
@@ -75,12 +76,6 @@ var Server = IgeClass.extend({
 							.drawBounds(false)
 							.drawBoundsData(false)
 							.mount(self.mainScene);
-
-                        self.uiScene = new IgeScene2d()
-                            .id('uiScene')
-                            .depth(2)
-                            .ignoreCamera(true)
-                            .mount(self.mainScene);
 
                         self.gameScene = new IgeScene2d()
                             .id('gameScene')

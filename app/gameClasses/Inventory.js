@@ -4,11 +4,42 @@ var Inventory = IgeEntityBox2d.extend({
     init: function () {
         var self = this;
         self.weapon = new Weapon(1);
+        self.bestWeapon = 1;
+        self.weapons = [];
         self.crops = [];
         self.seeds = [];
         self.money = 100;
         self.fertilizerUnits = 0;
         self.waterUnits = 0;
+
+        var forkWeapon = {
+            "name":"Fork",
+            "image":"assets/textures/ui/sword.png",
+            "present":1
+        };
+
+        var baseballBatWeapon = {
+            "name":"Baseball bat",
+            "image":"assets/textures/ui/sword.png",
+            "present":0
+        };
+
+        var chainsawWeapon = {
+            "name":"Chainsaw",
+            "image":"assets/textures/ui/sword.png",
+            "present":0
+        };
+
+        var ak47Weapon = {
+            "name":"AK-47",
+            "image":"assets/textures/ui/sword.png",
+            "present":0
+        };
+
+        self.weapons.push(forkWeapon);
+        self.weapons.push(baseballBatWeapon);
+        self.weapons.push(chainsawWeapon);
+        self.weapons.push(ak47Weapon);
 
         var wheatCrop = {
             "name":"Wheat crop",
@@ -28,6 +59,11 @@ var Inventory = IgeEntityBox2d.extend({
             "number":0
         };
 
+        self.crops.push(wheatCrop);
+        self.crops.push(tomatoCrop);
+        self.crops.push(cornCrop);
+
+
         var wheatSeed = {
             "name":"Wheat seed",
             "image":"assets/textures/ui/seed.png",
@@ -46,10 +82,6 @@ var Inventory = IgeEntityBox2d.extend({
             "number":0
         };
 
-        self.crops.push(wheatCrop);
-        self.crops.push(tomatoCrop);
-        self.crops.push(cornCrop);
-
         self.seeds.push(wheatSeed);
         self.seeds.push(tomatoSeed);
         self.seeds.push(cornSeed);
@@ -60,6 +92,13 @@ var Inventory = IgeEntityBox2d.extend({
             this.weapon.destroy();
         }
         this.weapon = new Weapon(type);
+        if(this.bestWeapon < type) {
+            this.bestWeapon = type;
+        }
+    },
+
+    getBestWeapon: function() {
+        return new Weapon(this.bestWeapon);
     },
 
     destroy: function () {
