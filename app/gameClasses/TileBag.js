@@ -51,55 +51,59 @@ var TileBag = IgeClass.extend({
 
                     // Add the fences textures
                     if(!ige.isServer) {
-                        if(i == 0) {
-                            if(j == 0) {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 1);
-                            }
-                            else if(j == this.height-1) {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 6);
-                            }
-                            else {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 2);
-                            }
-                        }
-                        if(j == 0) {
-                            if(i == 0) {
-                                // already done
-                            }
-                            else if(i == this.width-1) {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 4);
-                            }
-                            else {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 3);
-                            }
-                        }
-                        if(i == this.width-1) {
-                            if(j == 0) {
-                                // already done
-                            }
-                            else if(j == this.height-1) {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 5);
-                            }
-                            else {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 2);
-                            }
-                        }
-                        if(j == this.height-1) {
-                            if(i == 0) {
-                                // already done
-                            }
-                            else if(i == this.width-1) {
-                                // already done
-                            }
-                            else {
-                                ige.client.terrainLayer.paintTile((this.tiles[key].getTileX()), (this.tiles[key].getTileY()), 1, 3);
-                            }
-                        }
+                        this.paintFences(i, j, this.tiles[key], this.height, this.width);
                     }
                 }
             }
         }
     },
+
+    paintFences: function (x, y, tileData, height, width) {
+    if (x == 0) {
+        if (y == 0) {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 1);
+        }
+        else if (y == height - 1) {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 6);
+        }
+        else {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
+        }
+    }
+    if (y == 0) {
+        if (x == 0) {
+            // already done
+        }
+        else if (x == width - 1) {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 4);
+        }
+        else {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
+        }
+    }
+    if (x == width - 1) {
+        if (y == 0) {
+            // already done
+        }
+        else if (y == height - 1) {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 5);
+        }
+        else {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
+        }
+    }
+    if (y == height - 1) {
+        if (x == 0) {
+            // already done
+        }
+        else if (x == width - 1) {
+            // already done
+        }
+        else {
+            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
+        }
+    }
+},
 
     extendMap: function(size) {
         // Remove previous fences

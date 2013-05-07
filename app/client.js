@@ -1,16 +1,16 @@
 var Client = IgeClass.extend({
-	classId: 'Client',
-	init: function () {
-		ige.showStats(1);
+    classId: 'Client',
+    init: function () {
+        ige.showStats(1);
 
-		// Enabled texture smoothing when scaling textures
-		ige.globalSmoothing(true);
+        // Enabled texture smoothing when scaling textures
+        ige.globalSmoothing(true);
 
-		// Enable networking
-		ige.addComponent(IgeNetIoComponent);
+        // Enable networking
+        ige.addComponent(IgeNetIoComponent);
 
-		// Implement our game methods
-		this.implement(ClientNetworkEvents);
+        // Implement our game methods
+        this.implement(ClientNetworkEvents);
 
         var self = this;
         var clientId = -1;
@@ -453,50 +453,7 @@ var Client = IgeClass.extend({
             var y = tiles[key].y;
 
             if(tiles[key].isFence) {
-                if(x == 0) {
-                    if(y == 0) {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 1);
-                    }
-                    else if(y == height-1) {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 6);
-                    }
-                    else {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
-                    }
-                }
-                if(y == 0) {
-                    if(x == 0) {
-                        // already done
-                    }
-                    else if(x == width-1) {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 4);
-                    }
-                    else {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
-                    }
-                }
-                if(x == width-1) {
-                    if(y == 0) {
-                        // already done
-                    }
-                    else if(y == height-1) {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 5);
-                    }
-                    else {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
-                    }
-                }
-                if(y == height-1) {
-                    if(x == 0) {
-                        // already done
-                    }
-                    else if(x == width-1) {
-                        // already done
-                    }
-                    else {
-                        ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
-                    }
-                }
+                ige.client.tileBag.paintFences(x, y, tileData, height, width);
             } else {
                 if(tileType != 2) {
                     ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 0, tileType);
