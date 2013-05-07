@@ -429,6 +429,11 @@ var Client = IgeClass.extend({
         var width = data["width"];
         var height = data["height"];
         ige.client.tileBag = new TileBag();
+        // on recréé un tileBag cohérent avec celui du serveur
+        ige.client.tileBag.width = width;
+        ige.client.tileBag.height = height;
+
+
 
         for(var key in tiles) {
             var tileData = new Tile(tiles[key].x, tiles[key].y, tiles[key].owner);
