@@ -254,10 +254,12 @@ var Client = IgeClass.extend({
 
         // Market
         this.angularScope.marketItems = {};
+        this.angularScope.marketWeapons = {};
 
         // == BUY
         this.angularScope.marketBuyTotal = 0;
         this.angularScope.marketSellTotal = 0;
+
         // ==== Utilities
         var utilities = {};
         utilities.name = "Utilities";
@@ -286,25 +288,59 @@ var Client = IgeClass.extend({
             "name":"Wheat Seed",
             "value":15,
             "number":0,
-            "image":"assets/textures/ui/seed.png"
+            "image":"assets/textures/ui/wheat_seeds.png"
         };
         var tomatoSeed = {
             "name":"Tomato Seed",
             "value":20,
             "number":0,
-            "image":"assets/textures/ui/seed.png"
+            "image":"assets/textures/ui/tomato_seeds.png"
         };
         var cornSeed = {
             "name":"Corn Seed",
             "value":30,
             "number":0,
-            "image":"assets/textures/ui/seed.png"
+            "image":"assets/textures/ui/corn_seeds.png"
         };
+
         seeds.items.push(wheatSeed);
         seeds.items.push(tomatoSeed);
         seeds.items.push(cornSeed);
-
         this.angularScope.marketItems.seeds = seeds;
+
+        // ==== Weapons
+        var weapons = [];
+        var pitchforkWeapon = {
+            "name":"Pitchfork",
+            "value":"FREE",
+            "toggle":0,
+            "image":"assets/textures/ui/pitchfork.png"
+        };
+        var baseballbatWeapon = {
+            "name":"Baseball bat",
+            "value":1000,
+            "toggle":0,
+            "image":"assets/textures/ui/baseballbat.png"
+        };
+        var chainsawWeapon = {
+            "name":"Chainsaw",
+            "value":2000,
+            "toggle":0,
+            "image":"assets/textures/ui/chainsaw.png"
+        };
+        var ak47Weapon = {
+            "name":"AK-47",
+            "value":3000,
+            "toggle":0,
+            "image":"assets/textures/ui/ak47.png"
+        };
+
+        weapons.push(pitchforkWeapon);
+        weapons.push(baseballbatWeapon);
+        weapons.push(chainsawWeapon);
+        weapons.push(ak47Weapon);
+        this.angularScope.marketWeapons = weapons;
+
 
         // ==== Buy Event
         this.angularScope.marketBuyEvent = function () {
@@ -351,6 +387,17 @@ var Client = IgeClass.extend({
             var newValue = Math.floor(moneyLeft / itemPrice);
             ige.client.angularScope.marketBuyTotal += itemPrice * newValue;
             return newValue + oldValue;
+        }
+
+        // ==== Weapon Buy Event
+        this.angularScope.marketBuyWeaponEvent = function (weaponPrice, playerMoney) {
+            if(weaponPrice + ige.client.angularScope.marketBuyTotal <= playerMoney) {
+                ige.client.angularScope.marketBuyTotal += weaponPrice;
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
 

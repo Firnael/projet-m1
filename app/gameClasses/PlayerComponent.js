@@ -45,6 +45,18 @@ var PlayerComponent = IgeClass.extend({
             // ige.client.log("Open market");
             $('#marketModalDiv').modal();
         }
+        // Press P to plant
+        else if (keyCode === ige.input.key.p) {
+            // ige.client.log("Plant tile");
+            // ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username)).setCrop(2, 3);
+
+            var i, j;
+            for(i=1; i<4; i++) {
+                for(j=1; j<9; j++)  {
+                    ige.client.tileBag.getTile(i, j).setCrop(i, j);
+                }
+            }
+        }
     }
 });
 

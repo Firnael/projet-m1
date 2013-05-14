@@ -55,6 +55,10 @@ var Tile = IgeClass.extend({
         return this.isFence;
     },
 
+    setCrop: function (type, maturationState) {
+        this.crop = new Crop(type, maturationState, this.getX(), this.getY());
+    },
+
     getCrop: function () {
         return this.crop;
     },

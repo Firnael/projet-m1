@@ -13,6 +13,7 @@
     <!-- STYLES -->
     <link href="css/ige.css" rel="stylesheet" type="text/css"/>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap_switch.css" rel="stylesheet" media="screen"/>
     <link href="css/app.css" rel="stylesheet" type="text/css"/>
 
     <!-- Isogenic Loader -->
@@ -221,15 +222,10 @@
                         <p><img src={{weapon.image}} /> {{weapon.name}}</p>
                     </div>
                     <div class="span5 offset1">
-                        <div ng-switch-on={{weapon.present}}>
-                            <div ng-switch-when="1">
-                                OWNED
-                            </div>
-                            <div ng-switch-when="0">
-                                NOT OWNED
-                            </div>
+                        <div ng-switch on="weapon.present">
+                            <div ng-switch-when="1"><span class="label label-info">OWNED</span></div>
+                            <div ng-switch-when="0"><span class="label label-important">NOT OWNED</span></div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -267,22 +263,20 @@
                                     <div class="span7">
                                         <div class="input-prepend input-append">
                                             <button class="btn btn-warning" type="button"
-                                                    data-ng-click="category.items[$index].number = marketBuyMinEvent(category.items[$index].number, item.value)">min</button>
+                                                data-ng-click="category.items[$index].number = marketBuyMinEvent(category.items[$index].number, item.value)">min</button>
                                             <button class="btn" type="button"
-                                                    data-ng-click="category.items[$index].number = marketBuyMinusEvent(category.items[$index].number, item.value)"> - </button>
-                                            <input type="text" class="span3 text-center" name="category.items[$index].number"
-                                                   ng-model="category.items[$index].number" placeholder="0">
+                                                data-ng-click="category.items[$index].number = marketBuyMinusEvent(category.items[$index].number, item.value)"> - </button>
+                                            <input type="text" class="span3 text-center" name="category.items[$index].number" ng-model="category.items[$index].number" placeholder="0">
                                             <button class="btn" type="button"
-                                                    data-ng-click="category.items[$index].number = marketBuyPlusEvent(category.items[$index].number, item.value, inventoryScope.money)"> + </button>
+                                                data-ng-click="category.items[$index].number = marketBuyPlusEvent(category.items[$index].number, item.value, inventoryScope.money)"> + </button>
                                             <button class="btn btn-warning" type="button"
-                                                    data-ng-click="category.items[$index].number = marketBuyMaxEvent(category.items[$index].number, item.value, inventoryScope.money)">max</button>
+                                                data-ng-click="category.items[$index].number = marketBuyMaxEvent(category.items[$index].number, item.value, inventoryScope.money)">max</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#marketSellCollapse" href="#weaponsCollapse">
@@ -291,44 +285,12 @@
                         </div>
                         <div id="weaponsCollapse" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> Fork</div>
-                                    <div class="span2">FREE</div>
-                                    <div class="span4">
-                                        <span class="label label-info">OWNED</span>
-                                    </div>
-                                    <div class="span3">
-                                        <button type="button" class="btn btn-small btn-info disabled" data-toggle="button">Get it !</button>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> Baseball bat</div>
-                                    <div class="span2">? x <img src="assets/textures/ui/coin.png"/></div>
-                                    <div class="span4">
-                                        <span class="label label-success">AFFORDABLE</span>
-                                    </div>
-                                    <div class="span3">
-                                        <button type="button" class="btn btn-success btn-small" data-toggle="button">Get it !</button>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> Chainsaw</div>
-                                    <div class="span2">? x <img src="assets/textures/ui/coin.png"/></div>
-                                    <div class="span4">
-                                        <span class="label label-important">TOO EXPENSIVE</span>
-                                    </div>
-                                    <div class="span3">
-                                        <button type="button" class="btn btn-danger btn-small disabled" data-toggle="button">Get it !</button>
-                                    </div>
-                                </div>
-                                <div class="row-fluid">
-                                    <div class="span3"><img src="assets/textures/ui/sword.png"/> AK-47</div>
-                                    <div class="span2">? x <img src="assets/textures/ui/coin.png"/></div>
-                                    <div class="span4">
-                                        <span class="label label-important">TOO EXPENSIVE</span>
-                                    </div>
-                                    <div class="span3">
-                                        <button type="button" class="btn btn-danger btn-small disabled" data-toggle="button">Get it !</button>
+                                <div class="row-fluid" data-ng-repeat="weapon in marketWeapons">
+                                    <div class="span3"><img src="{{weapon.image}}"/> {{weapon.name}}</div>
+                                    <div class="span2">{{weapon.value}} x <img src="assets/textures/ui/coin.png"/></div>
+                                    <div class="span6 offset1">
+                                        <button type="button" class="btn btn-success btn-small" data-toggle="weapon.toggle"
+                                                data-ng-click="weapon.toggle = marketBuyWeaponEvent(weapon.value, inventoryScope.money)">Get it !</button>
                                     </div>
                                 </div>
                             </div>

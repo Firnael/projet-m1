@@ -7,7 +7,7 @@ var Character = IgeEntityBox2d.extend({
 		IgeEntityBox2d.prototype.init.call(this);
 
 		// Setup the entity
-		self.depth(1)
+		self.depth(2)
 			.size3d(20, 20, 40)
 			.isometric(true);
 

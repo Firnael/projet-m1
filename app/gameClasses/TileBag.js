@@ -180,6 +180,14 @@ var TileBag = IgeClass.extend({
         return this.tiles[key];
     },
 
+    getTileByEntityPosition: function(entity) {
+        var entityX = entity.translate().x();
+        var entityY = entity.translate().y();
+        var x = (Math.round(entityX / 10) * 10) / 40;
+        var y = (Math.round(entityY / 10) * 10) / 40;
+        return this.getTile(x, y);
+    },
+
     getOwnerByTile: function (x,y) {
         var key = x + "-" + y;
         if(this.tiles[key]) {
