@@ -47,15 +47,14 @@ var PlayerComponent = IgeClass.extend({
         }
         // Press P to plant
         else if (keyCode === ige.input.key.p) {
-            // ige.client.log("Plant tile");
-            // ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username)).setCrop(2, 3);
-
-            var i, j;
-            for(i=1; i<4; i++) {
-                for(j=1; j<9; j++)  {
-                    ige.client.tileBag.getTile(i, j).setCrop(i, j);
-                }
-            }
+            var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
+            var position = {};
+            position.x = tile.x;
+            position.y = tile.y;
+            var stuff = {};
+            stuff["cropType"] = 1;
+            stuff["targetTile"] = position;
+            ige.network.send("onPlayerPlantCrop", stuff);
         }
     }
 });

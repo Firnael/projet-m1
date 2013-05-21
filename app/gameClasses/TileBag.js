@@ -188,6 +188,12 @@ var TileBag = IgeClass.extend({
         return this.getTile(x, y);
     },
 
+    getTileByPosition: function(positionX, positionY) {
+        var x = (Math.round(positionX / 10) * 10) / 40;
+        var y = (Math.round(positionY / 10) * 10) / 40;
+        return this.getTile(x, y);
+    },
+
     getOwnerByTile: function (x,y) {
         var key = x + "-" + y;
         if(this.tiles[key]) {

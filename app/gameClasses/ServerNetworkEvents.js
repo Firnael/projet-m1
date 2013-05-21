@@ -190,6 +190,23 @@ var ServerNetworkEvents = {
             stuff["characterCurrentHp"] = player.getCurrentHp();
             ige.network.send('parcelleAmountChange', stuff, clientId);
         }
+    },
+
+    _onPlayerPlantCrop : function (data, clientId) {
+        ige.server.log("player " + clientId + " want to plant a crop");
+        ige.server.log("Tile, x = " + data["targetTile"].x + ", y = " + data["targetTile"].y);
+        ige.server.log("Type = " + data["cropType"]);
+
+        var targetTile = ige.server.tileBag.getTile(data["targetTile"].x, data["targetTile"].y);
+        targetTile.setCrop(data["cropType"], 1);
+
+        var crop = {};
+        crop.type = targetTile.crop.type;
+        crop.maturationState = targetTile.crop.maturationState;
+        crop.tilePositionX = targetTile.crop.tilePositionX;
+        crop.tilePositionY = targetTile.crop.tilePositionY;
+        crop.plantTime = targetTile.crop.plantTime;
+        ige.network.send("onPlayerPlantCrop", crop);
     }
 };
 

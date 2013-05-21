@@ -169,6 +169,16 @@ var ClientNetworkEvents = {
     _onExtendMap: function (data) {
         ige.client.log("Extension value = " + data);
         ige.client.tileBag.extendMap(data);
+    },
+
+    _onPlayerPlantCrop: function (data) {
+        ige.client.log("Player plant at " + data.tilePositionX + "," + data.tilePositionY);
+
+
+        var tile = ige.client.tileBag.getTileByPosition(data.tilePositionX, data.tilePositionY);
+        tile.crop = new Crop(data.type, data.maturationState, data.tilePositionX, data.tilePositionY, data.plantTime);
+
+        ige.client.updateTileActionButtons(tile.getTileIndex());
     }
 };
 

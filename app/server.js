@@ -45,6 +45,7 @@ var Server = IgeClass.extend({
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('getCharacterData', self._onGetCharacterData);
                         ige.network.define('playerAttackTile', self._onPlayerAttackTile);
+                        ige.network.define('onPlayerPlantCrop', self._onPlayerPlantCrop);
                         ige.network.define('getParcelle');
                         ige.network.define('playerAttack');
                         ige.network.define('toggleCharacterHide');

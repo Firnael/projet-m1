@@ -39,6 +39,14 @@ var Tile = IgeClass.extend({
         return this.y;
     },
 
+    // Return the (x,y) couple
+    getTileIndex: function() {
+        var index = {};
+        index.x = this.x;
+        index.y = this.y;
+        return index;
+    },
+
     getOwner: function () {
         return this.owner;
     },

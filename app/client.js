@@ -53,6 +53,8 @@ var Client = IgeClass.extend({
                         ige.network.define('onRainingEvent', self._onRainingEvent);
                         ige.network.define('onPlayerHpUpdateEvent', self._onPlayerHpUpdateEvent);
                         ige.network.define('onExtendMap', self._onExtendMap);
+                        ige.network.define('onPlayerPlantCrop', self._onPlayerPlantCrop);
+
 
                         ige.addComponent(ChatComponent);
 
@@ -475,11 +477,11 @@ var Client = IgeClass.extend({
         var tiles = data["tiles"];
         var width = data["width"];
         var height = data["height"];
+
+        // On recréer un tileBag cohérent avec celui du serveur
         ige.client.tileBag = new TileBag();
-        // on recréé un tileBag cohérent avec celui du serveur
         ige.client.tileBag.width = width;
         ige.client.tileBag.height = height;
-
 
 
         for(var key in tiles) {
@@ -488,6 +490,15 @@ var Client = IgeClass.extend({
             tileData.isFence = tiles[key].isFence;
             tileData.fertility = tiles[key].fertility;
             tileData.humidity = tiles[key].humidity;
+
+            var crop = tiles[key].crop;
+            if(crop != null) {
+                tileData.crop = new Crop(crop.type, crop.maturationState, crop.tilePositionX, crop.tilePositionY, crop.plantTime);
+            }
+            else {
+                tileData.crop = crop;
+            }
+
             ige.client.tileBag.addTile(tiles[key].x, tiles[key].y, tileData);
 
             var tileType;

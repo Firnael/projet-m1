@@ -1,7 +1,7 @@
 var Crop = IgeEntityBox2d.extend({
     classId: 'Crop',
 
-    init: function (type, maturationState, x, y) {
+    init: function (type, maturationState, x, y, plantTime) {
         var self = this;
 
         // Init attributes
@@ -9,18 +9,27 @@ var Crop = IgeEntityBox2d.extend({
         self.tilePositionY = y;
         self.type = type;
         self.maturationState = maturationState;
-        self.plantTime = ige._currentTime;
+
+        if(plantTime === undefined) {
+            self.plantTime = ige._currentTime;
+        }
+        else {
+            self.plantTime = plantTime;
+        }
 
         self.name = null;
-        self.maturationTime = 0;
         self.decayTime = 0;
         self.productivity = 0;
         self.seedPrice = 0;
 
         self.setType(type);
-        self.mount(ige.client.objectLayer);
 
+        // Mount the entity
+        if(!ige.isServer) {
+            self.mount(ige.client.objectLayer);
+        }
 
+        // Create and mount image entity
         if(!ige.isServer) {
             IgeEntityBox2d.prototype.init.call(this);
 
@@ -86,6 +95,9 @@ var Crop = IgeEntityBox2d.extend({
     },
 
     updateSpatial: function (type, maturationState) {
+
+        ige.client.log("updateSpatial, type=" + type + ", maturationState=" + maturationState);
+
         // Adapt the position and the bounding box of the crop
         // Depends of its type and maturation state
         switch(type) {
@@ -132,6 +144,8 @@ var Crop = IgeEntityBox2d.extend({
     },
 
     updateValues: function (offset, height, cellIndex) {
+        ige.client.log("updateValues");
+
         this.translateTo(this.tilePositionX - offset, this.tilePositionY - offset, 0);
         this.size3d(20, 20, height);
         this.imageEntity.cell(cellIndex);
@@ -144,6 +158,10 @@ var Crop = IgeEntityBox2d.extend({
             + " , Productivity : " + this.productivity
             + " , Seed price : " + this.seedPrice
             + ")";
+    },
+
+    tick: function (ctx) {
+        IgeEntity.prototype.tick.call(this, ctx);
     },
 
     destroy: function () {
