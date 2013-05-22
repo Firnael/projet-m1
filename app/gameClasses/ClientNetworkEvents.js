@@ -179,6 +179,17 @@ var ClientNetworkEvents = {
         tile.crop = new Crop(data.type, data.maturationState, data.tilePositionX, data.tilePositionY, data.plantTime);
 
         ige.client.updateTileActionButtons(tile.getTileIndex());
+    },
+
+    _onCropUpdateEvent : function (data) {
+        for(var i=0; i<data.length; i++) {
+            var tile = data[i];
+            var targetTile = ige.client.tileBag.tiles[tile["index"]];
+            targetTile.crop.maturationState = tile["maturation"];
+            targetTile.crop.updateSpatial();
+
+            ige.client.log("At " + tile["index"] + ", the maturationState is " + tile["maturation"]);
+        }
     }
 };
 

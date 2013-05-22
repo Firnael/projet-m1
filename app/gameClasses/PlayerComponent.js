@@ -48,13 +48,16 @@ var PlayerComponent = IgeClass.extend({
         // Press P to plant
         else if (keyCode === ige.input.key.p) {
             var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
-            var position = {};
-            position.x = tile.x;
-            position.y = tile.y;
-            var stuff = {};
-            stuff["cropType"] = 1;
-            stuff["targetTile"] = position;
-            ige.network.send("onPlayerPlantCrop", stuff);
+
+            if (tile != null) {
+                var position = {};
+                position.x = tile.x;
+                position.y = tile.y;
+                var stuff = {};
+                stuff["cropType"] = 1;
+                stuff["targetTile"] = position;
+                ige.network.send("onPlayerPlantCrop", stuff);
+            }
         }
     }
 });

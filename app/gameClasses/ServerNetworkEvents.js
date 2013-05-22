@@ -193,10 +193,6 @@ var ServerNetworkEvents = {
     },
 
     _onPlayerPlantCrop : function (data, clientId) {
-        ige.server.log("player " + clientId + " want to plant a crop");
-        ige.server.log("Tile, x = " + data["targetTile"].x + ", y = " + data["targetTile"].y);
-        ige.server.log("Type = " + data["cropType"]);
-
         var targetTile = ige.server.tileBag.getTile(data["targetTile"].x, data["targetTile"].y);
         targetTile.setCrop(data["cropType"], 1);
 

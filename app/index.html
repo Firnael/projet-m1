@@ -56,9 +56,22 @@
 <div id="navbar" class="navbar navbar-inverse">
     <div class="navbar-inner">
         <a class="brand" href="#">TremendousFarm</a>
-        <button class="btn btn-inverse" data-ng-disabled="plantButtonDisabled">
-            <img src="assets/textures/ui/seed.png"/> Plant
+        <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" data-ng-disabled="plantButtonDisabled">
+            <img src="assets/textures/ui/seed.png"/> Plant <span class="caret"></span>
         </button>
+
+        <!--
+        <div class="btn-group" data-ng-disabled="plantButtonDisabled">
+            <button class="btn btn-inverse">Plant</button>
+            <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="#">SEED_WHEAT</a></li>
+                <li><a href="#">SEED_TOMATO</a></li>
+                <li><a href="#">SEED_CORN</a></li>
+            </ul>
+        </div>
+        -->
+
         <button class="btn btn-info" data-ng-disabled="waterButtonDisabled">
             <img src="assets/textures/ui/waterdrop.png"/> Water
         </button>

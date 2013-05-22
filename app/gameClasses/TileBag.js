@@ -154,6 +154,15 @@ var TileBag = IgeClass.extend({
         }
     },
 
+    updateCrops: function () {
+        for(var key in this.tiles) {
+            var tile = this.tiles[key];
+            if(tile.crop != null) {
+                tile.crop.updateMaturation(this.fertility, this.humidity);
+            }
+        }
+    },
+
     addTile: function(x, y, tile) {
         var key = x + "-" + y;
         this.tiles[key] = tile;

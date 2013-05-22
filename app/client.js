@@ -54,7 +54,7 @@ var Client = IgeClass.extend({
                         ige.network.define('onPlayerHpUpdateEvent', self._onPlayerHpUpdateEvent);
                         ige.network.define('onExtendMap', self._onExtendMap);
                         ige.network.define('onPlayerPlantCrop', self._onPlayerPlantCrop);
-
+                        ige.network.define('onCropUpdateEvent', self._onCropUpdateEvent);
 
                         ige.addComponent(ChatComponent);
 

@@ -54,7 +54,7 @@ var Crop = IgeEntityBox2d.extend({
 
             }, false, true);
 
-            self.updateSpatial(type, maturationState);
+            self.updateSpatial();
         }
     },
 
@@ -94,16 +94,13 @@ var Crop = IgeEntityBox2d.extend({
         }
     },
 
-    updateSpatial: function (type, maturationState) {
-
-        ige.client.log("updateSpatial, type=" + type + ", maturationState=" + maturationState);
-
+    updateSpatial: function () {
         // Adapt the position and the bounding box of the crop
         // Depends of its type and maturation state
-        switch(type) {
+        switch(this.type) {
             // Wheat
             case 1:
-                switch(maturationState) {
+                switch(this.maturationState) {
                     case 1: this.updateValues(17, 0, 1); break;
                     case 2: this.updateValues(17, 0, 2); break;
                     case 3: this.updateValues(0, 30, 3); break;
@@ -116,7 +113,7 @@ var Crop = IgeEntityBox2d.extend({
                 break;
             // Tomato
             case 2:
-                switch(maturationState) {
+                switch(this.maturationState) {
                     case 1: this.updateValues(17, 0, 9); break;
                     case 2: this.updateValues(17, 0, 10); break;
                     case 3: this.updateValues(13, 5, 11); break;
@@ -129,7 +126,7 @@ var Crop = IgeEntityBox2d.extend({
                 break;
             // Corn
             case 3:
-                switch(maturationState) {
+                switch(this.maturationState) {
                     case 1: this.updateValues(17, 0, 17); break;
                     case 2: this.updateValues(17, 0, 18); break;
                     case 3: this.updateValues(17, 0, 19); break;
@@ -144,11 +141,14 @@ var Crop = IgeEntityBox2d.extend({
     },
 
     updateValues: function (offset, height, cellIndex) {
-        ige.client.log("updateValues");
-
         this.translateTo(this.tilePositionX - offset, this.tilePositionY - offset, 0);
         this.size3d(20, 20, height);
         this.imageEntity.cell(cellIndex);
+    },
+
+    updateMaturation: function (fertility, humidity) {
+        // var lifeTime = this.currentTime - this.plantTime;
+        this.maturationState += 1;
     },
 
     toString: function () {
