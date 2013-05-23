@@ -148,7 +148,9 @@ var Crop = IgeEntityBox2d.extend({
 
     updateMaturation: function (fertility, humidity) {
         // var lifeTime = this.currentTime - this.plantTime;
-        this.maturationState += 1;
+        if(this.maturationState < 8){
+            this.maturationState += 1;
+        }
     },
 
     toString: function () {

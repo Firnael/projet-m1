@@ -493,7 +493,6 @@ var Client = IgeClass.extend({
 
             var crop = tiles[key].crop;
             if(crop != null) {
-                // FIXME
                 console.log("test x="+crop.tilePositionX + " y="+crop.tilePositionY);
                 tileData.crop = new Crop(crop.type, crop.maturationState, crop.tilePositionX, crop.tilePositionY, crop.plantTime);
             }
