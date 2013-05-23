@@ -188,6 +188,8 @@ var ClientNetworkEvents = {
             targetTile.crop.maturationState = tile["maturation"];
             targetTile.crop.updateSpatial();
 
+            //targetTile.fertility -= 10;
+
             ige.client.log("At " + tile["index"] + ", the maturationState is " + tile["maturation"]);
         }
     }

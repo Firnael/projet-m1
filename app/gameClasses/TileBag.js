@@ -1,4 +1,5 @@
-var TileBag = IgeClass.extend({
+var TileBag;
+TileBag = IgeClass.extend({
     classId: 'TileBag',
 
     init: function () {
@@ -22,35 +23,60 @@ var TileBag = IgeClass.extend({
 
     // Used only by the server
     initTileBag: function () {
-        if(ige.isServer) {
+        if (ige.isServer) {
             var i, j;
-            for(i=0; i<this.width; i++) {
-                for(j=0; j<this.height; j++) {
+            for (i = 0; i < this.width; i++) {
+                for (j = 0; j < this.height; j++) {
                     // Add the tile to the list
                     this.addTile(i, j, new Tile(i, j, null));
                 }
             }
             // Place fences
             this.placeFences();
+            this.setFertility();
         }
-        if(!ige.isServer) {
+        if (!ige.isServer) {
             ige.client.log("You shouldn't use this method client-side.");
         }
     },
 
-    placeFences: function() {
+    setFertility: function () {
+        var i;
+        for (i = 1; i < this.width-1; i++) {
+            var key = i+"-"+1;
+            if (this.tiles[key].fertility == null) {
+                this.tiles[key].fertility = this.getRandomArbitary(60, 100);
+            }
+            for (var j = 1; j < this.height - 1; j++) {
+                var keyOfTheTile = i + "-" + j;
+                if (this.tiles[keyOfTheTile].fertility == null) {
+                    this.tiles[keyOfTheTile].fertility = this.getRandomArbitary(this.tiles[key].fertility - 5, this.tiles[key].fertility + 5);
+                    if (this.tiles[keyOfTheTile].fertility > 100) {
+                        this.tiles[keyOfTheTile].fertility = 100;
+                    }
+                }
+            }
+        }
+
+    },
+
+    getRandomArbitary: function  (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+
+    placeFences: function () {
         var i, j;
-        for(i=0; i<this.width; i++) {
-            for(j=0; j<this.height; j++) {
+        for (i = 0; i < this.width; i++) {
+            for (j = 0; j < this.height; j++) {
                 // Define the tiles as fences
-                if(i == 0 || j == 0 || i == this.width-1 || j == this.height-1) {
-                    var key = i +"-"+ j;
+                if (i == 0 || j == 0 || i == this.width - 1 || j == this.height - 1) {
+                    var key = i + "-" + j;
                     this.tiles[key].isFence = true;
                     this.tiles[key].fertility = 0;
                     this.tiles[key].humidity = 0;
 
                     // Add the fences textures
-                    if(!ige.isServer) {
+                    if (!ige.isServer) {
                         this.paintFences(i, j, this.tiles[key], this.height, this.width);
                     }
                 }
@@ -59,81 +85,81 @@ var TileBag = IgeClass.extend({
     },
 
     paintFences: function (x, y, tileData, height, width) {
-    if (x == 0) {
-        if (y == 0) {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 1);
-        }
-        else if (y == height - 1) {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 6);
-        }
-        else {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
-        }
-    }
-    if (y == 0) {
         if (x == 0) {
-            // already done
+            if (y == 0) {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 1);
+            }
+            else if (y == height - 1) {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 6);
+            }
+            else {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
+            }
         }
-        else if (x == width - 1) {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 4);
-        }
-        else {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
-        }
-    }
-    if (x == width - 1) {
         if (y == 0) {
-            // already done
+            if (x == 0) {
+                // already done
+            }
+            else if (x == width - 1) {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 4);
+            }
+            else {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
+            }
         }
-        else if (y == height - 1) {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 5);
+        if (x == width - 1) {
+            if (y == 0) {
+                // already done
+            }
+            else if (y == height - 1) {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 5);
+            }
+            else {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
+            }
         }
-        else {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 2);
+        if (y == height - 1) {
+            if (x == 0) {
+                // already done
+            }
+            else if (x == width - 1) {
+                // already done
+            }
+            else {
+                ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
+            }
         }
-    }
-    if (y == height - 1) {
-        if (x == 0) {
-            // already done
-        }
-        else if (x == width - 1) {
-            // already done
-        }
-        else {
-            ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
-        }
-    }
-},
+    },
 
-    extendMap: function(size) {
+    extendMap: function (size) {
         // Remove previous fences
         var i, j;
-        for(i=0; i<this.width; i++) {
-            for(j=0; j<this.height; j++) {
-                if(i == this.width-1 || j == this.height-1) {
-                    var key = i +"-"+ j;
+        for (i = 0; i < this.width; i++) {
+            for (j = 0; j < this.height; j++) {
+                if (i == this.width - 1 || j == this.height - 1) {
+                    var key = i + "-" + j;
                     this.tiles[key].isFence = false;
-                    this.tiles[key].fertility = 100;
+                    this.tiles[key].fertility = null;
                     this.tiles[key].humidity = 100;
-                    
+
                     // Remove the fences textures
-                    if(!ige.isServer) {
-                        ige.client.terrainLayer.clearTile(i, j);    
+                    if (!ige.isServer) {
+                        ige.client.terrainLayer.clearTile(i, j);
                     }
                 }
             }
         }
 
         // Add right tiles
-        for(i=this.width; i<this.width + size; i++) {
-            for(j=0; j<this.height + size; j++) {
+        for (i = this.width; i < this.width + size; i++) {
+            for (j = 0; j < this.height + size; j++) {
                 this.addTile(i, j, new Tile(i, j, null));
             }
         }
 
         // Add left tiles
-        for(i=0; i<this.width + size; i++) {
-            for(j=this.height; j<this.height + size; j++) {
+        for (i = 0; i < this.width + size; i++) {
+            for (j = this.height; j < this.height + size; j++) {
                 this.addTile(i, j, new Tile(i, j, null));
             }
         }
@@ -144,8 +170,10 @@ var TileBag = IgeClass.extend({
 
         // Place new fences
         this.placeFences();
+        this.setFertility();
 
-        if(!ige.isServer) {
+
+        if (!ige.isServer) {
             // Update collisions
             ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
 
@@ -155,15 +183,15 @@ var TileBag = IgeClass.extend({
     },
 
     updateCrops: function () {
-        for(var key in this.tiles) {
+        for (var key in this.tiles) {
             var tile = this.tiles[key];
-            if(tile.crop != null) {
+            if (tile.crop != null) {
                 tile.crop.updateMaturation(this.fertility, this.humidity);
             }
         }
     },
 
-    addTile: function(x, y, tile) {
+    addTile: function (x, y, tile) {
         var key = x + "-" + y;
         this.tiles[key] = tile;
     },
@@ -175,8 +203,8 @@ var TileBag = IgeClass.extend({
 
     getTileAmountByOwner: function (owner) {
         var amount = 0;
-        for(var key in this.tiles) {
-            if(this.tiles[key].getOwner() == owner) {
+        for (var key in this.tiles) {
+            if (this.tiles[key].getOwner() == owner) {
                 amount++;
             }
         }
@@ -189,7 +217,7 @@ var TileBag = IgeClass.extend({
         return this.tiles[key];
     },
 
-    getTileByEntityPosition: function(entity) {
+    getTileByEntityPosition: function (entity) {
         var entityX = entity.translate().x();
         var entityY = entity.translate().y();
         var x = (Math.round(entityX / 10) * 10) / 40;
@@ -197,45 +225,45 @@ var TileBag = IgeClass.extend({
         return this.getTile(x, y);
     },
 
-    getTileByPosition: function(positionX, positionY) {
+    getTileByPosition: function (positionX, positionY) {
         var x = (Math.round(positionX / 10) * 10) / 40;
         var y = (Math.round(positionY / 10) * 10) / 40;
         return this.getTile(x, y);
     },
 
-    getOwnerByTile: function (x,y) {
+    getOwnerByTile: function (x, y) {
         var key = x + "-" + y;
-        if(this.tiles[key]) {
+        if (this.tiles[key]) {
             return this.tiles[key].getOwner();
         }
     },
 
-    getFertilityByTile: function (x,y) {
+    getFertilityByTile: function (x, y) {
         var key = x + "-" + y;
-        if(this.tiles[key]) {
+        if (this.tiles[key]) {
             return this.tiles[key].getFertility();
         }
     },
 
-    getHumidityByTile: function (x,y) {
+    getHumidityByTile: function (x, y) {
         var key = x + "-" + y;
-        if(this.tiles[key]) {
+        if (this.tiles[key]) {
             return this.tiles[key].getHumidity();
         }
     },
 
-    setCollisionMap: function (tileMap){
-        for(var key in this.tiles) {
-            if(!this.tiles[key].getIsFence()) {
-                tileMap.occupyTile(this.tiles[key].getTileX(),this.tiles[key].getTileY(), 1, 1,"walkable");
+    setCollisionMap: function (tileMap) {
+        for (var key in this.tiles) {
+            if (!this.tiles[key].getIsFence()) {
+                tileMap.occupyTile(this.tiles[key].getTileX(), this.tiles[key].getTileY(), 1, 1, "walkable");
             }
         }
     },
 
-    canAttack: function(x, y, owner) {
+    canAttack: function (x, y, owner) {
         var key = x + "-" + y;
-        if(this.tiles[key]) {
-            if(this.tiles[key].getOwner() != owner && this.tiles[key].getOwner() != null) {
+        if (this.tiles[key]) {
+            if (this.tiles[key].getOwner() != owner && this.tiles[key].getOwner() != null) {
                 // The tile belongs to someone else
                 return true;
             }
@@ -268,23 +296,23 @@ var TileBag = IgeClass.extend({
         data["attackerHealthAfter"] = null; // (13)
         data["defenderHealthAfter"] = null; // (14)
 
-        while(paHp > 0 && pdHp > 0) {
+        while (paHp > 0 && pdHp > 0) {
             var damages = playerAttacker.inventory.weapon.getDamages();
             pdHp -= damages;
-            if(damages == 0) {
-                data["attackerMissCount"] =  data["attackerMissCount"] + 1;
+            if (damages == 0) {
+                data["attackerMissCount"] = data["attackerMissCount"] + 1;
             }
             else {
                 data["attackerHitCount"] = data["attackerHitCount"] + 1;
             }
 
-            if(pdHp <= 0) {
+            if (pdHp <= 0) {
                 break;
             }
 
             var damages = playerDefender.inventory.weapon.getDamages();
             paHp -= damages;
-            if(damages == 0) {
+            if (damages == 0) {
                 data["defenderMissCount"] = data["defenderMissCount"] + 1;
             }
             else {
@@ -294,7 +322,7 @@ var TileBag = IgeClass.extend({
 
         // Set resting status for the loser
         var winnerName;
-        if(paHp <= 0) {
+        if (paHp <= 0) {
             winnerName = defenderName;
             playerAttacker.setStatus(1);
         }
@@ -323,8 +351,9 @@ var TileBag = IgeClass.extend({
         return winnerName;
     },
 
+
     destroy: function () {
-        for(var key in this.tiles) {
+        for (var key in this.tiles) {
             this.tiles[key].destroy();
         }
         IgeClass.prototype.destroy.call(this);
