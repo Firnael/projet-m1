@@ -55,6 +55,8 @@ var Client = IgeClass.extend({
                         ige.network.define('onExtendMap', self._onExtendMap);
                         ige.network.define('onPlayerPlantCrop', self._onPlayerPlantCrop);
                         ige.network.define('onCropUpdateEvent', self._onCropUpdateEvent);
+                        ige.network.define('onFertilizeEvent', self._onFertilizeEvent);
+                        ige.network.define('onHumidityEvent', self._onHumidityEvent);
 
                         ige.addComponent(ChatComponent);
 
@@ -451,6 +453,18 @@ var Client = IgeClass.extend({
                 $('.rain').css('opacity','');
             }
             setTimeout(killDrops, 6000);
+        }
+
+        // Fertilize event
+        this.angularScope.fertilizeEvent = function () {
+            var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
+            ige.network.send("onFertilizeEvent", tile);
+        }
+
+        // Humidity event
+        this.angularScope.humidityEvent = function () {
+            var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
+            ige.network.send("onHumidityEvent", tile);
         }
 
         this.angularScope.$apply();

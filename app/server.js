@@ -54,6 +54,9 @@ var Server = IgeClass.extend({
                         ige.network.define('onRainingEvent');
                         ige.network.define('onPlayerHpUpdateEvent');
                         ige.network.define('onExtendMap');
+                        ige.network.define('onFertilizeEvent', self._onFertilizeEvent);
+                        ige.network.define('onHumidityEvent', self._onHumidityEvent);
+
 
                         ige.network.on('connect', self._onPlayerConnect);
                         ige.network.on('disconnect', self._onPlayerDisconnect);

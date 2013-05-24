@@ -206,6 +206,22 @@ var ServerNetworkEvents = {
         ige.network.send("onPlayerPlantCrop", crop);
     },
 
+    _onFertilizeEvent : function (tile) { // FIXME voir fertilizer dans inventaire 
+        tile.fertility += 10;
+        if (tile.fertility >= 100) {
+            tile.fertility = 100;
+        }
+        ige.network.send("onFertilizeEvent", tile);
+    },
+    
+    _onHumidityEvent : function (tile) { // FIXME voir fertilizer dans inventaire 
+        tile.humidity += 10;
+        if (tile.humidity >= 100) {
+            tile.humidity = 100;
+        }
+        ige.network.send("onHumidityEvent", tile);
+    },
+
     _onPlayerBuyEvent : function (data, clientId) {
         var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
 
