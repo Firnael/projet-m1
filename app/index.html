@@ -302,8 +302,10 @@
                                     <div class="span3"><img src="{{weapon.image}}"/> {{weapon.name}}</div>
                                     <div class="span2">{{weapon.value}} x <img src="assets/textures/ui/coin.png"/></div>
                                     <div class="span6 offset1">
-                                        <button type="button" class="btn btn-success btn-small" data-toggle="weapon.toggle"
-                                                data-ng-click="weapon.toggle = marketBuyWeaponEvent(weapon.value, inventoryScope.money)">Get it !</button>
+                                        <label class="checkbox">
+                                            <input type="checkbox" data-ng-model="weapon.toggle"
+                                                   data-ng-change="marketBuyWeaponEvent(weapon.toggle, weapon.value, inventoryScope.money)"> Get it !
+                                        </label>
                                     </div>
                                 </div>
                             </div>

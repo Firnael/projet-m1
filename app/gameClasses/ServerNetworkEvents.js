@@ -204,6 +204,35 @@ var ServerNetworkEvents = {
         crop.tilePositionY = targetTile.crop.tilePositionY;
         crop.plantTime = targetTile.crop.plantTime;
         ige.network.send("onPlayerPlantCrop", crop);
+    },
+
+    _onPlayerBuyEvent : function (data, clientId) {
+        var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
+
+        // TODO Check server-side pour les sous du joueur
+
+        ige.server.log("NETWORK : onPlayerBuyEvent");
+        for(var key in data) {
+            ige.server.log("Key = " + key + ", Value = " + data[key]);
+
+            switch(key) {
+                case "Water": character.inventory.addWater(data[key]); break;
+                case "Fertilizer": character.inventory.addFertilizer(data[key]); break;
+
+                case "Wheat Seed":
+                case "Tomato Seed":
+                case "Corn Seed":
+                    character.inventory.addSeed(key, data[key]); break;
+
+                case "Baseball bat":
+                case "Chainsaw":
+                case "AK-47":
+                    if(data[key]) {
+                        character.inventory.addWeapon(key);
+                    }
+                    break;
+            }
+        }
     }
 };
 

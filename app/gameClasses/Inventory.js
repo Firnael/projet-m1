@@ -101,6 +101,30 @@ var Inventory = IgeEntityBox2d.extend({
         return new Weapon(this.bestWeapon);
     },
 
+    addSeed: function (seedName, seedAmount) {
+        switch(seedName) {
+            case "Wheat seed" : this.seeds[0].number += seedAmount; break;
+            case "Tomato seed" : this.seeds[1].number += seedAmount; break;
+            case "Corn seed" : this.seeds[2].number += seedAmount;break;
+        }
+    },
+
+    addWater: function (waterAmount) {
+        this.waterUnits += waterAmount;
+    },
+
+    addFertilizer : function (fertilizerAmount) {
+        this.fertilizerUnits += fertilizerAmount;
+    },
+
+    addWeapon : function(weaponName) {
+        switch(weaponName) {
+            case "Baseball bat": this.weapons[1].present = 1; break;
+            case "Chainsaw": this.weapons[2].present = 1; break;
+            case "AK-47": this.weapons[3].present = 1; break;
+        }
+    },
+
     destroy: function () {
         this.weapon.destroy();
         IgeEntityBox2d.prototype.destroy.call(this);
