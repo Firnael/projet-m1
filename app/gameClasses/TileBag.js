@@ -33,26 +33,31 @@ TileBag = IgeClass.extend({
             }
             // Place fences
             this.placeFences();
-            this.setFertility();
+            this.setFertilityAndHumidity();
         }
         if (!ige.isServer) {
             ige.client.log("You shouldn't use this method client-side.");
         }
     },
 
-    setFertility: function () {
+    setFertilityAndHumidity: function () {
         var i;
         for (i = 1; i < this.width-1; i++) {
             var key = i+"-"+1;
             if (this.tiles[key].fertility == null) {
                 this.tiles[key].fertility = this.getRandomArbitary(60, 100);
+                this.tiles[key].humidity = this.getRandomArbitary(50, 100);
             }
             for (var j = 1; j < this.height - 1; j++) {
                 var keyOfTheTile = i + "-" + j;
                 if (this.tiles[keyOfTheTile].fertility == null) {
                     this.tiles[keyOfTheTile].fertility = this.getRandomArbitary(this.tiles[key].fertility - 5, this.tiles[key].fertility + 5);
+                    this.tiles[keyOfTheTile].humidity = this.getRandomArbitary(this.tiles[key].humidity - 5, this.tiles[key].humidity + 5);
                     if (this.tiles[keyOfTheTile].fertility > 100) {
                         this.tiles[keyOfTheTile].fertility = 100;
+                    }
+                    if (this.tiles[keyOfTheTile].humidity > 100) {
+                        this.tiles[keyOfTheTile].humidity = 100;
                     }
                 }
             }
@@ -152,6 +157,7 @@ TileBag = IgeClass.extend({
             var newTile = new Tile(tile.x,tile.y,null)
             newTile.isFence = false;
             newTile.fertility = tile.fertility;
+            newTile.humidity = tile.humidity;
             this.addTile(tile.x,tile.y,newTile);
         }
         var i, j;
@@ -197,7 +203,7 @@ TileBag = IgeClass.extend({
                     var key = i + "-" + j;
                     this.tiles[key].isFence = false;
                     this.tiles[key].fertility = null;
-                    this.tiles[key].humidity = 100;
+                    this.tiles[key].humidity = null;
 
                     // Remove the fences textures
                     if (!ige.isServer) {
@@ -227,7 +233,7 @@ TileBag = IgeClass.extend({
 
         // Place new fences
         this.placeFences();
-        this.setFertility();
+        this.setFertilityAndHumidity();
 
 
         if (!ige.isServer) {
