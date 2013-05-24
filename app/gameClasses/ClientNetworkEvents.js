@@ -167,8 +167,8 @@ var ClientNetworkEvents = {
     },
 
     _onExtendMap: function (data) {
-        ige.client.log("Extension value = " + data);
-        ige.client.tileBag.extendMap(data); // FIXME extend map
+        //ige.client.log("Extension value = " + data);
+        ige.client.tileBag.appendMap(data, 10);
     },
 
     _onPlayerPlantCrop: function (data) {

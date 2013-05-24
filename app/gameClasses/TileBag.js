@@ -71,6 +71,7 @@ TileBag = IgeClass.extend({
                 // Define the tiles as fences
                 if (i == 0 || j == 0 || i == this.width - 1 || j == this.height - 1) {
                     var key = i + "-" + j;
+                    //console.log("x="+i+" y="+j);
                     this.tiles[key].isFence = true;
                     this.tiles[key].fertility = 0;
                     this.tiles[key].humidity = 0;
@@ -129,6 +130,62 @@ TileBag = IgeClass.extend({
                 ige.client.terrainLayer.paintTile((tileData.getTileX()), (tileData.getTileY()), 1, 3);
             }
         }
+    },
+
+    extractMapPart: function(min, max){
+        var tilesToReturn = [];
+        for (var i = 0; i < max; i++) {
+            for (var j = 0; j < max; j++) {
+                if ((i >= min && i <max) || (j>=min && j<max)){
+                    var key = i+"-"+j;
+                    tilesToReturn.push(this.tiles[key]);
+                }
+            }
+        }
+
+        return tilesToReturn;
+    },
+
+    appendMap: function(tileArray, size){
+        for(var key in tileArray){
+            var tile = tileArray[key];
+            var newTile = new Tile(tile.x,tile.y,null)
+            newTile.isFence = false;
+            newTile.fertility = tile.fertility;
+            this.addTile(tile.x,tile.y,newTile);
+        }
+        var i, j;
+
+        for (i = 0; i < this.width; i++) {
+            for (j = 0; j < this.height; j++) {
+                if (i == this.width - 1 || j == this.height - 1) {
+                    var key = i + "-" + j;
+                    this.tiles[key].isFence = false;
+                    this.tiles[key].fertility = 90;
+                    this.tiles[key].humidity = 90;
+                    if (!ige.isServer) {
+                        ige.client.terrainLayer.clearTile(i, j);
+                    }
+                }
+            }
+        }
+        // Remove the fences textures
+
+        // Update new size
+        this.width += size;
+        this.height += size;
+
+        this.placeFences();
+
+        // Update collisions
+        ige.client.tileBag.setCollisionMap(ige.client.objectLayer);
+
+        // Force the render
+        ige.client.terrainLayer.cacheForceFrame();
+
+        // Force the render
+        ige.client.terrainLayer.cacheForceFrame();
+
     },
 
     extendMap: function (size) {

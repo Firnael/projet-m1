@@ -108,7 +108,8 @@ var ServerNetworkEvents = {
 
         var extensionValue = 10;
         ige.server.tileBag.extendMap(extensionValue);
-        ige.network.send("onExtendMap", extensionValue);
+        //ige.network.send("onExtendMap", extensionValue);
+        ige.network.send("onExtendMap", ige.server.tileBag.extractMapPart(ige.server.tileBag.width-extensionValue,ige.server.tileBag.width));
     },
 
     _onPlayerMove: function (data, clientId) {
