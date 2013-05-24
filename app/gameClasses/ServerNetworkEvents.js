@@ -206,20 +206,29 @@ var ServerNetworkEvents = {
         ige.network.send("onPlayerPlantCrop", crop);
     },
 
-    _onFertilizeEvent : function (tile) { // FIXME voir fertilizer dans inventaire 
-        tile.fertility += 10;
-        if (tile.fertility >= 100) {
-            tile.fertility = 100;
+    _onFertilizeEvent : function (tile) {
+        var character = ige.$("character_" + tile.owner);
+
+        if(character.inventory.fertilizerUnits >= 1){
+            tile.fertility += 10;
+            if (tile.fertility >= 100) {
+                tile.fertility = 100;
+            }
+            character.inventory.fertilizerUnits -= 1;
+            ige.network.send("onFertilizeEvent", tile);
         }
-        ige.network.send("onFertilizeEvent", tile);
     },
-    
-    _onHumidityEvent : function (tile) { // FIXME voir fertilizer dans inventaire 
-        tile.humidity += 10;
-        if (tile.humidity >= 100) {
-            tile.humidity = 100;
+
+    _onHumidityEvent : function (tile) {
+        var character = ige.$("character_" + tile.owner);
+        if(character.inventory.waterUnits >= 1){
+            tile.humidity += 10;
+            if (tile.humidity >= 100) {
+                tile.humidity = 100;
+            }
+            character.inventory.waterUnits -= 1;
+            ige.network.send("onHumidityEvent", tile);
         }
-        ige.network.send("onHumidityEvent", tile);
     },
 
     _onPlayerBuyEvent : function (data, clientId) {

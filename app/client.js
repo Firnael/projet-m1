@@ -458,13 +458,17 @@ var Client = IgeClass.extend({
         // Fertilize event
         this.angularScope.fertilizeEvent = function () {
             var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
-            ige.network.send("onFertilizeEvent", tile);
+            if (tile.owner == ige.client.username) {
+                ige.network.send("onFertilizeEvent", tile);
+            }
         }
 
         // Humidity event
         this.angularScope.humidityEvent = function () {
             var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
-            ige.network.send("onHumidityEvent", tile);
+            if (tile.owner == ige.client.username) {
+                ige.network.send("onHumidityEvent", tile);
+            }
         }
 
         this.angularScope.$apply();

@@ -9,8 +9,8 @@ var Inventory = IgeEntityBox2d.extend({
         self.crops = [];
         self.seeds = [];
         self.money = 10000000;
-        self.fertilizerUnits = 0;
-        self.waterUnits = 0;
+        self.fertilizerUnits = 10;
+        self.waterUnits = 10;
 
         var forkWeapon = {
             "name":"Fork",

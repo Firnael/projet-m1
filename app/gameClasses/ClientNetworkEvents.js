@@ -191,10 +191,14 @@ var ClientNetworkEvents = {
     },
 
     _onFertilizeEvent : function (tile) {
+        var player = ige.$("character_" + ige.client.username);
+        player.inventory.fertilizerUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).fertility = tile.fertility;
     },
 
     _onHumidityEvent : function (tile) {
+        var player = ige.$("character_" + ige.client.username);
+        player.inventory.waterUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).humidity = tile.humidity;
     }
 };
