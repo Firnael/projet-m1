@@ -3,11 +3,13 @@ var Timer = IgeObject.extend({
 
     init: function () {
         this.rainEventTimer = 10000;
-        this.cropEventTimer= 1000;
+        this.cropEventTimer = 1000;
+        this.marketPricesEventTimer = 5000;
 
         this.currentTime  = ige._currentTime;
         this.lastRainTime = this.currentTime;
         this.lastCropUpdateTime = this.currentTime;
+        this.lastMarketPricesUpdateTime = this.currentTime;
     },
 
     update:function() {
@@ -22,6 +24,7 @@ var Timer = IgeObject.extend({
             // Raining event
             ige.network.send("onRainingEvent");
         }
+
         //== Crop update event
         var differenceTime = this.currentTime - this.lastCropUpdateTime;
         if(differenceTime >= this.cropEventTimer) {
@@ -45,6 +48,18 @@ var Timer = IgeObject.extend({
             }
 
             ige.network.send("onCropUpdateEvent", stuff);
+        }
+
+        // Market prices
+        var differenceTime = this.currentTime - this.lastMarketPricesUpdateTime;
+        if(differenceTime >= this.marketPricesEventTimer) {
+            this.lastMarketPricesUpdateTime = this.currentTime;
+
+            // Update prices
+            ige.server.updateMarketPrices();
+
+            // Send new prices to server
+            ige.network.send("onMarketPricesUpdateEvent", ige.server.marketCropPrices);
         }
     }
 });

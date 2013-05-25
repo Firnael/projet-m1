@@ -103,6 +103,10 @@ var ServerNetworkEvents = {
         ige.network.response(requestId, stuff);
     },
 
+    _onGetMarketPrices: function (data, clientId, requestId) {
+        ige.network.response(requestId, ige.server.marketCropPrices);
+    },
+
     _onPlayerKeyUp: function (data, clientId) {
         ige.server.log("character_" + clientId + " : keyUp !");
 
@@ -228,6 +232,36 @@ var ServerNetworkEvents = {
             }
             character.inventory.waterUnits -= 1;
             ige.network.send("onHumidityEvent", tile);
+        }
+    },
+
+    _onPlayerSellEvent : function (data, clientId) {
+        ige.server.log("NETWORK : onPlayerSellEvent");
+        ige.server.log("data, [0] = " + data[0] + ", [1] = " + data[1] + ", [2] = " + data[2]);
+
+        var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
+        var moneyEarned = 0;
+        var wheatAmount = data[0];
+        var tomatoAmount = data[1];
+        var cornAmount = data[2];
+
+        // Check if the player owns the crops
+        var result = character.inventory.checkCropsExistence(wheatAmount, tomatoAmount, cornAmount);
+
+        // Update the different amounts (crops and money) of the player's inventory
+        if(result) {
+            moneyEarned += ige.server.marketCropPrices["wheat"] * wheatAmount;
+            moneyEarned += ige.server.marketCropPrices["tomato"] * tomatoAmount;
+            moneyEarned += ige.server.marketCropPrices["corn"] * cornAmount;
+
+            character.inventory.money += moneyEarned;
+            character.inventory.crops[0].number -= wheatAmount;
+            character.inventory.crops[1].number -= tomatoAmount;
+            character.inventory.crops[2].number -= cornAmount;
+            ige.network.send("onInventoryUpdate", character.inventory, clientId);
+        }
+        else {
+            ige.server.log("NETWORK : Client " + clientId + " is trying to cheat !!");
         }
     },
 

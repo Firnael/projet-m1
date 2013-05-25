@@ -324,56 +324,31 @@
                 <div class="text-center">
                     <h5>Current Market crop values</h5>
                     <p>
-                        <img src="assets/textures/ui/wheat.png"/> : ? x <img src="assets/textures/ui/coin.png"/>
+                        <img src="assets/textures/ui/wheat.png"/> : {{marketSellCropValues[0]}} x <img src="assets/textures/ui/coin.png"/>
                          <img src="assets/textures/ui/separator.png"/>
-                        <img src="assets/textures/ui/tomato.png"/> : ? x <img src="assets/textures/ui/coin.png"/>
+                        <img src="assets/textures/ui/tomato.png"/> : {{marketSellCropValues[1]}} x <img src="assets/textures/ui/coin.png"/>
                          <img src="assets/textures/ui/separator.png"/>
-                        <img src="assets/textures/ui/corn.png"/> : ? x <img src="assets/textures/ui/coin.png"/>
+                        <img src="assets/textures/ui/corn.png"/> : {{marketSellCropValues[2]}} x <img src="assets/textures/ui/coin.png"/>
                     </p>
                 </div>
                 <hr/>
-                <div class="row-fluid">
-                    <div class="span3 offset1">Wheat Crops</div>
-                    <div class="span1">{{inventoryScope.crops["wheat"]}} x <img src="assets/textures/ui/wheat.png"/></div>
-                    <div class="span3">
+                <div class="row-fluid" data-ng-repeat="crop in inventoryScope.crops">
+                    <div class="span3 offset1">{{crop.name}}</div>
+                    <div class="span2">{{crop.number}} x <img src="{{crop.image}}"/></div>
+                    <div class="span6">
                         <div class="input-prepend input-append">
-                            <button class="btn btn-warning" type="button">min</button>
-                            <button class="btn" type="button"> - </button>
-                            <input type="text" class="span3 text-center" name="marketBag.wheatSellScope" ng-model="marketBag.wheatSellScope" placeholder="0">
-                            <button class="btn" type="button" data-ng-click=""> + </button>
-                            <button class="btn btn-warning" type="button">max</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span3 offset1">Tomato Crops</div>
-                    <div class="span1">{{inventoryScope.crops["tomato"]}} x <img src="assets/textures/ui/tomato.png"/></div>
-                    <div class="span3">
-                        <div class="input-prepend input-append">
-                            <button class="btn btn-warning" type="button">min</button>
-                            <button class="btn" type="button"> - </button>
-                            <input type="text" class="span3 text-center" name="marketBag.tomatoSellScope" ng-model="marketBag.tomatoSellScope" placeholder="0">
-                            <button class="btn" type="button" data-ng-click=""> + </button>
-                            <button class="btn btn-warning" type="button">max</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span3 offset1">Corn Crops</div>
-                    <div class="span1">{{inventoryScope.crops["corn"]}} x <img src="assets/textures/ui/corn.png"/></div>
-                    <div class="span3">
-                        <div class="input-prepend input-append">
-                            <button class="btn btn-warning" type="button">min</button>
-                            <button class="btn" type="button"> - </button>
-                            <input type="text" class="span3 text-center" name="marketBag.cornSellScope" ng-model="marketBag.cornSellScope" placeholder="0">
-                            <button class="btn" type="button" data-ng-click=""> + </button>
-                            <button class="btn btn-warning" type="button">max</button>
+                            <button class="btn btn-warning" type="button" data-ng-click="marketSellMinEvent($index)">min</button>
+                            <button class="btn" type="button" data-ng-click="marketSellMinusEvent($index)"> - </button>
+                            <input type="text" class="span3 text-center" disabled="disabled" name="marketSellBag[$index]"
+                                   ng-model="marketSellBag[$index]" placeholder="0">
+                            <button class="btn" type="button" data-ng-click="marketSellPlusEvent($index)"> + </button>
+                            <button class="btn btn-warning" type="button" data-ng-click="marketSellMaxEvent($index)">max</button>
                         </div>
                     </div>
                 </div>
                 <hr/>
                 <div id="sellTotal" class="pull-right">
-                    <b>- TOTAL : ? x </b>
+                    <b>- TOTAL : {{marketSellTotal}} x </b>
                     <img src="assets/textures/ui/coin.png">
                     <img src="assets/textures/ui/separator.png">
                     <button class="btn btn-success" data-ng-click="marketSellEvent()">Sell</button>

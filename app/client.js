@@ -55,8 +55,10 @@ var Client = IgeClass.extend({
                         ige.network.define('onExtendMap', self._onExtendMap);
                         ige.network.define('onPlayerPlantCrop', self._onPlayerPlantCrop);
                         ige.network.define('onCropUpdateEvent', self._onCropUpdateEvent);
+                        ige.network.define('onMarketPricesUpdateEvent', self._onMarketPricesUpdateEvent);
                         ige.network.define('onFertilizeEvent', self._onFertilizeEvent);
                         ige.network.define('onHumidityEvent', self._onHumidityEvent);
+                        ige.network.define('onInventoryUpdate', self._onInventoryUpdate);
 
                         ige.addComponent(ChatComponent);
 
@@ -195,6 +197,11 @@ var Client = IgeClass.extend({
                                 ige.client.log("Map loaded !");
                             });
 
+                            ige.network.request('getMarketPrices', {}, function (commandName, data) {
+                                ige.client._onMarketPricesUpdateEvent(data);
+                                ige.client.log("Market prices updated !");
+                            });
+
                             // Join chat room
                             ige.chat.joinRoom('lobby');
                         });
@@ -262,7 +269,6 @@ var Client = IgeClass.extend({
 
         // == BUY
         this.angularScope.marketBuyTotal = 0;
-        this.angularScope.marketSellTotal = 0;
 
         // ==== Utilities
         var utilities = {};
@@ -314,6 +320,12 @@ var Client = IgeClass.extend({
 
         // ==== Weapons
         var weapons = [];
+        var pitchforkWeapon = {
+            "name":"Pitchfork",
+            "value":"FREE",
+            "toggle":0,
+            "image":"assets/textures/ui/pitchfork.png"
+        };
         var baseballbatWeapon = {
             "name":"Baseball bat",
             "value":1000,
@@ -422,6 +434,76 @@ var Client = IgeClass.extend({
             }
         }
 
+        // == SELL
+        this.angularScope.marketSellCropValues = [];
+        this.angularScope.marketSellCropValues[0] = 1; // wheat
+        this.angularScope.marketSellCropValues[1] = 2; // tomato
+        this.angularScope.marketSellCropValues[2] = 3; // corn
+        this.angularScope.marketSellTotal = 0;
+        this.angularScope.marketSellBag = [];
+        this.angularScope.marketSellBag[0] = 0; // wheat
+        this.angularScope.marketSellBag[1] = 0; // tomato
+        this.angularScope.marketSellBag[2] = 0; // corn
+
+        // ==== Sell event
+        this.angularScope.marketSellEvent = function () {
+            var sellData = ige.client.angularScope.marketSellBag;
+            ige.client.log("sellData, [0] = " + sellData[0] + ", [1] = " + sellData[1] + ", [2] = " + sellData[2]);
+
+            ige.network.send("onPlayerSellEvent", sellData);
+
+            ige.client.angularScope.marketSellBag[0] = 0; // wheat
+            ige.client.angularScope.marketSellBag[1] = 0; // tomato
+            ige.client.angularScope.marketSellBag[2] = 0; // corn
+            ige.client.angularScope.marketSellTotal = 0; // total
+        }
+
+        // ==== Min Event
+        this.angularScope.marketSellMinEvent = function (index) {
+            var itemAmount = ige.client.angularScope.marketSellBag[index];
+            var itemPrice = ige.client.angularScope.marketSellCropValues[index];
+
+            ige.client.angularScope.marketSellTotal -= itemAmount * itemPrice;
+            ige.client.angularScope.marketSellBag[index] = 0;
+        }
+
+        // ==== Minus Event
+        this.angularScope.marketSellMinusEvent = function (index) {
+            var itemAmount = ige.client.angularScope.marketSellBag[index];
+            var itemPrice = ige.client.angularScope.marketSellCropValues[index];
+
+            if(itemAmount > 0) {
+                ige.client.angularScope.marketSellTotal -= itemPrice;
+                ige.client.angularScope.marketSellBag[index] -= 1;
+            }
+        }
+
+        // ==== Plus Event
+        this.angularScope.marketSellPlusEvent = function (index) {
+            var itemAmount = ige.client.angularScope.marketSellBag[index];
+            var itemPrice = ige.client.angularScope.marketSellCropValues[index];
+            var playerItemAmount = ige.client.angularScope.inventoryScope.crops[index].number;
+
+            if(itemAmount + 1 <= playerItemAmount) {
+                ige.client.angularScope.marketSellTotal += itemPrice;
+                ige.client.angularScope.marketSellBag[index] += 1;
+            }
+        }
+
+        // ==== Max Event
+        this.angularScope.marketSellMaxEvent = function (index) {
+            var itemAmount = ige.client.angularScope.marketSellBag[index];
+            var itemPrice = ige.client.angularScope.marketSellCropValues[index];
+            var playerItemAmount = ige.client.angularScope.inventoryScope.crops[index].number;
+            var differenceItemAmount = playerItemAmount - itemAmount;
+
+            ige.client.angularScope.marketSellTotal += differenceItemAmount * itemPrice;
+            ige.client.angularScope.marketSellBag[index] = playerItemAmount;
+        }
+
+
+        // ======
+
 
         // Rain event
         this.angularScope.rainEvent = function(){
@@ -473,6 +555,13 @@ var Client = IgeClass.extend({
 
         this.angularScope.$apply();
         this.log("UI loaded !");
+    },
+
+    // Update UI variables
+    updateAngularScopeVariables: function () {
+        var character = ige.$("character_" + this.username);
+        this.angularScope.inventoryScope = character.inventory;
+        this.angularScope.$apply();
     },
 
     // Creates the player's character

@@ -44,19 +44,19 @@ var Inventory = IgeEntityBox2d.extend({
         var wheatCrop = {
             "name":"Wheat crop",
             "image":"assets/textures/ui/wheat.png",
-            "number":0
+            "number":10
         };
 
         var tomatoCrop = {
             "name":"Tomato crop",
             "image":"assets/textures/ui/tomato.png",
-            "number":0
+            "number":10
         };
 
         var cornCrop = {
             "name":"Corn crop",
             "image":"assets/textures/ui/corn.png",
-            "number":0
+            "number":10
         };
 
         self.crops.push(wheatCrop);
@@ -123,6 +123,24 @@ var Inventory = IgeEntityBox2d.extend({
             case "Chainsaw": this.weapons[2].present = 1; break;
             case "AK-47": this.weapons[3].present = 1; break;
         }
+    },
+
+    checkCropsExistence : function (wheatAmount, tomatoAmount, cornAmount) {
+        ige.server.log("wheatAmount = " + wheatAmount
+            + ", tomatoAmount = " + tomatoAmount
+            + ", cornAmount = " + cornAmount);
+
+        ige.server.log("serverWheat = " + this.crops[0].number
+            + ", serverTomato = " + this.crops[1].number
+            + ", serverCorn = " + this.crops[0].number);
+
+        if(this.crops[0].number >= wheatAmount
+            && this.crops[1].number >= tomatoAmount
+            && this.crops[2].number >= cornAmount) {
+
+            return true;
+        }
+        return false;
     },
 
     destroy: function () {

@@ -12,7 +12,11 @@ var Server = IgeClass.extend({
         // Container for the tiles
         this.tileBag = new TileBag();
         this.tileBag.initTileBag();
-        
+
+        // Prices for crops in the market
+        this.marketCropPrices = {};
+        this.updateMarketPrices();
+
 		// Add physics and setup physics world
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
@@ -40,12 +44,15 @@ var Server = IgeClass.extend({
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerKeyUp', self._onPlayerKeyUp);
                         ige.network.define('getMap', self._onGetMap);
+                        ige.network.define('getMarketPrices', self._onGetMarketPrices);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);
                         ige.network.define('getCharacterData', self._onGetCharacterData);
                         ige.network.define('playerAttackTile', self._onPlayerAttackTile);
                         ige.network.define('onPlayerPlantCrop', self._onPlayerPlantCrop);
+                        ige.network.define('onPlayerSellEvent', self._onPlayerSellEvent);
+                        ige.network.define('onMarketPricesUpdateEvent');
                         ige.network.define('onPlayerBuyEvent', self._onPlayerBuyEvent);
                         ige.network.define('onCropUpdateEvent');
                         ige.network.define('getParcelle');
@@ -56,6 +63,7 @@ var Server = IgeClass.extend({
                         ige.network.define('onExtendMap');
                         ige.network.define('onFertilizeEvent', self._onFertilizeEvent);
                         ige.network.define('onHumidityEvent', self._onHumidityEvent);
+                        ige.network.define('onInventoryUpdate');
 
 
                         ige.network.on('connect', self._onPlayerConnect);
@@ -117,7 +125,17 @@ var Server = IgeClass.extend({
 					}
 				});
 			});
-	}
+	},
+
+    updateMarketPrices: function () {
+        this.marketCropPrices["wheat"] = randomFromInterval(1, 10);
+        this.marketCropPrices["tomato"] = randomFromInterval(11, 20);
+        this.marketCropPrices["corn"] = randomFromInterval(21, 30);
+
+        function randomFromInterval(from, to) {
+            return Math.floor(Math.random() * (to - from + 1) + from);
+        }
+    }
 });
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = Server; }

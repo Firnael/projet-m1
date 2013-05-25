@@ -200,6 +200,27 @@ var ClientNetworkEvents = {
         var player = ige.$("character_" + ige.client.username);
         player.inventory.waterUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).humidity = tile.humidity;
+    },
+
+    _onMarketPricesUpdateEvent : function (data) {
+        var scope = ige.client.angularScope;
+        scope.marketSellCropValues[0] = data["wheat"];
+        scope.marketSellCropValues[1] = data["tomato"];
+        scope.marketSellCropValues[2] = data["corn"];
+
+        // Reset values if the player is currently shopping.
+        scope.marketSellTotal = 0;
+        scope.marketSellBag[0] = 0; // wheat
+        scope.marketSellBag[1] = 0; // tomato
+        scope.marketSellBag[2] = 0; // corn
+    },
+
+    _onInventoryUpdate : function (data) {
+        ige.client.log("NETWORK : onInventoryUpdate");
+
+        var character = ige.$("character_" + ige.client.username);
+        character.inventory = data;
+        ige.client.updateAngularScopeVariables();
     }
 };
 
