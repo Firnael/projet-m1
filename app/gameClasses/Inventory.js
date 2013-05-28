@@ -67,19 +67,19 @@ var Inventory = IgeEntityBox2d.extend({
         var wheatSeed = {
             "name":"Wheat seed",
             "image":"assets/textures/ui/wheat_seeds.png",
-            "number":0
+            "number":10
         };
 
         var tomatoSeed = {
             "name":"Tomato seed",
             "image":"assets/textures/ui/tomato_seeds.png",
-            "number":0
+            "number":10
         };
 
         var cornSeed = {
             "name":"Corn crop",
             "image":"assets/textures/ui/corn_seeds.png",
-            "number":0
+            "number":10
         };
 
         self.seeds.push(wheatSeed);
@@ -109,6 +109,22 @@ var Inventory = IgeEntityBox2d.extend({
         }
     },
 
+    removeSeed: function (seedType) {
+        var index = seedType -1;
+        this.seeds[index].number -= 1;
+        if(this.seeds[index].number < 0) {
+            this.seeds[index].number = 0;
+        }
+    },
+
+    checkSeedExistence : function (seedType) {
+        var index = seedType -1;
+        if(this.seeds[index].number > 0) {
+            return true;
+        }
+        return false;
+    },
+
     addWater: function (waterAmount) {
         this.waterUnits += waterAmount;
     },
@@ -126,14 +142,6 @@ var Inventory = IgeEntityBox2d.extend({
     },
 
     checkCropsExistence : function (wheatAmount, tomatoAmount, cornAmount) {
-        ige.server.log("wheatAmount = " + wheatAmount
-            + ", tomatoAmount = " + tomatoAmount
-            + ", cornAmount = " + cornAmount);
-
-        ige.server.log("serverWheat = " + this.crops[0].number
-            + ", serverTomato = " + this.crops[1].number
-            + ", serverCorn = " + this.crops[0].number);
-
         if(this.crops[0].number >= wheatAmount
             && this.crops[1].number >= tomatoAmount
             && this.crops[2].number >= cornAmount) {

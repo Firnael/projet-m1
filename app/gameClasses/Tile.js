@@ -19,6 +19,17 @@ var Tile = IgeClass.extend({
         self.crop = null;
     },
 
+    decreaseGrowingFactors: function () {
+        this.humidity -= 10;
+        if(this.humidity < 0) {
+            this.humidity = 0;
+        }
+        this.fertility -= 10;
+        if(this.fertility < 0) {
+            this.fertility = 0;
+        }
+    },
+
     // Return the x position as pixels
     getX: function () {
         return this.x * this.tileWidth;

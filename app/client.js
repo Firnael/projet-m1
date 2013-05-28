@@ -124,16 +124,21 @@ var Client = IgeClass.extend({
                                     var fertility = ige.client.tileBag.getFertilityByTile(x, y);
                                     var humidity = ige.client.tileBag.getHumidityByTile(x, y);
                                     var owner = ige.client.tileBag.getOwnerByTile(x, y);
-                                    if(fertility && humidity){
-                                        var playerName = "None";
-                                        if(owner) { playerName = owner; }
-                                        self.angularScope.tileOwnerScope = playerName;
+
+                                    self.angularScope.tileHumidityScope = "???";
+                                    self.angularScope.tileFertilityScope = "???";
+                                    self.angularScope.tileOwnerScope = "None";
+
+                                    if(humidity !== undefined) {
                                         self.angularScope.tileHumidityScope = humidity;
+                                    }
+
+                                    if(fertility !== undefined) {
                                         self.angularScope.tileFertilityScope = fertility;
                                     }
-                                    else {
-                                        self.angularScope.tileHumidityScope = "???";
-                                        self.angularScope.tileFertilityScope = "???";
+
+                                    if(owner) {
+                                        self.angularScope.tileOwnerScope = owner;
                                     }
                                 }
 
@@ -540,16 +545,43 @@ var Client = IgeClass.extend({
         // Fertilize event
         this.angularScope.fertilizeEvent = function () {
             var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
-            if (tile.owner == ige.client.username) {
-                ige.network.send("onFertilizeEvent", tile);
+            if(tile) {
+                if (tile.owner == ige.client.username) {
+                    var stuff = {};
+                    stuff.x = tile.x;
+                    stuff.y = tile.y;
+                    stuff.owner = tile.owner;
+                    ige.network.send("onFertilizeEvent", stuff);
+                }
             }
         }
 
         // Humidity event
         this.angularScope.humidityEvent = function () {
             var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
-            if (tile.owner == ige.client.username) {
-                ige.network.send("onHumidityEvent", tile);
+            if(tile) {
+                if (tile.owner == ige.client.username) {
+                    var stuff = {};
+                    stuff.x = tile.x;
+                    stuff.y = tile.y;
+                    stuff.owner = tile.owner;
+                    ige.network.send("onHumidityEvent", stuff);
+                }
+            }
+        }
+
+        // Plant event
+        this.angularScope.plantEvent = function (cropType) {
+            var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
+
+            if (tile != null) {
+                var position = {};
+                position.x = tile.x;
+                position.y = tile.y;
+                var stuff = {};
+                stuff["cropType"] = cropType;
+                stuff["targetTile"] = position;
+                ige.network.send("onPlayerPlantCrop", stuff);
             }
         }
 

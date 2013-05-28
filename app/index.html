@@ -13,7 +13,6 @@
     <!-- STYLES -->
     <link href="css/ige.css" rel="stylesheet" type="text/css"/>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="css/bootstrap_switch.css" rel="stylesheet" media="screen"/>
     <link href="css/app.css" rel="stylesheet" type="text/css"/>
 
     <!-- Isogenic Loader -->
@@ -22,9 +21,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="lib/angular/angular.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
-    <script src="js/bootstrap.min.js"></script>
 </head>
 <body data-ng-controller="IsoGame">
 
@@ -56,22 +55,16 @@
 <div id="navbar" class="navbar navbar-inverse">
     <div class="navbar-inner">
         <a class="brand" href="#">TremendousFarm</a>
-        <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" data-ng-disabled="plantButtonDisabled">
-            <img src="assets/textures/ui/seed.png"/> Plant <span class="caret"></span>
-        </button>
-
-        <!--
-        <div class="btn-group" data-ng-disabled="plantButtonDisabled">
-            <button class="btn btn-inverse">Plant</button>
-            <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        <div class="btn-group">
+            <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" data-ng-disabled="plantButtonDisabled">
+                <img src="assets/textures/ui/seed.png"/> Plant <span class="caret"></span>
+            </button>
             <ul class="dropdown-menu">
-                <li><a href="#">SEED_WHEAT</a></li>
-                <li><a href="#">SEED_TOMATO</a></li>
-                <li><a href="#">SEED_CORN</a></li>
+                <li data-ng-click="plantEvent(1)"><a><img src="assets/textures/ui/wheat_seeds.png"/> Wheat seed</a></li>
+                <li data-ng-click="plantEvent(2)"><a><img src="assets/textures/ui/tomato_seeds.png"/> Tomato seed</a></li>
+                <li data-ng-click="plantEvent(3)"><a><img src="assets/textures/ui/corn_seeds.png"/> Corn seed</a></li>
             </ul>
         </div>
-        -->
-
         <button class="btn btn-info" data-ng-disabled="waterButtonDisabled" data-ng-click="humidityEvent()">
             <img src="assets/textures/ui/waterdrop.png"/> Water
         </button>

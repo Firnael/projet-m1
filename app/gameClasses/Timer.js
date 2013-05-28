@@ -2,8 +2,8 @@ var Timer = IgeObject.extend({
     classId: 'Timer',
 
     init: function () {
-        this.rainEventTimer = 10000;
-        this.cropEventTimer = 1000;
+        this.rainEventTimer = 10000000;
+        this.cropEventTimer = 2000;
         this.marketPricesEventTimer = 5000;
 
         this.currentTime  = ige._currentTime;
@@ -23,6 +23,7 @@ var Timer = IgeObject.extend({
 
             // Raining event
             ige.network.send("onRainingEvent");
+            ige.server.tileBag.rainEvent();
         }
 
         //== Crop update event
@@ -30,20 +31,20 @@ var Timer = IgeObject.extend({
         if(differenceTime >= this.cropEventTimer) {
             this.lastCropUpdateTime = this.currentTime;
 
-            // Update crops
-            ige.server.tileBag.updateCrops();
+            // Update crops and get the dying one
+            var dyingCrops = ige.server.tileBag.updateCrops();
 
             // Send new data to all clients
-            var stuff = [];
+            var stuff = {};
+            stuff.dyingCrops = dyingCrops;
+            stuff.updatedCrops = [];
+
             var tiles = ige.server.tileBag.getTiles();
             for(var key in tiles) {
                 var tile = tiles[key];
-                var otherStuff = {};
 
                 if(tile.crop != null) {
-                    otherStuff["index"] = tile.getTileX() + "-" + tile.getTileY();
-                    otherStuff["maturation"] = tile.crop.maturationState;
-                    stuff.push(otherStuff);
+                    stuff.updatedCrops.push(tile);
                 }
             }
 

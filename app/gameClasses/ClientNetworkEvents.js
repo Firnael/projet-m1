@@ -146,6 +146,7 @@ var ClientNetworkEvents = {
 
     _onRainingEvent: function(data){
         ige.client.angularScope.rainEvent();
+        ige.client.tileBag.rainEvent();
     },
 
     _onPlayerHpUpdateEvent: function (data) {
@@ -172,34 +173,53 @@ var ClientNetworkEvents = {
     },
 
     _onPlayerPlantCrop: function (data) {
-        ige.client.log("Player plant at " + data.tilePositionX + "," + data.tilePositionY);
-
-
         var tile = ige.client.tileBag.getTileByPosition(data.tilePositionX, data.tilePositionY);
         tile.crop = new Crop(data.type, data.maturationState, data.tilePositionX, data.tilePositionY, data.plantTime);
+
+        var character = ige.$("character_" + ige.client.username);
+        character.inventory.removeSeed(data.type);
 
         ige.client.updateTileActionButtons(tile.getTileIndex());
     },
 
     _onCropUpdateEvent : function (data) {
-        for(var i=0; i<data.length; i++) {
-            var tile = data[i];
-            var targetTile = ige.client.tileBag.tiles[tile["index"]];
-            targetTile.crop.maturationState = tile["maturation"];
+        var updatedCrops = data.updatedCrops;
+
+        // Update living crops
+        for(var i=0; i<updatedCrops.length; i++) {
+            var tile = updatedCrops[i];
+            var targetTile = ige.client.tileBag.getTile(tile.x, tile.y);
+
+            ige.client.log("tile, humidity=" + tile.humidity);
+            ige.client.log("targettile, humidity=" + targetTile.humidity);
+
+            targetTile.crop.maturationState = tile.crop.maturationState;
+            targetTile.humidity = tile.humidity;
+            targetTile.fertility = tile.fertility;
             targetTile.crop.updateSpatial();
         }
+
+        // Destroy dead crops
+        var dyingCrops = data.dyingCrops;
+        for (var i = 0; i < dyingCrops.length; i++) {
+            var key = dyingCrops[i];
+            ige.client.tileBag.tiles[key].crop.destroy();
+        }
+
+        // Update fertility
+        ige.client.tileBag.updateFertility();
     },
 
     _onFertilizeEvent : function (tile) {
         var player = ige.$("character_" + ige.client.username);
         player.inventory.fertilizerUnits -= 1;
-        ige.client.tileBag.getTile(tile.x,tile.y).fertility = tile.fertility;
+        ige.client.tileBag.getTile(tile.x,tile.y).fertility += 10;
     },
 
     _onHumidityEvent : function (tile) {
         var player = ige.$("character_" + ige.client.username);
         player.inventory.waterUnits -= 1;
-        ige.client.tileBag.getTile(tile.x,tile.y).humidity = tile.humidity;
+        ige.client.tileBag.getTile(tile.x,tile.y).humidity += 10;
     },
 
     _onMarketPricesUpdateEvent : function (data) {

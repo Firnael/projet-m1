@@ -246,10 +246,43 @@ TileBag = IgeClass.extend({
     },
 
     updateCrops: function () {
+        var dyingCrops = [];
         for (var key in this.tiles) {
             var tile = this.tiles[key];
             if (tile.crop != null) {
-                tile.crop.updateMaturation(this.fertility, this.humidity);
+                var returnValue = tile.crop.updateMaturation(tile.fertility, tile.humidity);
+
+                if(returnValue == null) {
+                    tile.crop = null;
+                    dyingCrops.push(tile.getTileX() + "-" + tile.getTileY());
+                }
+
+                tile.decreaseGrowingFactors();
+            }
+            // Fertility regen
+            else {
+                if(tile.isFence == false) {
+                    tile.fertility += 1;
+                    if(tile.fertility > 100) {
+                        tile.fertility = 100;
+                    }
+                }
+            }
+        }
+
+        return dyingCrops;
+    },
+
+    updateFertility: function () {
+        for (var key in this.tiles) {
+            var tile = this.tiles[key];
+            if (tile.crop == null) {
+                if(tile.isFence == false) {
+                    tile.fertility += 1;
+                    if(tile.fertility > 100) {
+                        tile.fertility = 100;
+                    }
+                }
             }
         }
     },
@@ -333,6 +366,18 @@ TileBag = IgeClass.extend({
             else {
                 // The tile is either ours, or neutral
                 return false;
+            }
+        }
+    },
+
+    rainEvent: function () {
+        for(var key in this.tiles) {
+            var tile = this.tiles[key];
+            if(tile.isFence == false) {
+                tile.humidity += 5;
+                if(tile.humidity > 100) {
+                    tile.humidity = 100;
+                }
             }
         }
     },

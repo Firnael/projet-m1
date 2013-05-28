@@ -198,25 +198,44 @@ var ServerNetworkEvents = {
     },
 
     _onPlayerPlantCrop : function (data, clientId) {
-        var targetTile = ige.server.tileBag.getTile(data["targetTile"].x, data["targetTile"].y);
-        targetTile.setCrop(data["cropType"], 1);
+        var cropType = data["cropType"];
 
-        var crop = {};
-        crop.type = targetTile.crop.type;
-        crop.maturationState = targetTile.crop.maturationState;
-        crop.tilePositionX = targetTile.crop.tilePositionX;
-        crop.tilePositionY = targetTile.crop.tilePositionY;
-        crop.plantTime = targetTile.crop.plantTime;
-        ige.network.send("onPlayerPlantCrop", crop);
+        // Check if the player possess enough seed
+        var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
+        var result = character.inventory.checkSeedExistence(cropType);
+
+        // If it's the case, plant the seed
+        if(result) {
+
+            // If no crop exist in this tile, create one
+            var targetTile = ige.server.tileBag.getTile(data["targetTile"].x, data["targetTile"].y);
+            if(targetTile.crop == null) {
+                targetTile.setCrop(cropType, 1);
+
+                // Remove one seed from the player inventory
+                character.inventory.removeSeed(cropType);
+
+                // Send data to clients
+                var crop = {};
+                crop.type = targetTile.crop.type;
+                crop.maturationState = targetTile.crop.maturationState;
+                crop.tilePositionX = targetTile.crop.tilePositionX;
+                crop.tilePositionY = targetTile.crop.tilePositionY;
+                crop.plantTime = targetTile.crop.plantTime;
+                ige.network.send("onPlayerPlantCrop", crop);
+            }
+
+        }
     },
 
     _onFertilizeEvent : function (tile) {
         var character = ige.$("character_" + tile.owner);
-
         if(character.inventory.fertilizerUnits >= 1){
-            tile.fertility += 10;
-            if (tile.fertility >= 100) {
-                tile.fertility = 100;
+            var serverTile = ige.server.tileBag.getTile(tile.x,tile.y);
+
+            serverTile.fertility += 10;
+            if (serverTile.fertility >= 100) {
+                serverTile.fertility = 100;
             }
             character.inventory.fertilizerUnits -= 1;
             ige.network.send("onFertilizeEvent", tile);
@@ -226,9 +245,10 @@ var ServerNetworkEvents = {
     _onHumidityEvent : function (tile) {
         var character = ige.$("character_" + tile.owner);
         if(character.inventory.waterUnits >= 1){
-            tile.humidity += 10;
-            if (tile.humidity >= 100) {
-                tile.humidity = 100;
+            var serverTile = ige.server.tileBag.getTile(tile.x,tile.y);
+            serverTile.humidity += 10;
+            if (serverTile.humidity >= 100) {
+                serverTile.humidity = 100;
             }
             character.inventory.waterUnits -= 1;
             ige.network.send("onHumidityEvent", tile);

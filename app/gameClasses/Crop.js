@@ -9,6 +9,13 @@ var Crop = IgeEntityBox2d.extend({
         self.tilePositionY = y;
         self.type = type;
         self.maturationState = maturationState;
+        self.maturationTime = 0;
+        self.maturationLevel = 0;
+        self.decayState = 0;
+        self.decayTime = 0;
+        self.decayLevel = 0;
+        self.health = 0;
+        self.maxHealth = 0;
 
         if(plantTime === undefined) {
             self.plantTime = ige._currentTime;
@@ -18,8 +25,8 @@ var Crop = IgeEntityBox2d.extend({
         }
 
         self.name = null;
-        self.decayTime = 0;
         self.productivity = 0;
+        self.currentProductivity = 0;
         self.seedPrice = 0;
 
         self.setType(type);
@@ -70,26 +77,32 @@ var Crop = IgeEntityBox2d.extend({
         switch(type) {
             case 1:
                 this.name = "Wheat";
-                this.maturationTime = 10;
-                this.decayTime = 3;
-                this.productivity = 1;
+                this.maturationTime = 1;
+                this.decayTime = 2;
+                this.productivity = 10;
                 this.seedPrice = 1;
+                this.health = 3;
+                this.maxHealth = 3;
                 break;
 
             case 2:
                 this.name = "Tomato";
-                this.maturationTime = 20;
-                this.decayTime = 3;
-                this.productivity = 2;
+                this.maturationTime = 2;
+                this.decayTime = 2;
+                this.productivity = 20;
                 this.seedPrice = 2;
+                this.health = 4;
+                this.maxHealth = 4;
                 break;
 
             case 3:
                 this.name = "Corn";
-                this.maturationTime = 30;
+                this.maturationTime = 3;
                 this.decayTime = 3;
-                this.productivity = 3;
+                this.productivity = 30;
                 this.seedPrice = 3;
+                this.health = 5;
+                this.maxHealth = 5;
                 break;
         }
     },
@@ -147,10 +160,62 @@ var Crop = IgeEntityBox2d.extend({
     },
 
     updateMaturation: function (fertility, humidity) {
-        // var lifeTime = this.currentTime - this.plantTime;
-        if(this.maturationState < 8){
-            this.maturationState += 1;
+        ige.server.log("maturationState : " + this.maturationState);
+        ige.server.log("fertility : " + fertility + ", humidity : " + humidity);
+
+        // Si l'humidité est < 10, la plante commence à mourir
+        // Si la fertilité est < 10, la plante s'arrête de grandir
+
+        // Update crop health
+        if(humidity < 10) {
+            this.health -= 1;
+            if(this.health <= 0) {
+                ige.server.log("He dead ! (health)");
+                return null;
+            }
+            return "lol";
         }
+        else {
+            this.health = this.maxHealth;
+        }
+
+        // Update crop maturation state
+        // The crop is in his growing state
+        if(this.maturationState < 5) {
+            if(fertility >= 10) {
+                this.maturationLevel +=1;
+
+                if(this.maturationLevel >= this.maturationTime) {
+                    this.maturationLevel = 0;
+                    this.maturationState += 1;
+                }
+            }
+        }
+        // The crop is withering
+        else {
+            this.decayLevel += 1;
+            if(this.decayLevel >= this.decayTime) {
+                this.decayLevel = 0;
+                this.maturationState += 1;
+            }
+        }
+
+        // Destroy the crop if its life is over
+        if(this.maturationState > 8) {
+            ige.server.log("He dead ! (old)");
+            return null;
+        }
+        // Update productivity
+        else if(this.maturationState >= 5 && this.maturationState <= 8)  {
+            switch(this.maturationState) {
+                case 5: this.currentProductivity = this.productivity * 1; break;
+                case 6: this.currentProductivity = this.productivity * 0.75; break;
+                case 7: this.currentProductivity = this.productivity * 0.50; break;
+                case 8: this.currentProductivity = this.productivity * 0.25; break;
+            }
+        }
+
+        return "lol";
     },
 
     toString: function () {
@@ -163,11 +228,11 @@ var Crop = IgeEntityBox2d.extend({
     },
 
     tick: function (ctx) {
-        IgeEntity.prototype.tick.call(this, ctx);
+        IgeEntityBox2d.prototype.tick.call(this, ctx);
     },
 
     destroy: function () {
-        IgeClass.prototype.destroy.call(this);
+        IgeEntityBox2d.prototype.destroy.call(this);
     }
 });
 
