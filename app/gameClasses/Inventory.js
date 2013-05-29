@@ -3,8 +3,6 @@ var Inventory = IgeEntityBox2d.extend({
 
     init: function () {
         var self = this;
-        self.weapon = new Weapon(1);
-        self.bestWeapon = 1;
         self.weapons = [];
         self.crops = [];
         self.seeds = [];
@@ -87,18 +85,14 @@ var Inventory = IgeEntityBox2d.extend({
         self.seeds.push(cornSeed);
     },
 
-    setWeapon: function (type) {
-        if(this.weapon != null) {
-            this.weapon.destroy();
-        }
-        this.weapon = new Weapon(type);
-        if(this.bestWeapon < type) {
-            this.bestWeapon = type;
-        }
-    },
-
     getBestWeapon: function() {
-        return new Weapon(this.bestWeapon);
+        var bestWeapon = 0;
+        for (var i = 0; i < this.weapons.length; i++) {
+            if(this.weapons[i].present == 1) {
+                bestWeapon = i;
+            }
+        }
+        return new Weapon(bestWeapon);
     },
 
     addSeed: function (seedName, seedAmount) {
@@ -152,7 +146,6 @@ var Inventory = IgeEntityBox2d.extend({
     },
 
     destroy: function () {
-        this.weapon.destroy();
         IgeEntityBox2d.prototype.destroy.call(this);
     }
 });

@@ -113,9 +113,8 @@
 #fightRecapDiv {
     position: absolute;
     z-index: 1050;
-    left: 35%;
-    right:35%;
-    width: 30%;
+    left: 30%;
+    width: 45%;
     margin-left:0px;
 }
 

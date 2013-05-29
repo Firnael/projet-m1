@@ -394,8 +394,8 @@ TileBag = IgeClass.extend({
         data["tileIndex"] = "(" + tileIndex.x + ", " + tileIndex.y + ")"; // (3)
         data["attackerHealth"] = paHp; // (4)
         data["defenderHealth"] = pdHp; // (5)
-        data["attackerWeapon"] = playerAttacker.inventory.weapon.name; // (6)
-        data["defenderWeapon"] = playerDefender.inventory.weapon.name; // (7)
+        data["attackerWeapon"] = playerAttacker.inventory.getBestWeapon().name; // (6)
+        data["defenderWeapon"] = playerDefender.inventory.getBestWeapon().name; // (7)
         data["attackerHitCount"] = 0; // (8)
         data["defenderHitCount"] = 0; // (9)
         data["attackerMissCount"] = 0; // (10)
@@ -405,7 +405,7 @@ TileBag = IgeClass.extend({
         data["defenderHealthAfter"] = null; // (14)
 
         while (paHp > 0 && pdHp > 0) {
-            var damages = playerAttacker.inventory.weapon.getDamages();
+            var damages = playerAttacker.inventory.getBestWeapon().getDamages();
             pdHp -= damages;
             if (damages == 0) {
                 data["attackerMissCount"] = data["attackerMissCount"] + 1;
@@ -418,7 +418,7 @@ TileBag = IgeClass.extend({
                 break;
             }
 
-            var damages = playerDefender.inventory.weapon.getDamages();
+            var damages = playerDefender.inventory.getBestWeapon().getDamages();
             paHp -= damages;
             if (damages == 0) {
                 data["defenderMissCount"] = data["defenderMissCount"] + 1;
