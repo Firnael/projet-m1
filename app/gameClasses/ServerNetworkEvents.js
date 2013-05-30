@@ -308,6 +308,28 @@ var ServerNetworkEvents = {
 
             ige.network.send("onInventoryUpdate", character.inventory, clientId);
         }
+    },
+
+    _onPlayerHarvestCrop : function (data, clientId) {
+        var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
+        ige.server.log("NETWORK : onHarvestCrop");
+        var tile = ige.server.tileBag.getTile(data.x,data.y);
+        if(tile){
+            if(tile.crop){
+                var currentProductivity = tile.crop.currentProductivity;
+                var type = tile.crop.type;
+                var stuff = {};
+
+                stuff.type = type-1;
+                stuff.x = data.x;
+                stuff.y = data.y;
+                console.log("type="+stuff.type);
+                character.inventory.crops[type-1].number += currentProductivity;
+                stuff.cropsInInventory = character.inventory.crops[type-1].number;
+                ige.network.send("onPlayerHarvestCrop", stuff, clientId);
+                tile.crop = null;
+            }
+        }
     }
 };
 

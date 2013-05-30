@@ -64,6 +64,8 @@ var Server = IgeClass.extend({
                         ige.network.define('onFertilizeEvent', self._onFertilizeEvent);
                         ige.network.define('onHumidityEvent', self._onHumidityEvent);
                         ige.network.define('onInventoryUpdate');
+                        ige.network.define('onPlayerHarvestCrop', self._onPlayerHarvestCrop);
+
 
 
                         ige.network.on('connect', self._onPlayerConnect);

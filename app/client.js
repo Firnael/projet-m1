@@ -59,6 +59,7 @@ var Client = IgeClass.extend({
                         ige.network.define('onFertilizeEvent', self._onFertilizeEvent);
                         ige.network.define('onHumidityEvent', self._onHumidityEvent);
                         ige.network.define('onInventoryUpdate', self._onInventoryUpdate);
+                        ige.network.define('onPlayerHarvestCrop', self._onPlayerHarvestCrop);
 
                         ige.addComponent(ChatComponent);
 
@@ -572,6 +573,20 @@ var Client = IgeClass.extend({
                 stuff["cropType"] = cropType;
                 stuff["targetTile"] = position;
                 ige.network.send("onPlayerPlantCrop", stuff);
+            }
+        }
+
+        this.angularScope.harvestEvent = function (){
+            var tile = ige.client.tileBag.getTileByEntityPosition(ige.$("character_" + ige.client.username));
+
+            if (tile != null) {
+                if(tile.crop){
+                    console.log("yeah");
+                    var position = {};
+                    position.x = tile.x;
+                    position.y = tile.y;
+                    ige.network.send("onPlayerHarvestCrop", position);
+                }
             }
         }
 

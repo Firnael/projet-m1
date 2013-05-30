@@ -204,22 +204,26 @@ var ClientNetworkEvents = {
         for (var i = 0; i < dyingCrops.length; i++) {
             var key = dyingCrops[i];
             ige.client.tileBag.tiles[key].crop.destroy();
+            ige.client.tileBag.tiles[key].crop = null;
         }
 
         // Update fertility
         ige.client.tileBag.updateFertility();
+        ige.client.updateAngularScopeVariables();
     },
 
     _onFertilizeEvent : function (tile) {
         var player = ige.$("character_" + ige.client.username);
         player.inventory.fertilizerUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).fertility += 10;
+        ige.client.updateAngularScopeVariables();
     },
 
     _onHumidityEvent : function (tile) {
         var player = ige.$("character_" + ige.client.username);
         player.inventory.waterUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).humidity += 10;
+        ige.client.updateAngularScopeVariables();
     },
 
     _onMarketPricesUpdateEvent : function (data) {
@@ -238,6 +242,18 @@ var ClientNetworkEvents = {
     _onInventoryUpdate : function (data) {
         var character = ige.$("character_" + ige.client.username);
         character.inventory = data;
+        ige.client.updateAngularScopeVariables();
+    },
+
+    _onPlayerHarvestCrop : function (data) {
+        ige.client.log("NETWORK : onHarvestCrop");
+        console.log("type="+data.type);
+
+        var character = ige.$("character_" + ige.client.username);
+        character.inventory.crops[data.type].number = data.cropsInInventory;
+        var key = data.x+"-"+data.y;
+        ige.client.tileBag.tiles[key].crop.destroy();
+        ige.client.tileBag.tiles[key].crop = null;
         ige.client.updateAngularScopeVariables();
     }
 };
