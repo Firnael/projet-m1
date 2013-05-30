@@ -236,8 +236,6 @@ var ClientNetworkEvents = {
     },
 
     _onInventoryUpdate : function (data) {
-        ige.client.log("NETWORK : onInventoryUpdate");
-
         var character = ige.$("character_" + ige.client.username);
         character.inventory = data;
         ige.client.updateAngularScopeVariables();

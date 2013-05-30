@@ -281,13 +281,13 @@ var Client = IgeClass.extend({
         utilities.items = [];
         var marketWater = {
             "name":"Water",
-            "value":5,
+            "value":2,
             "number":0,
             "image":"assets/textures/ui/waterdrop.png"
         };
         var marketFertilizer = {
             "name":"Fertilizer",
-            "value":10,
+            "value":5,
             "number":0,
             "image":"assets/textures/ui/fertilize.png"
         };
@@ -301,7 +301,7 @@ var Client = IgeClass.extend({
         seeds.items = [];
         var wheatSeed = {
             "name":"Wheat Seed",
-            "value":15,
+            "value":10,
             "number":0,
             "image":"assets/textures/ui/wheat_seeds.png"
         };
@@ -325,12 +325,6 @@ var Client = IgeClass.extend({
 
         // ==== Weapons
         var weapons = [];
-        var pitchforkWeapon = {
-            "name":"Pitchfork",
-            "value":"FREE",
-            "toggle":0,
-            "image":"assets/textures/ui/pitchfork.png"
-        };
         var baseballbatWeapon = {
             "name":"Baseball bat",
             "value":1000,
@@ -362,28 +356,27 @@ var Client = IgeClass.extend({
             var marketItems = ige.client.angularScope.marketItems;
             var marketWeapons = ige.client.angularScope.marketWeapons;
 
-            ige.client.log("marketBag =");
             for(var key in marketItems.utilities.items){
-                ige.client.log("Key:" + marketItems.utilities.items[key].name
-                    + ", Value:" + marketItems.utilities.items[key].number);
-
                 stuff[marketItems.utilities.items[key].name] = marketItems.utilities.items[key].number;
             }
 
             for(var key in marketItems.seeds.items){
-                ige.client.log("Key:" + marketItems.seeds.items[key].name
-                    + ", Value:" + marketItems.seeds.items[key].number);
-
                 stuff[marketItems.seeds.items[key].name] = marketItems.seeds.items[key].number;
             }
 
             for(var i=0; i<marketWeapons.length; i++) {
-                ige.client.log("Key:" + marketWeapons[i].name
-                    + ", Value:" + marketWeapons[i].toggle);
-
                 stuff[marketWeapons[i].name] = marketWeapons[i].toggle;
             }
 
+            // Reset GUI
+            ige.client.angularScope.marketBuyTotal = 0;
+            ige.client.angularScope.marketItems.seeds.items[0].number = 0;
+            ige.client.angularScope.marketItems.seeds.items[1].number = 0;
+            ige.client.angularScope.marketItems.seeds.items[2].number = 0;
+            ige.client.angularScope.marketItems.utilities.items[0].number = 0;
+            ige.client.angularScope.marketItems.utilities.items[1].number = 0;
+
+            // Send the buy event
             ige.network.send("onPlayerBuyEvent", stuff);
         }
 
@@ -426,14 +419,12 @@ var Client = IgeClass.extend({
         // ==== Weapon Buy Event
         this.angularScope.marketBuyWeaponEvent = function (weaponToggle, weaponPrice, playerMoney) {
             if(weaponToggle) {
-                ige.client.log("weaponToggle is TRUE");
                 if(weaponPrice + ige.client.angularScope.marketBuyTotal <= playerMoney) {
                     ige.client.angularScope.marketBuyTotal += weaponPrice;
                     return false;
                 }
             }
             else {
-                ige.client.log("weaponToggle is FALSE");
                 ige.client.angularScope.marketBuyTotal -= weaponPrice;
                 return true;
             }
@@ -453,7 +444,6 @@ var Client = IgeClass.extend({
         // ==== Sell event
         this.angularScope.marketSellEvent = function () {
             var sellData = ige.client.angularScope.marketSellBag;
-            ige.client.log("sellData, [0] = " + sellData[0] + ", [1] = " + sellData[1] + ", [2] = " + sellData[2]);
 
             ige.network.send("onPlayerSellEvent", sellData);
 

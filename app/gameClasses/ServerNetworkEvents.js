@@ -256,9 +256,6 @@ var ServerNetworkEvents = {
     },
 
     _onPlayerSellEvent : function (data, clientId) {
-        ige.server.log("NETWORK : onPlayerSellEvent");
-        ige.server.log("data, [0] = " + data[0] + ", [1] = " + data[1] + ", [2] = " + data[2]);
-
         var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
         var moneyEarned = 0;
         var wheatAmount = data[0];
@@ -280,37 +277,36 @@ var ServerNetworkEvents = {
             character.inventory.crops[2].number -= cornAmount;
             ige.network.send("onInventoryUpdate", character.inventory, clientId);
         }
-        else {
-            ige.server.log("NETWORK : Client " + clientId + " is trying to cheat !!");
-        }
     },
 
     _onPlayerBuyEvent : function (data, clientId) {
         var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
 
-        // TODO Check server-side pour les sous du joueur
+        // Check if the player has enough money
+        var result = character.inventory.checkIfEnoughMoney(data);
 
-        ige.server.log("NETWORK : onPlayerBuyEvent");
-        for(var key in data) {
-            ige.server.log("Key = " + key + ", Value = " + data[key]);
+        if(result) {
+            for(var key in data) {
+                switch(key) {
+                    case "Water": character.inventory.addWater(data[key]); break;
+                    case "Fertilizer": character.inventory.addFertilizer(data[key]); break;
 
-            switch(key) {
-                case "Water": character.inventory.addWater(data[key]); break;
-                case "Fertilizer": character.inventory.addFertilizer(data[key]); break;
+                    case "Wheat Seed":
+                    case "Tomato Seed":
+                    case "Corn Seed":
+                        character.inventory.addSeed(key, data[key]); break;
 
-                case "Wheat Seed":
-                case "Tomato Seed":
-                case "Corn Seed":
-                    character.inventory.addSeed(key, data[key]); break;
-
-                case "Baseball bat":
-                case "Chainsaw":
-                case "AK-47":
-                    if(data[key]) {
-                        character.inventory.addWeapon(key);
-                    }
-                    break;
+                    case "Baseball bat":
+                    case "Chainsaw":
+                    case "AK-47":
+                        if(data[key]) {
+                            character.inventory.addWeapon(key);
+                        }
+                        break;
+                }
             }
+
+            ige.network.send("onInventoryUpdate", character.inventory, clientId);
         }
     }
 };

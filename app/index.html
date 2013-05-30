@@ -272,7 +272,7 @@
                                                 data-ng-click="category.items[$index].number = marketBuyMinEvent(category.items[$index].number, item.value)">min</button>
                                             <button class="btn" type="button"
                                                 data-ng-click="category.items[$index].number = marketBuyMinusEvent(category.items[$index].number, item.value)"> - </button>
-                                            <input type="text" class="span3 text-center" name="category.items[$index].number" ng-model="category.items[$index].number" placeholder="0">
+                                            <input type="text" class="span3 text-center" disabled="disabled" name="category.items[$index].number" ng-model="category.items[$index].number" placeholder="0">
                                             <button class="btn" type="button"
                                                 data-ng-click="category.items[$index].number = marketBuyPlusEvent(category.items[$index].number, item.value, inventoryScope.money)"> + </button>
                                             <button class="btn btn-warning" type="button"

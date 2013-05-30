@@ -85,11 +85,20 @@ var Inventory = IgeEntityBox2d.extend({
         self.seeds.push(cornSeed);
     },
 
+    addWeapon : function(weaponName) {
+        switch(weaponName) {
+            case "Baseball bat": this.weapons[1].present = 1;break;
+            case "Chainsaw": this.weapons[2].present = 1; break;
+            case "AK-47": this.weapons[3].present = 1; break;
+        }
+    },
+
     getBestWeapon: function() {
         var bestWeapon = 0;
         for (var i = 0; i < this.weapons.length; i++) {
             if(this.weapons[i].present == 1) {
                 bestWeapon = i;
+                console.log("Best Weapon : " + this.weapons[i].name);
             }
         }
         return new Weapon(bestWeapon);
@@ -97,9 +106,9 @@ var Inventory = IgeEntityBox2d.extend({
 
     addSeed: function (seedName, seedAmount) {
         switch(seedName) {
-            case "Wheat seed" : this.seeds[0].number += seedAmount; break;
-            case "Tomato seed" : this.seeds[1].number += seedAmount; break;
-            case "Corn seed" : this.seeds[2].number += seedAmount;break;
+            case "Wheat Seed" : this.seeds[0].number += seedAmount; break;
+            case "Tomato Seed" : this.seeds[1].number += seedAmount; break;
+            case "Corn Seed" : this.seeds[2].number += seedAmount;break;
         }
     },
 
@@ -127,19 +136,33 @@ var Inventory = IgeEntityBox2d.extend({
         this.fertilizerUnits += fertilizerAmount;
     },
 
-    addWeapon : function(weaponName) {
-        switch(weaponName) {
-            case "Baseball bat": this.weapons[1].present = 1; break;
-            case "Chainsaw": this.weapons[2].present = 1; break;
-            case "AK-47": this.weapons[3].present = 1; break;
-        }
-    },
-
     checkCropsExistence : function (wheatAmount, tomatoAmount, cornAmount) {
         if(this.crops[0].number >= wheatAmount
             && this.crops[1].number >= tomatoAmount
             && this.crops[2].number >= cornAmount) {
 
+            return true;
+        }
+        return false;
+    },
+
+    checkIfEnoughMoney: function (items) {
+        var amount = 0;
+        for(var key in items) {
+            switch(key) {
+                case "Water": amount += 2 * items[key]; break;
+                case "Fertilizer": amount += 5 * items[key]; break;
+                case "Wheat Seed": amount += 10 * items[key]; break;
+                case "Tomato Seed": amount += 20 * items[key]; break;
+                case "Corn Seed": amount += 30 * items[key]; break;
+                case "Baseball bat": if(items[key]) {amount += 1000}; break;
+                case "Chainsaw": if(items[key]) {amount += 2000}; break;
+                case "AK-47": if(items[key]) {amount += 3000}; break;
+            }
+        }
+
+        if(amount <= this.money) {
+            this.money -= amount;
             return true;
         }
         return false;

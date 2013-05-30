@@ -223,9 +223,6 @@ var Character = IgeEntityBox2d.extend({
             // Check status change
             if(this.status == 1) {
                 if(this.currentHp >= this.maxHp /2) {
-
-                    console.log("currentHp = " + this.currentHp + ", maxHp / 2 = " + this.maxHp / 2);
-
                     // set status to "Normal"
                     this.status = 0;
                     if(!ige.isServer) {
