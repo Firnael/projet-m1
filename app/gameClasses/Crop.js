@@ -208,10 +208,10 @@ var Crop = IgeEntityBox2d.extend({
         // Update productivity
         else if(this.maturationState >= 5 && this.maturationState <= 8)  {
             switch(this.maturationState) {
-                case 5: this.currentProductivity = this.productivity * 1; break;
-                case 6: this.currentProductivity = this.productivity * 0.75; break;
-                case 7: this.currentProductivity = this.productivity * 0.50; break;
-                case 8: this.currentProductivity = this.productivity * 0.25; break;
+                case 5: this.currentProductivity = Math.floor(this.productivity * 1); break;
+                case 6: this.currentProductivity = Math.floor(this.productivity * 0.75); break;
+                case 7: this.currentProductivity = Math.floor(this.productivity * 0.50); break;
+                case 8: this.currentProductivity = Math.floor(this.productivity * 0.25); break;
             }
         }
 

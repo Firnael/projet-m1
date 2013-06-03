@@ -92,6 +92,8 @@ var ServerNetworkEvents = {
         stuff["characterMaxHp"] = character.getMaxHp();
         stuff["characterCurrentHp"] = character.getCurrentHp();
         stuff["characterStatus"] = character.getStatus();
+        stuff["inventory"] = character.inventory;
+        ige.server.log("water : " + character.inventory.waterUnits);
         ige.network.response(requestId, stuff);
     },
 
@@ -323,10 +325,11 @@ var ServerNetworkEvents = {
                 stuff.type = type-1;
                 stuff.x = data.x;
                 stuff.y = data.y;
+                stuff.clientId = clientId;
                 console.log("type="+stuff.type);
                 character.inventory.crops[type-1].number += currentProductivity;
                 stuff.cropsInInventory = character.inventory.crops[type-1].number;
-                ige.network.send("onPlayerHarvestCrop", stuff, clientId);
+                ige.network.send("onPlayerHarvestCrop", stuff);
                 tile.crop = null;
             }
         }

@@ -246,11 +246,15 @@ var ClientNetworkEvents = {
     },
 
     _onPlayerHarvestCrop : function (data) {
-        ige.client.log("NETWORK : onHarvestCrop");
-        console.log("type="+data.type);
+        if(data.clientId == ige.client.clientId) {
+            ige.client.log("NETWORK : onHarvestCrop");
+            console.log("type="+data.type);
 
-        var character = ige.$("character_" + ige.client.username);
-        character.inventory.crops[data.type].number = data.cropsInInventory;
+            var character = ige.$("character_" + ige.client.username);
+            character.inventory.crops[data.type].number = data.cropsInInventory;
+        }
+
+        // Remove crop for all clients
         var key = data.x+"-"+data.y;
         ige.client.tileBag.tiles[key].crop.destroy();
         ige.client.tileBag.tiles[key].crop = null;

@@ -1,4 +1,4 @@
-var Inventory = IgeEntityBox2d.extend({
+var Inventory = IgeEntity.extend({
     classId: 'Inventory',
 
     init: function () {
@@ -98,10 +98,9 @@ var Inventory = IgeEntityBox2d.extend({
         for (var i = 0; i < this.weapons.length; i++) {
             if(this.weapons[i].present == 1) {
                 bestWeapon = i;
-                console.log("Best Weapon : " + this.weapons[i].name);
             }
         }
-        return new Weapon(bestWeapon);
+        return new Weapon(bestWeapon +1);
     },
 
     addSeed: function (seedName, seedAmount) {
@@ -169,7 +168,7 @@ var Inventory = IgeEntityBox2d.extend({
     },
 
     destroy: function () {
-        IgeEntityBox2d.prototype.destroy.call(this);
+        IgeEntity.prototype.destroy.call(this);
     }
 });
 

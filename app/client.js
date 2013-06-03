@@ -73,7 +73,6 @@ var Client = IgeClass.extend({
                                     ige.network.send("getCharacterName", entity.id());
                                 }
 								this.log('Stream entity created with ID: ' + entity.id());
-                                self.angularScope.inventoryScope = entity.inventory;
                             }
                         );
 
@@ -193,6 +192,10 @@ var Client = IgeClass.extend({
                                         self.angularScope.playerStatusIcon = "assets/textures/ui/resting.png";
                                         self.angularScope.playerStatusScope = "Resting";
                                     }
+
+                                    var character = ige.$("character_" + ige.client.username);
+                                    character.inventory = data["inventory"];
+
                                     self.angularScope.$apply();
                                     ige.client.log("Character data loaded !");
                                 });
