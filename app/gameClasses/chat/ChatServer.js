@@ -140,7 +140,7 @@ var ChatServer = {
 					// Add the user to the room
 					room.users.push(clientId);
 					ige.network.send('igeChatJoinRoom', {roomId: roomId, joined: true}, clientId);
-					console.log('User "' + clientId + '" joined room ' + roomId);
+					console.log('IGE *lobby* [ChatComponent] : User "' + clientId + '" joined room ' + roomId);
 				} else {
 					// User is already in the room!
 				}

@@ -7,6 +7,7 @@ TileBag = IgeClass.extend({
         self.tiles = {};
         self.width = 10;
         self.height = 10;
+        self.spawnRange = 5;
     },
 
     getTiles: function () {
@@ -295,6 +296,17 @@ TileBag = IgeClass.extend({
     modifyTileOwner: function (x, y, owner) {
         var key = x + "-" + y;
         this.tiles[key].owner = owner;
+
+        // Tag the surrounding tile with the "can't spawn here" flag
+        for (var i = x - this.spawnRange; i < x + this.spawnRange; i++) {
+            for (var j = y - this.spawnRange; j < y + this.spawnRange; j++) {
+                var key = i + "-" + j;
+
+                if(this.tiles[key]) {
+                    this.tiles[key].cannotSpawnHere = true;
+                }
+            }
+        }
     },
 
     getTileAmountByOwner: function (owner) {

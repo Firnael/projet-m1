@@ -202,6 +202,27 @@ var Character = IgeEntityBox2d.extend({
         }
     },
 
+    setStartingPosition: function () {
+        // Try to place the character
+        var tiles = ige.server.tileBag.tiles;
+        for(var key in tiles) {
+            var tile = tiles[key];
+
+            if(tile.cannotSpawnHere === undefined && !tile.isFence) {
+                this.translateToTile(tile.getTileX(), tile.getTileY(), 0);
+                return;
+            }
+        }
+
+        // We need to extend the map
+        var extensionValue = 10;
+        ige.server.tileBag.extendMap(extensionValue);
+        ige.network.send("onExtendMap", ige.server.tileBag.extractMapPart(ige.server.tileBag.width-extensionValue, ige.server.tileBag.width));
+
+        // Recall the function
+        this.setStartingPosition();
+    },
+
     tick: function (ctx) {
         // Regen HP both sides
         this.currentTime = ige._currentTime;

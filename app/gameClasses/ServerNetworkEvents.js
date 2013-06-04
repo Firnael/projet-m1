@@ -30,6 +30,7 @@ var ServerNetworkEvents = {
     _onPlayerEntity: function (data, clientId, requestId) {
         // Check if this player already exists in the list
         var username = data;
+
         if(ige.server.playerBag.checkPlayerExistence(username)) {
             // The player exists on the list, do not re-create it
 
@@ -71,9 +72,12 @@ var ServerNetworkEvents = {
                 })
                 .id('character_' + username)
                 .isometric(true)
-                .translateTo(40, 40, 0)
+                //.translateTo(40, 40, 0)
                 .streamMode(1)
                 .mount(ige.server.objectLayer);
+
+            // place the character depending on others positions
+            ige.server.characters[username].setStartingPosition();
 
             // Add the new player to the player list
             ige.server.playerBag.addPlayer(new Player(clientId, username));
@@ -93,7 +97,6 @@ var ServerNetworkEvents = {
         stuff["characterCurrentHp"] = character.getCurrentHp();
         stuff["characterStatus"] = character.getStatus();
         stuff["inventory"] = character.inventory;
-        ige.server.log("water : " + character.inventory.waterUnits);
         ige.network.response(requestId, stuff);
     },
 
@@ -114,7 +117,6 @@ var ServerNetworkEvents = {
 
         var extensionValue = 10;
         ige.server.tileBag.extendMap(extensionValue);
-        //ige.network.send("onExtendMap", extensionValue);
         ige.network.send("onExtendMap", ige.server.tileBag.extractMapPart(ige.server.tileBag.width-extensionValue,ige.server.tileBag.width));
     },
 
