@@ -23,17 +23,21 @@ var ClientNetworkEvents = {
     },
 
     _onPlayerReachDestination: function (data) {
+        var character = ige.$("character_" + data["username"]);
         // Stop the walking animation
-        ige.$("character_" + data["username"]).imageEntity.animation.stop();
+        character.imageEntity.animation.stop();
 
-        // If it's us, pop up the alert
+        // Check if it's us
         if(data["username"] == ige.client.username) {
-            // Trigger a popup fight
-            if(data["canAttack"]) {
-                ige.client.angularScope.attackAlertShow = true;
-                ige.client.angularScope.attackAlertText = "You are on " + data["targetTileOwner"] + " lands.";
-                ige.client.angularScope.attackAlertData = data;
-                ige.client.angularScope.$apply();
+            // Check if we aren't resting (can't attack otherwise)
+            if(character.status == 0) {
+                // Trigger a popup fight
+                if(data["canAttack"]) {
+                    ige.client.angularScope.attackAlertShow = true;
+                    ige.client.angularScope.attackAlertText = "You are on " + data["targetTileOwner"] + " lands.";
+                    ige.client.angularScope.attackAlertData = data;
+                    ige.client.angularScope.$apply();
+                }
             }
 
             // Update the buttons state
@@ -176,40 +180,36 @@ var ClientNetworkEvents = {
         var tile = ige.client.tileBag.getTileByPosition(data.tilePositionX, data.tilePositionY);
         tile.crop = new Crop(data.type, data.maturationState, data.tilePositionX, data.tilePositionY, data.plantTime);
 
-        var character = ige.$("character_" + ige.client.username);
-        character.inventory.removeSeed(data.type);
-
         ige.client.updateTileActionButtons(tile.getTileIndex());
     },
 
     _onCropUpdateEvent : function (data) {
-        var updatedCrops = data.updatedCrops;
+        if(ige.client.tileBag) {
+            var updatedCrops = data.updatedCrops;
 
-        // Update living crops
-        for(var i=0; i<updatedCrops.length; i++) {
-            var tile = updatedCrops[i];
-            var targetTile = ige.client.tileBag.getTile(tile.x, tile.y);
+            // Update living crops
+            for(var i=0; i<updatedCrops.length; i++) {
+                var tile = updatedCrops[i];
+                var targetTile = ige.client.tileBag.getTile(tile.x, tile.y);
 
-            ige.client.log("tile, humidity=" + tile.humidity);
-            ige.client.log("targettile, humidity=" + targetTile.humidity);
+                targetTile.crop.maturationState = tile.crop.maturationState;
+                targetTile.humidity = tile.humidity;
+                targetTile.fertility = tile.fertility;
+                targetTile.crop.updateSpatial();
+            }
 
-            targetTile.crop.maturationState = tile.crop.maturationState;
-            targetTile.humidity = tile.humidity;
-            targetTile.fertility = tile.fertility;
-            targetTile.crop.updateSpatial();
+            // Destroy dead crops
+            var dyingCrops = data.dyingCrops;
+            for (var i = 0; i < dyingCrops.length; i++) {
+                var key = dyingCrops[i];
+                ige.client.tileBag.tiles[key].crop.destroy();
+                ige.client.tileBag.tiles[key].crop = null;
+            }
+
+            // Update fertility
+            ige.client.tileBag.updateFertility();
+            ige.client.updateAngularScopeVariables();
         }
-
-        // Destroy dead crops
-        var dyingCrops = data.dyingCrops;
-        for (var i = 0; i < dyingCrops.length; i++) {
-            var key = dyingCrops[i];
-            ige.client.tileBag.tiles[key].crop.destroy();
-            ige.client.tileBag.tiles[key].crop = null;
-        }
-
-        // Update fertility
-        ige.client.tileBag.updateFertility();
-        ige.client.updateAngularScopeVariables();
     },
 
     _onFertilizeEvent : function (tile) {
@@ -247,9 +247,6 @@ var ClientNetworkEvents = {
 
     _onPlayerHarvestCrop : function (data) {
         if(data.clientId == ige.client.clientId) {
-            ige.client.log("NETWORK : onHarvestCrop");
-            console.log("type="+data.type);
-
             var character = ige.$("character_" + ige.client.username);
             character.inventory.crops[data.type].number = data.cropsInInventory;
         }

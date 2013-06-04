@@ -699,9 +699,11 @@ var Client = IgeClass.extend({
 
     // Update the tile action buttons state
     updateTileActionButtons: function (tileIndex) {
+        var character = ige.$("character_" + this.username);
         var tile = this.tileBag.getTile(tileIndex.x, tileIndex.y);
         if(tile.getOwner() == this.username) {
-            if(tile.getCrop() != null) {
+            // If there is a crop and the farmer isn't resting
+            if(tile.getCrop() != null && character.status == 0) {
                 this.angularScope.plantButtonDisabled = true;
                 this.angularScope.harvestButtonDisabled = false;
             }

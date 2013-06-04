@@ -144,33 +144,37 @@ var ServerNetworkEvents = {
         var targetTile = ige.server.tileBag.getTile(tileIndex.x, tileIndex.y);
         var defenderName = targetTile.getOwner();
 
-        if(data["canAttack"]) {
-            var winnerName = ige.server.tileBag.fight(attackerName, defenderName, tileIndex);
-            if(winnerName == attackerName) {
+        // If the character isn't resting, he can attack
+        if(ige.$("character_" + attackerName).status == 0) {
+            // If the opponent isn't resting, he can defend
+            if(data["canAttack"] && ige.$("character_" + defenderName).status == 0) {
+                var winnerName = ige.server.tileBag.fight(attackerName, defenderName, tileIndex);
+                if(winnerName == attackerName) {
+                    ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
+
+                    var oldOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
+                    var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
+                    var oldOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(defenderName);
+                    var newOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(attackerName);
+                    ige.server._onParcelleAmountChange(oldOwnerTileAmount, oldOwnerClientId);
+                    ige.server._onParcelleAmountChange(newOwnerTileAmount, newOwnerClientId);
+                }
+            }
+            // Else, the tile is either ours already or neutral (or the opponent is resting)
+            else {
                 ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
 
-                var oldOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
-                var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
-                var oldOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(defenderName);
-                var newOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(attackerName);
-                ige.server._onParcelleAmountChange(oldOwnerTileAmount, oldOwnerClientId);
-                ige.server._onParcelleAmountChange(newOwnerTileAmount, newOwnerClientId);
+                // Notify the client that his parcelle amount inscreased
+                ige.server._onParcelleAmountChange(ige.server.tileBag.getTileAmountByOwner(attackerName), clientId);
             }
-        }
-        // The tile is either ours already or neutral
-        else {
-            ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
 
-            // Notify the client that his parcelle amount inscreased
-            ige.server._onParcelleAmountChange(ige.server.tileBag.getTileAmountByOwner(attackerName), clientId);
+            // Broadcast the tile to update
+            var stuff = {};
+            stuff["tileX"] = targetTile.getTileX();
+            stuff["tileY"] = targetTile.getTileY();
+            stuff["tileOwner"] = targetTile.getOwner();
+            ige.network.send("getParcelle", stuff);
         }
-
-        // Broadcast the tile to update
-        var stuff = {};
-        stuff["tileX"] = targetTile.getTileX();
-        stuff["tileY"] = targetTile.getTileY();
-        stuff["tileOwner"] = targetTile.getOwner();
-        ige.network.send("getParcelle", stuff);
     },
 
     _onGetCharacterName: function(data, clientId) {
@@ -210,7 +214,6 @@ var ServerNetworkEvents = {
 
         // If it's the case, plant the seed
         if(result) {
-
             // If no crop exist in this tile, create one
             var targetTile = ige.server.tileBag.getTile(data["targetTile"].x, data["targetTile"].y);
             if(targetTile.crop == null) {
@@ -227,6 +230,7 @@ var ServerNetworkEvents = {
                 crop.tilePositionY = targetTile.crop.tilePositionY;
                 crop.plantTime = targetTile.crop.plantTime;
                 ige.network.send("onPlayerPlantCrop", crop);
+                ige.network.send("onInventoryUpdate", character.inventory, clientId);
             }
 
         }
@@ -316,23 +320,26 @@ var ServerNetworkEvents = {
 
     _onPlayerHarvestCrop : function (data, clientId) {
         var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
-        ige.server.log("NETWORK : onHarvestCrop");
-        var tile = ige.server.tileBag.getTile(data.x,data.y);
-        if(tile){
-            if(tile.crop){
-                var currentProductivity = tile.crop.currentProductivity;
-                var type = tile.crop.type;
-                var stuff = {};
 
-                stuff.type = type-1;
-                stuff.x = data.x;
-                stuff.y = data.y;
-                stuff.clientId = clientId;
-                console.log("type="+stuff.type);
-                character.inventory.crops[type-1].number += currentProductivity;
-                stuff.cropsInInventory = character.inventory.crops[type-1].number;
-                ige.network.send("onPlayerHarvestCrop", stuff);
-                tile.crop = null;
+        // Check if the character isn't resting
+        if(character.status == 0) {
+            var tile = ige.server.tileBag.getTile(data.x,data.y);
+            if(tile){
+                if(tile.crop){
+                    var currentProductivity = tile.crop.currentProductivity;
+                    var type = tile.crop.type;
+                    var stuff = {};
+
+                    stuff.type = type-1;
+                    stuff.x = data.x;
+                    stuff.y = data.y;
+                    stuff.clientId = clientId;
+                    console.log("type="+stuff.type);
+                    character.inventory.crops[type-1].number += currentProductivity;
+                    stuff.cropsInInventory = character.inventory.crops[type-1].number;
+                    ige.network.send("onPlayerHarvestCrop", stuff);
+                    tile.crop = null;
+                }
             }
         }
     }
