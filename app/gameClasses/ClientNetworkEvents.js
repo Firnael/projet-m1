@@ -214,42 +214,52 @@ var ClientNetworkEvents = {
 
     _onFertilizeEvent : function (tile) {
         var player = ige.$("character_" + ige.client.username);
+        var character = ige.$("character_" + tile.owner);
+
         player.inventory.fertilizerUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).fertility += 10;
         if(ige.client.tileBag.getTile(tile.x,tile.y).fertility > 100){
             ige.client.tileBag.getTile(tile.x,tile.y).fertility = 100;
         }
 
-        // afficher l'info dans le chat
-        var message = {};
-        message.color = "#FF3333";
-        message.text = "Vous avez fertilisé votre terrain.";
-        message.fromUsername = "SERVER";
-        ige.client.angularScope.chatTextArrayScope.push(message);
+        if(player == character){
+            // afficher l'info dans le chat
+            var message = {};
+            message.color = "#FF3333";
+            message.text = "Vous avez fertilisé votre terrain.";
+            message.fromUsername = "SERVER";
+            ige.client.angularScope.chatTextArrayScope.push(message);
 
-        // Force chatbox scroll down
-        $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
+            // Force chatbox scroll down
+            $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
+        }
 
         ige.client.updateAngularScopeVariables();
     },
 
     _onHumidityEvent : function (tile) {
         var player = ige.$("character_" + ige.client.username);
-        player.inventory.waterUnits -= 1;
+        var character = ige.$("character_" + tile.owner);
+
         ige.client.tileBag.getTile(tile.x,tile.y).humidity += 10;
         if(ige.client.tileBag.getTile(tile.x,tile.y).humidity > 100){
             ige.client.tileBag.getTile(tile.x,tile.y).humidity = 100;
         }
 
-        // afficher l'info dans le chat
-        var message = {};
-        message.color = "#FF3333";
-        message.text = "Vous avez arrosé votre terrain.";
-        message.fromUsername = "SERVER";
-        ige.client.angularScope.chatTextArrayScope.push(message);
+        if(player == character){
+            player.inventory.waterUnits -= 1;
+            // afficher l'info dans le chat
+            var message = {};
+            message.color = "#FF3333";
+            message.text = "Vous avez arrosé votre terrain.";
+            message.fromUsername = "SERVER";
+            ige.client.angularScope.chatTextArrayScope.push(message);
 
-        // Force chatbox scroll down
-        $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
+            // Force chatbox scroll down
+            $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
+        }
+
+
 
         ige.client.updateAngularScopeVariables();
     },
