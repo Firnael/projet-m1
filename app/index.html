@@ -359,7 +359,7 @@
 <div id=chatComponentDiv>
     <div id="chatComponentText" class="well well-small">
             <span data-ng-repeat="message in chatTextArrayScope">
-                {{message.fromUsername}} : {{message.text}}<br/>
+                <span style="color:{{message.color}}">{{message.fromUsername}} : {{message.text}}</span><br/>
             </span>
     </div>
     <div id="chatInputDiv" class="input-append">

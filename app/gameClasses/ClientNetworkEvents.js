@@ -216,6 +216,17 @@ var ClientNetworkEvents = {
         var player = ige.$("character_" + ige.client.username);
         player.inventory.fertilizerUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).fertility += 10;
+        if(ige.client.tileBag.getTile(tile.x,tile.y).fertility > 100){
+            ige.client.tileBag.getTile(tile.x,tile.y).fertility = 100;
+        }
+
+        // afficher l'info dans le chat
+        var message = {};
+        message.color = "#FF3333";
+        message.text = "Vous avez fertilisé votre terrain.";
+        message.fromUsername = "SERVER";
+        ige.client.angularScope.chatTextArrayScope.push(message);
+
         ige.client.updateAngularScopeVariables();
     },
 
@@ -223,6 +234,17 @@ var ClientNetworkEvents = {
         var player = ige.$("character_" + ige.client.username);
         player.inventory.waterUnits -= 1;
         ige.client.tileBag.getTile(tile.x,tile.y).humidity += 10;
+        if(ige.client.tileBag.getTile(tile.x,tile.y).humidity > 100){
+            ige.client.tileBag.getTile(tile.x,tile.y).humidity = 100;
+        }
+
+        // afficher l'info dans le chat
+        var message = {};
+        message.color = "#FF3333";
+        message.text = "Vous avez arrosé votre terrain.";
+        message.fromUsername = "SERVER";
+        ige.client.angularScope.chatTextArrayScope.push(message);
+
         ige.client.updateAngularScopeVariables();
     },
 
