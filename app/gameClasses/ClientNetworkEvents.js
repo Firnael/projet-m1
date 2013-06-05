@@ -227,6 +227,9 @@ var ClientNetworkEvents = {
         message.fromUsername = "SERVER";
         ige.client.angularScope.chatTextArrayScope.push(message);
 
+        // Force chatbox scroll down
+        $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
+
         ige.client.updateAngularScopeVariables();
     },
 
@@ -244,6 +247,9 @@ var ClientNetworkEvents = {
         message.text = "Vous avez arrosé votre terrain.";
         message.fromUsername = "SERVER";
         ige.client.angularScope.chatTextArrayScope.push(message);
+
+        // Force chatbox scroll down
+        $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
 
         ige.client.updateAngularScopeVariables();
     },
