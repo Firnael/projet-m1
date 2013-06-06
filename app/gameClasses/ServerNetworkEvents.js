@@ -333,6 +333,7 @@ var ServerNetworkEvents = {
                     stuff.type = type-1;
                     stuff.x = data.x;
                     stuff.y = data.y;
+                    stuff.nbCropHarvested = currentProductivity;
                     stuff.clientId = clientId;
                     console.log("type="+stuff.type);
                     character.inventory.crops[type-1].number += currentProductivity;

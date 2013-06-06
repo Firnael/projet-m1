@@ -225,10 +225,11 @@ var ClientNetworkEvents = {
         if(player == character){
             // afficher l'info dans le chat
             var message = {};
-            message.color = "#FF3333";
-            message.text = "Vous avez fertilisé votre terrain.";
+            message.color = "green";
+            message.text = "You fertilized your land.";
             message.fromUsername = "SERVER";
             ige.client.angularScope.chatTextArrayScope.push(message);
+            ige.client.angularScope.$apply();
 
             // Force chatbox scroll down
             $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
@@ -250,10 +251,11 @@ var ClientNetworkEvents = {
             player.inventory.waterUnits -= 1;
             // afficher l'info dans le chat
             var message = {};
-            message.color = "#FF3333";
-            message.text = "Vous avez arrosé votre terrain.";
+            message.color = "blue";
+            message.text = "You watered your land.";
             message.fromUsername = "SERVER";
             ige.client.angularScope.chatTextArrayScope.push(message);
+            ige.client.angularScope.$apply();
 
             // Force chatbox scroll down
             $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
@@ -287,6 +289,16 @@ var ClientNetworkEvents = {
         if(data.clientId == ige.client.clientId) {
             var character = ige.$("character_" + ige.client.username);
             character.inventory.crops[data.type].number = data.cropsInInventory;
+
+            var message = {};
+            message.color = "goldenrod";
+            message.text = "You gathered "+data.nbCropHarvested+" "+character.inventory.crops[data.type].name +".";
+            message.fromUsername = "SERVER";
+            ige.client.angularScope.chatTextArrayScope.push(message);
+            ige.client.angularScope.$apply();
+
+            // Force chatbox scroll down
+            $("#chatComponentText").scrollTop($("#chatComponentText")[0].scrollHeight);
         }
 
         // Remove crop for all clients
