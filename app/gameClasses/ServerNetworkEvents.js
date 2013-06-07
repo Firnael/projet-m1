@@ -16,9 +16,6 @@ var ServerNetworkEvents = {
             stuff["username"] = username;
             stuff["boolean"] = true;
             ige.network.send('toggleCharacterHide', stuff);
-
-            // ige.server.characters[clientId].destroy();
-            // delete ige.server.characters[clientId];
         }
     },
 
@@ -112,6 +109,12 @@ var ServerNetworkEvents = {
         ige.network.response(requestId, ige.server.marketCropPrices);
     },
 
+    _onGetInventory: function (data, clientId, requestId) {
+        var character = ige.$("character_" + ige.server.playerBag.getPlayerUsernameByClientId(clientId));
+        ige.network.response(requestId, character.inventory);
+    },
+
+
     _onPlayerKeyUp: function (data, clientId) {
         ige.server.log("character_" + clientId + " : keyUp !");
 
@@ -143,21 +146,43 @@ var ServerNetworkEvents = {
         var tileIndex = data["tileIndex"];
         var targetTile = ige.server.tileBag.getTile(tileIndex.x, tileIndex.y);
         var defenderName = targetTile.getOwner();
+        var defender = ige.$("character_" + defenderName);
 
         // If the character isn't resting, he can attack
         if(ige.$("character_" + attackerName).status == 0) {
-            // If the opponent isn't resting, he can defend
-            if(data["canAttack"] && ige.$("character_" + defenderName).status == 0) {
-                var winnerName = ige.server.tileBag.fight(attackerName, defenderName, tileIndex);
-                if(winnerName == attackerName) {
-                    ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
+            // If there is a defender
+            if(defender) {
+                // If the attacked player killerName and the attacker name aren't same
+                ige.server.log("defender.killerName = " + defender.killerName);
+                ige.server.log("attackerName = " + attackerName);
 
-                    var oldOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
-                    var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
-                    var oldOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(defenderName);
-                    var newOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(attackerName);
-                    ige.server._onParcelleAmountChange(oldOwnerTileAmount, oldOwnerClientId);
-                    ige.server._onParcelleAmountChange(newOwnerTileAmount, newOwnerClientId);
+                if(defender.killerName != attackerName) {
+                    // If the opponent isn't resting, he can defend (also, he can be resting due to a failed attack)
+                    // in that case, he can be attacked with no grace time
+                    if((data["canAttack"] && ige.$("character_" + defenderName).status == 0)
+                        || (data["canAttack"] && defender.killerName == null)) {
+
+                        var winnerName = ige.server.tileBag.fight(attackerName, defenderName, tileIndex);
+                        if(winnerName == attackerName) {
+                            // Set the killerName to the loser
+                            defender.killerName = attackerName;
+
+                            // Change tile owner
+                            ige.server.tileBag.modifyTileOwner(tileIndex.x, tileIndex.y, attackerName);
+
+                            var oldOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(defenderName);
+                            var newOwnerClientId = ige.server.playerBag.getPlayerClientIdByUsername(attackerName);
+                            var oldOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(defenderName);
+                            var newOwnerTileAmount = ige.server.tileBag.getTileAmountByOwner(attackerName);
+                            ige.server._onParcelleAmountChange(oldOwnerTileAmount, oldOwnerClientId);
+                            ige.server._onParcelleAmountChange(newOwnerTileAmount, newOwnerClientId);
+                        }
+                    }
+
+                }
+                else {
+                    // The attacked player has already been killed and the grace time protects him
+                    ige.server.log(attackerName + " has to respect a grace time to attack " + defenderName + " again.");
                 }
             }
             // Else, the tile is either ours already or neutral (or the opponent is resting)

@@ -25,6 +25,7 @@ var Character = IgeEntityBox2d.extend({
 
         self.playerName = playerName;
         self.inventory = new Inventory();
+        self.killerName = null;
 
         self.loginLabel = null;
 
@@ -250,6 +251,10 @@ var Character = IgeEntityBox2d.extend({
                         ige.client.angularScope.playerStatusIcon = "assets/textures/ui/normal.png";
                         ige.client.angularScope.playerStatusScope = "Normal";
                     }
+
+                    // Reset the killerName, the character is vulnerable again
+                    this.killerName = null;
+                    ige.server.log("Grace time is over, this.killerName = " + this.killerName);
                 }
             }
         }

@@ -45,6 +45,7 @@ var Server = IgeClass.extend({
                         ige.network.define('playerKeyUp', self._onPlayerKeyUp);
                         ige.network.define('getMap', self._onGetMap);
                         ige.network.define('getMarketPrices', self._onGetMarketPrices);
+                        ige.network.define('getInventory', self._onGetInventory);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);
                         ige.network.define('getCharacterName', self._onGetCharacterName);
                         ige.network.define('parcelleAmountChange', self._onParcelleAmountChange);

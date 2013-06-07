@@ -42,7 +42,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://localhost:2000', function () {
+					ige.network.start('http://10.21.16.248:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);
@@ -209,6 +209,12 @@ var Client = IgeClass.extend({
                             ige.network.request('getMarketPrices', {}, function (commandName, data) {
                                 ige.client._onMarketPricesUpdateEvent(data);
                                 ige.client.log("Market prices updated !");
+                            });
+
+                            ige.network.request('getInventory', {}, function (commandName, data) {
+                                var character = ige.$("character_" + ige.client.username);
+                                character.inventory = data;
+                                ige.client.log("Inventory loaded !");
                             });
 
                             // Join chat room
