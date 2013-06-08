@@ -160,9 +160,6 @@ var Crop = IgeEntityBox2d.extend({
     },
 
     updateMaturation: function (fertility, humidity) {
-        ige.server.log("maturationState : " + this.maturationState);
-        ige.server.log("fertility : " + fertility + ", humidity : " + humidity);
-
         // Si l'humidité est < 10, la plante commence à mourir
         // Si la fertilité est < 10, la plante s'arrête de grandir
 
@@ -170,7 +167,6 @@ var Crop = IgeEntityBox2d.extend({
         if(humidity < 10) {
             this.health -= 1;
             if(this.health <= 0) {
-                ige.server.log("He dead ! (health)");
                 return null;
             }
             return "lol";
@@ -202,7 +198,6 @@ var Crop = IgeEntityBox2d.extend({
 
         // Destroy the crop if its life is over
         if(this.maturationState > 8) {
-            ige.server.log("He dead ! (old)");
             return null;
         }
         // Update productivity

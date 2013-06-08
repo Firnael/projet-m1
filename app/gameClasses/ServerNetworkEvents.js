@@ -153,9 +153,6 @@ var ServerNetworkEvents = {
             // If there is a defender
             if(defender) {
                 // If the attacked player killerName and the attacker name aren't same
-                ige.server.log("defender.killerName = " + defender.killerName);
-                ige.server.log("attackerName = " + attackerName);
-
                 if(defender.killerName != attackerName) {
                     // If the opponent isn't resting, he can defend (also, he can be resting due to a failed attack)
                     // in that case, he can be attacked with no grace time
@@ -360,7 +357,6 @@ var ServerNetworkEvents = {
                     stuff.y = data.y;
                     stuff.nbCropHarvested = currentProductivity;
                     stuff.clientId = clientId;
-                    console.log("type="+stuff.type);
                     character.inventory.crops[type-1].number += currentProductivity;
                     stuff.cropsInInventory = character.inventory.crops[type-1].number;
                     ige.network.send("onPlayerHarvestCrop", stuff);

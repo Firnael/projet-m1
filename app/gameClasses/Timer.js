@@ -2,9 +2,9 @@ var Timer = IgeObject.extend({
     classId: 'Timer',
 
     init: function () {
-        this.rainEventTimer = 10000000;
-        this.cropEventTimer = 2000;
-        this.marketPricesEventTimer = 5000;
+        this.rainEventTimer = 60000;
+        this.cropEventTimer = 30000;
+        this.marketPricesEventTimer = 50000;
 
         this.currentTime  = ige._currentTime;
         this.lastRainTime = this.currentTime;

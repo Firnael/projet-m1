@@ -42,6 +42,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
+					//ige.network.start('http://94.125.163.146:5222', function () {
 					ige.network.start('http://94.125.163.146:5222', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
@@ -707,6 +708,7 @@ var Client = IgeClass.extend({
     updateTileActionButtons: function (tileIndex) {
         var character = ige.$("character_" + this.username);
         var tile = this.tileBag.getTile(tileIndex.x, tileIndex.y);
+
         if(tile.getOwner() == this.username) {
             // If there is a crop and the farmer isn't resting
             if(tile.getCrop() != null && character.status == 0) {
@@ -729,9 +731,15 @@ var Client = IgeClass.extend({
             else {
                 this.angularScope.fertilizeButtonDisabled = true;
             }
-
-            this.angularScope.$apply();
         }
+        else {
+            this.angularScope.plantButtonDisabled = true;
+            this.angularScope.harvestButtonDisabled = true;
+            this.angularScope.waterButtonDisabled = true;
+            this.angularScope.fertilizeButtonDisabled = true;
+        }
+
+        this.angularScope.$apply();
     }
 });
 

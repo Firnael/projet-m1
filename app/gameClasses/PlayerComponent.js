@@ -30,6 +30,8 @@ var PlayerComponent = IgeClass.extend({
     },
 
     _keyUp: function (event, keyCode) {
+
+        /*
         // Press Space for testing
         if (keyCode === ige.input.key.e) {
             ige.client.log("Key " + keyCode + " is up. (Event :" + event + ")");
@@ -59,6 +61,7 @@ var PlayerComponent = IgeClass.extend({
                 ige.network.send("onPlayerPlantCrop", stuff);
             }
         }
+        */
     }
 });
 

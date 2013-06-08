@@ -6,7 +6,7 @@ var Inventory = IgeEntity.extend({
         self.weapons = [];
         self.crops = [];
         self.seeds = [];
-        self.money = 10000000;
+        self.money = 50;
         self.fertilizerUnits = 10;
         self.waterUnits = 10;
 
@@ -42,19 +42,19 @@ var Inventory = IgeEntity.extend({
         var wheatCrop = {
             "name":"Wheat crop",
             "image":"assets/textures/ui/wheat.png",
-            "number":10
+            "number":0
         };
 
         var tomatoCrop = {
             "name":"Tomato crop",
             "image":"assets/textures/ui/tomato.png",
-            "number":10
+            "number":0
         };
 
         var cornCrop = {
             "name":"Corn crop",
             "image":"assets/textures/ui/corn.png",
-            "number":10
+            "number":0
         };
 
         self.crops.push(wheatCrop);
@@ -65,19 +65,19 @@ var Inventory = IgeEntity.extend({
         var wheatSeed = {
             "name":"Wheat seed",
             "image":"assets/textures/ui/wheat_seeds.png",
-            "number":10
+            "number":0
         };
 
         var tomatoSeed = {
             "name":"Tomato seed",
             "image":"assets/textures/ui/tomato_seeds.png",
-            "number":10
+            "number":0
         };
 
         var cornSeed = {
             "name":"Corn crop",
             "image":"assets/textures/ui/corn_seeds.png",
-            "number":10
+            "number":0
         };
 
         self.seeds.push(wheatSeed);
