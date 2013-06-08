@@ -32,7 +32,7 @@ var Server = IgeClass.extend({
 
 
         // Start the network server
-			.network.start(2000, function () {
+			.network.start(5222, function () {
 				// Start the game engine
 				ige.start(function (success) {
                     ige.addComponent(ChatComponent);
