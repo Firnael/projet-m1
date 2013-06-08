@@ -42,7 +42,7 @@ var Client = IgeClass.extend({
 			ige.start(function (success) {
                 // Check if the engine started successfully
 				if (success) {
-					ige.network.start('http://10.21.16.248:2000', function () {
+					ige.network.start('http://94.125.163.146:2000', function () {
                         ige.network.define('getParcelle', self._onGetParcelle);
                         ige.network.define('playerMove', self._onPlayerMove);
                         ige.network.define('playerReachDestination', self._onPlayerReachDestination);
