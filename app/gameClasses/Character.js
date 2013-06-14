@@ -66,6 +66,7 @@ var Character = IgeEntityBox2d.extend({
             .text(text)
             .center(0)
             .middle(-20)
+            .width(100)
             .drawBounds(false)
             .drawBoundsData(false)
             .mount(this);
