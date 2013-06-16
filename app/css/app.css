@@ -33,7 +33,6 @@
 }
 
 #navbar{
-    z-index:1;
     position:absolute;
     left:0%;
     top:0%;
@@ -41,21 +40,18 @@
 }
 
 #playerInfoDiv{
-    z-index:1;
     position:absolute;
     left:1%;
     top:8%;
 }
 
 #tileInfoDiv {
-    z-index: 1;
     position: absolute;
     right: 1%;
     top: 8%;
 }
 
 #fightAlertDiv {
-    z-index: 1;
     position: absolute;
     left: 75%;
     top: 75%;
@@ -63,7 +59,6 @@
 }
 
 #attackAlertDiv {
-    z-index: 1;
     position: absolute;
     left: 35%;
     top: 20%;
@@ -76,12 +71,17 @@
 }
 
 #chatComponentDiv {
-    z-index: 1;
     position: absolute;
     bottom: 1%;
     left: 1%;
     width: 25%;
     height: 30%;
+}
+
+#tutoButtonDiv {
+    position: absolute;
+    bottom: 1%;
+    right: 1%;
 }
 
 #chatComponentText {

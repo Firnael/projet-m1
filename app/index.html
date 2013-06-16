@@ -14,16 +14,20 @@
     <link href="css/ige.css" rel="stylesheet" type="text/css"/>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="css/app.css" rel="stylesheet" type="text/css"/>
+    <link href="css/bootstro.css" rel="stylesheet">
 
     <!-- Isogenic Loader -->
     <script type="text/javascript">var igeRoot = '../../ige/engine/';</script>
     <script type="text/javascript" src="../../ige/engine/loader.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
     <script src="lib/angular/angular.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
+    <script src="js/bootstro.js"></script>
 </head>
 <body data-ng-controller="IsoGame">
 
@@ -52,10 +56,10 @@
 <div id="rain" class="rain"></div>
 
 <!--  MenuBar -->
-<div id="navbar" class="navbar navbar-inverse">
+<div id="navbar" class="navbar navbar-inverse bootstro" data-bootstro-step="0" data-bootstro-placement="bottom" data-bootstro-content="Welcome to the Tremendous Farm tutorial !" data-bootstro-title="Tutorial" data-original-title>
     <div class="navbar-inner">
         <a class="brand" href="#">TremendousFarm</a>
-        <div class="btn-group">
+        <div class="btn-group bootstro" data-bootstro-step="4" data-bootstro-placement="bottom" data-bootstro-content="Click on this button to plant a seed on the tile" data-bootstro-title="Tutorial" data-original-title>
             <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" data-ng-disabled="plantButtonDisabled">
                 <img src="assets/textures/ui/seed.png"/> Plant <span class="caret"></span>
             </button>
@@ -65,21 +69,21 @@
                 <li data-ng-click="plantEvent(3)"><a><img src="assets/textures/ui/corn_seeds.png"/> Corn seed</a></li>
             </ul>
         </div>
-        <button class="btn btn-info" data-ng-disabled="waterButtonDisabled" data-ng-click="humidityEvent()">
+        <button class="btn btn-info bootstro" data-bootstro-step="5" data-bootstro-placement="bottom" data-bootstro-content="Click on this button to water the seed" data-bootstro-title="Tutorial" data-original-title data-ng-disabled="waterButtonDisabled" data-ng-click="humidityEvent()">
             <img src="assets/textures/ui/waterdrop.png"/> Water
         </button>
-        <button class="btn btn-success" data-ng-disabled="fertilizeButtonDisabled" data-ng-click="fertilizeEvent()">
+        <button class="btn btn-success bootstro" data-bootstro-step="6" data-bootstro-placement="bottom" data-bootstro-content="Click on this button to fertilize the seed" data-bootstro-title="Tutorial" data-original-title data-ng-disabled="fertilizeButtonDisabled" data-ng-click="fertilizeEvent()">
             <img src="assets/textures/ui/fertilize.png"/> Fertilize
         </button>
-        <button class="btn" data-ng-disabled="harvestButtonDisabled" data-ng-click="harvestEvent()">
+        <button class="btn bootstro" data-bootstro-step="7" data-bootstro-placement="bottom" data-bootstro-content="Click on this button to harvest the plant" data-bootstro-title="Tutorial" data-original-title data-ng-disabled="harvestButtonDisabled" data-ng-click="harvestEvent()">
             <img src="assets/textures/ui/harvest.png"/> Harvest
         </button>
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>
-            <a class="btn btn-primary" data-toggle="modal" href="#inventoryModalDiv">
+            <a class="btn btn-primary bootstro" data-bootstro-step="8" data-bootstro-placement="bottom" data-bootstro-content="Click on this button to open the inventory" data-bootstro-title="Tutorial" data-original-title data-toggle="modal" href="#inventoryModalDiv">
                 <img src="assets/textures/ui/chest.png"/> Inventory
             </a>
-            <a class="btn btn-warning underline" data-toggle="modal" href="#marketModalDiv">
+            <a class="btn btn-warning underline bootstro" data-bootstro-step="9" data-bootstro-placement="bottom" data-bootstro-content="Click on this button to open the market" data-bootstro-title="Tutorial" data-original-title data-toggle="modal" href="#marketModalDiv">
                 <img src="assets/textures/ui/coin.png"/> Market
             </a>
         </ul>
@@ -87,7 +91,7 @@
 </div>
 
 <!-- Player Info -->
-<div id=playerInfoDiv class="well well-small">
+<div id=playerInfoDiv class="well well-small bootstro" data-bootstro-step="1" data-bootstro-placement="right" data-bootstro-content="Here are the player status, tile amount, player level and health" data-bootstro-title="Tutorial" data-original-title>
     <img src={{playerStatusIcon}} /> - {{playerStatusScope}}</br>
     <img src="assets/textures/ui/tile.png"/> x {{tileAmountScope}}</br>
     <img src="assets/textures/ui/levelup.png"/> - {{playerLevelScope}}</br>
@@ -95,7 +99,7 @@
 </div>
 
 <!--  Tile Info -->
-<div id=tileInfoDiv  class="well well-small">
+<div id=tileInfoDiv  class="well well-small bootstro" data-bootstro-step="2" data-bootstro-placement="left" data-bootstro-content="Here are the tile owner, humidity and fertility !" data-bootstro-title="Tutoriel" data-original-title>
     <img src="assets/textures/ui/owner.png"/> - {{tileOwnerScope}}</br>
     <img src="assets/textures/ui/water.png"/> - {{tileHumidityScope}} %</br>
     <img src="assets/textures/ui/plant.png"/> - {{tileFertilityScope}} %
@@ -357,7 +361,7 @@
 
 <!-- Chat -->
 <div id=chatComponentDiv>
-    <div id="chatComponentText" class="well well-small">
+    <div id="chatComponentText" class="well well-small bootstro" data-bootstro-step="3" data-bootstro-placement="top" data-bootstro-content="Here is the chat to speak with other players" data-bootstro-title="Tutorial">
             <span data-ng-repeat="message in chatTextArrayScope">
                 <span style="color:{{message.color}}">{{message.fromUsername}} : {{message.text}}</span><br/>
             </span>
@@ -371,5 +375,16 @@
         </form>
     </div>
 </div>
+
+<div id="tutoButtonDiv">
+    <a href="#" id="tuto" class="btn"><i class="icon-question-sign"></i></a>
+</div>
 </body>
+<script>
+    $(document).ready(function (){
+        $("#tuto").click(function(){
+            bootstro.start();
+        });
+    });
+</script>
 </html>
